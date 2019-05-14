@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>票务系统-售票系统</title>
+
+    <link th:href="${pub_bucket} + @{/inspinia/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="${pub_bucket} + @{/inspinia/font-awesome/css/font-awesome.css}" rel="stylesheet">
+    <link th:href="${pub_bucket} + @{/inspinia/css/plugins/iCheck/custom.css}" rel="stylesheet">
+    <link th:href="${pub_bucket} + @{/inspinia/css/animate.css}" rel="stylesheet">
+    <link th:href="${pub_bucket} + @{/inspinia/css/style.css}" rel="stylesheet">
+</head>
+<body>
+<div id="wrapper">
+	<div th:replace="../common/nav"></div>
+	<div id="page-wrapper" class="gray-bg">    
+	    <div th:replace="../common/top"></div>
+        <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="">
+           <div class="row">
+               <div class="col-lg-12">
+               <button type="button" class="btn btn-primary" id="new_item_btn"><i class="fa fa-plus"></i>&nbsp添加分类</button>
+               </div>
+           </div>
+           </div>
+        </div>
+         <table class="footable table table-stripped toggle-arrow-tiny default breakpoint footable-loaded" data-page-size="15">
+            <thead>
+            <tr>
+                <th data-toggle="true" class="footable-visible footable-first-column footable-sortable">分类<span class="footable-sort-indicator"></span></th>
+                <th data-hide="phone" class="footable-visible footable-sortable">描述<span class="footable-sort-indicator"></span></th>
+                <th data-hide="all" class="footable-sortable">添加时间<span class="footable-sort-indicator"></span></th>
+                <th class="text-right footable-visible footable-last-column" data-sort-ignore="true">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(all_category)}">
+                    <td colspan="5" style="text-align: center;">暂无数据</td>
+            </tr>
+            <tr class="footable-even" style="display: table-row;" th:if="${not #lists.isEmpty(all_category)}" th:each="item : ${all_category}">
+                <td class="footable-visible footable-first-column"><span class="footable-toggle"></span>
+                   [[${item.category_code}]]
+                </td>
+                <td class="footable-visible">
+                   [[${item.category_name}]]
+                </td>
+                <td class="footable-visible">
+                   [[${item.a_time}]]
+                </td>
+                <td class="text-right footable-visible footable-last-column">
+                    <div class="btn-group">
+                        <button class="btn btn-outline btn-info btn-xs" th:onclick="'edit_item('+${item.id}+')'">编辑</button>
+                        <button class="btn btn-outline btn-info btn-xs" th:onclick="'del_item('+${item.id}+')'">删除</button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            </tfoot>
+        </table>
+          <div th:replace="../common/foot"></div>
+    </div>
+</div>
+
+<div id="new_item_pop" style="display: none;">
+     <div class="ibox-content">
+          <form class="form-horizontal" action="" onsubmit="return false;">
+          	  <input type="hidden" value="" name="id" />
+              <div class="form-group"><label class="col-lg-2 control-label">分类</label>
+                  <div class="col-lg-10">
+                  	<input type="text" placeholder="请输入分类" class="form-control" name="category_code">
+                  </div>
+              </div>
+              <div class="form-group"><label class="col-lg-2 control-label">描述</label>
+                  <div class="col-lg-10">
+                  	<input type="text" placeholder="请输入分类描述" class="form-control" name="category_name">
+                  </div>
+              </div>
+              <div class="form-group">
+                  <div class="col-lg-offset-2 col-lg-10">
+                      <button class="btn btn-outline btn-primary" type="submit">添加</button>
+                      <button class="btn btn-outline btn-danger" onclick="layer.close(window.current_pop);" type="reset">取消</button>
+                  </div>
+              </div>
+          </form>
+      </div>
+ </div>
+
+<!-- Mainly scripts -->
+<script th:src="${pub_bucket} + @{/inspinia/js/jquery-2.1.1.js}"></script>
+<script th:src="${pub_bucket} + @{/inspinia/js/bootstrap.min.js}"></script>
+<script th:src="${pub_bucket} + @{/inspinia/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+<script th:src="${pub_bucket} + @{/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+
+<!-- Custom and plugin javascript -->
+<script th:src="${pub_bucket} + @{/inspinia/js/plugins/pace/pace.min.js}"></script>
+
+<!-- iCheck -->
+<script th:src="${pub_bucket} + @{/inspinia/js/plugins/iCheck/icheck.min.js}"></script>
+<script th:src="${pub_bucket} + @{/layer/layer.js}"></script>
+<script type="text/javascript">
+	/*自适应高度*/
+	$(document).ready(function(){
+	  var windowHeight = $(window).height();
+	  if($("#content_area").height() < windowHeight){
+	      $("#content_area").height(windowHeight);
+	  }
+	});
+</script>
+<script type="text/javascript">
+var showErrTip = function(_form, name) {
+	_form.find("*[name=" + name + "]").parents(".form-group").addClass("has-error");
+	setTimeout(function() {_form.find("*[name=" + name + "]").parents(".form-group").removeClass("has-error");}, 1500)
+}
+
+$("#new_item_btn").click(function(){
+	$("#new_item_pop form")[0].reset();
+	   window.current_pop = layer.open({
+	    type: 1,
+	    title: '添加领用项',
+	    maxmin: true,
+	    area: ['800px', '350px'],
+	    content: $("#new_item_pop")
+	  });
+});
+
+$("#new_item_pop form").find("button[type=submit]").click(function(){
+	var id = $("#new_item_pop form").find("*[name=id]").val();
+	var category_code = $("#new_item_pop form").find("*[name=category_code]").val();
+	var category_name = $("#new_item_pop form").find("*[name=category_name]").val();
+	
+	
+	var error_items = [];
+	if (!category_code) {
+		error_items.push("category_code");
+	}
+	if (!category_name) {
+		error_items.push("category_name");
+	}
+	
+	
+	if (error_items.length) {
+		for (var i = 0, ic = error_items.length; i < ic; i++) {
+			showErrTip($("#new_item_pop form"), error_items[i]);
+		}
+		return;
+	}
+	
+	var _btn = $(this);
+	_btn.attr("disabled","true");
+	
+	var load_pop = layer.load(1);
+	var post_data = {
+		"id" : id
+		,"category_code" : category_code
+		,"category_name" : category_name
+	};
+	$.post("[[${contextPath}]]/category/add", post_data,function(msg) {
+		layer.close(load_pop);
+		if (msg.code === 0) {
+			layer.msg('操作成功', {icon : 1,time : 1000}, function() {
+				_btn.removeAttr("disabled");
+				location.reload();
+			});
+		}else{
+			_btn.removeAttr("disabled");
+			layer.msg(msg.msg, {icon : 5,time : 1000});
+		}
+	});
+})
+
+var del_item = function(id){
+	if(!id){
+		return;
+	}
+	window.current_pop = layer.confirm('确认删除该分类？', {
+		btn : [ '确认', '取消' ]
+	//按钮
+	}, function() {
+		var post_data = {
+			"id" : id
+		}
+		var load_pop = layer.load(1);
+		$.post("[[${contextPath}]]/category/del", post_data,function(msg) {
+			layer.close(load_pop);
+			if (msg.code === 0) {
+				layer.msg('删除成功', {icon : 1,time : 1500}, function() {
+					location.reload();
+				});
+			}else{
+				layer.msg(msg.msg, {icon : 5,time : 1000});
+			}
+		});
+	}, function() {
+		layer.close(window.current_pop);
+	});
+}
+
+var edit_item = function(id){
+	var post_data = {
+		"id" : id
+	}
+	var load_pop = layer.load(1);
+	$.post("[[${contextPath}]]/category/get", post_data,function(msg) {
+		layer.close(load_pop);
+		if (msg.code === 0) {
+			$("#new_item_pop form").find("*[name=id]").val(msg.data.id);
+			$("#new_item_pop form").find("*[name=category_code]").val(msg.data.category_code);
+			$("#new_item_pop form").find("*[name=category_name]").val(msg.data.category_name);
+			
+			window.current_pop = layer.open({
+			    type: 1,
+			    title: '编辑分类',
+			    maxmin: true,
+			    area: ['800px', '350px'],
+			    content: $("#new_item_pop")
+			  });
+		}else{
+			layer.msg(msg.msg, {icon : 5,time : 1000});
+		}
+	});
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>票务系统-影讯管理</title>
+
+    <link th:href="|${pub_bucket}/inspinia/css/bootstrap.min.css|" rel="stylesheet">
+    <link th:href="|${pub_bucket}/inspinia/font-awesome/css/font-awesome.css|" rel="stylesheet">
+    <link th:href="|${pub_bucket}/inspinia/css/plugins/iCheck/custom.css|" rel="stylesheet">
+    <link th:href="|${pub_bucket}/inspinia/css/animate.css|" rel="stylesheet">
+    <link th:href="|${pub_bucket}/inspinia/css/style.css|" rel="stylesheet">
+</head>
+<body>
+ <div id="wrapper">
+     <div th:replace="../common/nav"></div>
+     <div id="page-wrapper" class="gray-bg">    
+         <div th:replace="../common/top"></div>
+         <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="ibox-content" id="content_area">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>在映影片列表</h5><br/>
+                            <div><span class="label badge-white">底色说明：</span>
+                            <span class="label label-danger" style="background-color: #ffc3c3;color: inherit;">影讯同步失败</span>
+                            <span class="label label-danger" style="background-color: #c4ffc3;color: inherit;">影讯同步成功</span>                     
+                            <input type="button" id="yxtb" class="btn btn-outline btn-info btn-xs" value="影讯同步" style = "float:right">
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+    
+                            <table class="table">
+                                <thead id="ttfilm">
+                                    <tr>
+                                        <th>片名</th>
+                                        <th>字幕</th>
+                                        <th>语言</th>
+                                        <th>制式</th>
+                                        <th>国家</th>
+                                        <th>上映日期</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody th:each="film : ${page.result}" class="tyfilm" id="tafilm">
+                                    <tr th:style="'background-color: ' + ((${#strings.isEmpty(film.film_name)}) ? '#ffc3c3' : '#c4ffc3')">
+                                        <td>[[${film.film_name}]]</td>
+                                        <td>[[${film.film_subtitle}]]</td>
+                                        <td>[[${film.film_language}]]</td>
+                                        <td>[[${film.film_format}]]</td>
+                                        <td>[[${film.film_region}]]</td>
+                                        <td>[[${film.release_date}]]</td>
+                                        <td>
+                                                <button class="btn btn-outline btn-info btn-xs" th:data-id="${film.id}" th:data-name="${film.film_name}" onclick="show_sync_pop(this)">手动同步</button>
+                                                <button class="btn btn-outline btn-info btn-xs local_sync" th:data-id="${film.id}" >自定义影片同步</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div th:replace="../common/page"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+         </div>
+          <div th:replace="../common/foot"></div>
+     </div>
+ </div>
+
+<div id="sync_movie_info_pop" style="display:none ;">
+     <div class="ibox-content">
+          <form class="form-horizontal" action="" onsubmit="return false;">
+          		<div class="form-group">
+          		<label class="col-lg-2 control-label">影片名称</label>
+                  <div class="col-lg-8">
+                  	<input type="text" placeholder="修正的影片名称" class="form-control" name="film_name">
+                  </div>
+                  <button class="btn btn-outline btn-primary col-lg-2" type="button" id="get_my_snapshot_btn">获取快照</button>
+              </div>
+              <input type="hidden" name="org_id" />
+              <input type="hidden" name="org_name" />
+              <div class="form-group"><label class="col-sm-2 control-label">匹配影片</label>
+                 <div class="col-sm-10">
+                 <select class="form-control m-b" name="film_my_id">
+                 	<option value="">请选择</option>
+                 </select>
+                 </div>
+              </div>
+              <div class="form-group">
+                  <div class="col-lg-offset-2 col-lg-10">
+                      <button class="btn btn-outline btn-primary" type="submit">同步</button>
+                      <button class="btn btn-outline btn-danger" onclick="layer.close(window.current_pop);" type="reset">取消</button>
+                  </div>
+              </div>
+          </form>
+      </div>
+ </div>
+
+<!-- Mainly scripts -->
+<script th:src="|${pub_bucket}/inspinia/js/jquery-2.1.1.js|"></script>
+<script th:src="|${pub_bucket}/inspinia/js/bootstrap.min.js|"></script>
+<script th:src="|${pub_bucket}/inspinia/js/plugins/metisMenu/jquery.metisMenu.js|"></script>
+<script th:src="|${pub_bucket}/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js|"></script>
+
+<!-- Custom and plugin javascript -->
+<script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+
+<!-- iCheck -->
+<script th:src="|${pub_bucket}/inspinia/js/plugins/iCheck/icheck.min.js|"></script>
+<script th:src="|${pub_bucket}/layer/layer.js|"></script>
+<script type="text/javascript">
+	/*自适应高度*/
+	$(document).ready(function(){
+	  var windowHeight = $(window).height();
+	  if($("#content_area").height() < windowHeight){
+	      $("#content_area").height(windowHeight);
+	  }
+	});
+</script>
+<script type="text/javascript">
+var showErrTip = function(_form, name) {
+	_form.find("*[name=" + name + "]").parents(".form-group").addClass("has-error");
+	setTimeout(function() {_form.find("*[name=" + name + "]").parents(".form-group").removeClass("has-error");}, 1500)
+}
+
+var show_sync_pop = function(domemt){
+	var _this = $(domemt);
+	var org_id = _this.attr("data-id");
+	var org_name = _this.attr("data-name");
+	$("#sync_movie_info_pop *[name=org_id]").val(org_id);
+	$("#sync_movie_info_pop *[name=org_name]").val(org_name);
+	var my_ids = $("#sync_movie_info_pop form *[name=film_my_id]");
+	my_ids.html('<option value="">请选择</option>');
+	window.current_pop = layer.open({
+	    type: 1,
+	    title: '手动同步《'+org_name+"》影讯",
+	    maxmin: true,
+	    area: ['800px', '300px'],
+	    content: $("#sync_movie_info_pop")
+	});
+}
+
+$("#get_my_snapshot_btn").click(function(){
+	var film_name = $("#sync_movie_info_pop form *[name=film_name]").val();
+	
+	var error_items = [];
+	if (!film_name) {
+		error_items.push("film_name");
+	}
+	
+	if (error_items.length) {
+		for (var i = 0, ic = error_items.length; i < ic; i++) {
+			showErrTip($("#sync_movie_info_pop form"), error_items[i]);
+		}
+		return;
+	}
+	
+	var load_pop = layer.load(1);
+	var post_data = {
+		"movieName" : film_name
+	};
+	$.post("[[${contextPath}]]/movie/myutil_snapshot", post_data,function(msg) {
+		layer.close(load_pop);
+		if (msg.code === 0) {
+			try{
+				var my_data = JSON.parse(msg.data);
+				
+				layer.msg('获取快照成功', {icon : 1,time : 800});
+				
+				var my_ids = $("#sync_movie_info_pop form *[name=film_my_id]");
+				my_ids.html("");
+				
+				for(var i=0,ic=my_data.movies.list.length;i<ic;i++){
+					var my_snapshot = my_data.movies.list[i];
+					my_ids.append('<option value="'+my_snapshot.id+'">'+my_snapshot.nm+'(上映日期:'+my_snapshot.rt+')</option>');
+				}
+			}catch(e){
+				console.log(e);
+				var my_ids = $("#sync_movie_info_pop form *[name=film_my_id]");
+				my_ids.html('<option value="">请选择</option>');
+				layer.msg('未获取到数据', {icon : 1,time : 800});
+			}
+		}else{
+			var my_ids = $("#sync_movie_info_pop form *[name=film_my_id]");
+			my_ids.html('<option value="">请选择</option>');
+			layer.msg('未获取到数据', {icon : 1,time : 800});
+		}
+	});
+})
+$("#yxtb").click(function(){
+	$.post("[[${contextPath}]]/plan/planlist", {},function(msg) {
+		$(".tyfilm").html("");
+		$("#ttfilm").html("");
+		if (msg.code === 0) {
+			var htmls = "<tr><th>片名</th><th>字幕</th><th>语言</th><th>制式</th><th>演出时间</th><th>影厅</th></tr>";
+			$("#ttfilm").append(htmls);
+			var html = "";
+			for(var i=0;i<msg.data.length;i++){
+				for(var j=0;j<msg.data[i].dates.length;j++){
+					for(var z=0;z<msg.data[i].dates[j].plans.length;z++){
+						html += "<tr style='background-color:#c4ffc3'><td>" + msg.data[i].name + "</td>";
+						html += "<td>" + msg.data[i].dates[j].plans[z].subtitle + "</td>";
+						html += "<td>" + msg.data[i].dates[j].plans[z].language + "</td>";
+						html += "<td>" + msg.data[i].dates[j].plans[z].format + "</td>";
+						html += "<td>" + msg.data[i].dates[j].plans[z].startTime + "</td>";
+						html += "<td>" + msg.data[i].dates[j].plans[z].hall + "</td>";
+					}
+				}
+			}
+			$("#tafilm").append(html);
+		}else{
+			layer.msg(msg.msg, {icon : 5,time : 1000});
+		}
+	});
+})
+$("#sync_movie_info_pop button[type=submit]").click(function(){
+	var org_id = $("#sync_movie_info_pop *[name=org_id]").val();
+	
+	var film_my_id = $("#sync_movie_info_pop form *[name=film_my_id]").val();
+	
+	var error_items = [];
+	if (!film_my_id) {
+		error_items.push("film_my_id");
+	}
+	
+	if (error_items.length) {
+		for (var i = 0, ic = error_items.length; i < ic; i++) {
+			showErrTip($("#sync_movie_info_pop form"), error_items[i]);
+		}
+		return;
+	}
+	
+	var load_pop = layer.load(1);
+	var post_data = {
+		"org_id" : org_id,
+		"film_my_id" : film_my_id
+	};
+	$.post("[[${contextPath}]]/movie/myutil_mdetail", post_data,function(msg) {
+		layer.close(load_pop);
+		if (msg.code === 0) {
+			layer.msg('操作成功', {icon : 1,time : 1500}, function() {
+				location.reload();
+			});
+		}else{
+			layer.msg(msg.msg, {icon : 5,time : 1000});
+		}
+	});
+})
+
+$(".local_sync").click(function(){
+	var mid = $(this).attr("data-id");
+	var load_pop = layer.load(1);
+    $.post("[[${contextPath}]]/movie/local_sync", {mid:mid},function(msg) {
+        layer.close(load_pop);
+        if (msg.available) {
+            layer.msg('操作成功', {icon : 1,time : 1500}, function() {
+                location.reload();
+            });
+        }else{
+            layer.msg(msg.messages[0], {icon : 5,time : 1000});
+        }
+    });
+});
+</script>
+</body>
+</html>

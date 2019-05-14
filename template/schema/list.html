@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>票务系统-售票系统</title>
+
+    <link th:href="|${pub_bucket}/inspinia/css/bootstrap.min.css|" rel="stylesheet">
+    <link th:href="|${pub_bucket}/inspinia/font-awesome/css/font-awesome.css|" rel="stylesheet">
+    <link th:href="|${pub_bucket}/inspinia/css/plugins/iCheck/custom.css|" rel="stylesheet">
+    <link th:href="|${pub_bucket}/inspinia/css/animate.css|" rel="stylesheet">
+    <link th:href="|${pub_bucket}/inspinia/css/style.css|" rel="stylesheet">
+    <link th:href="|${pub_bucket}/inspinia/css/plugins/datapicker/bootstrap-datetimepicker.min.css|" rel="stylesheet">
+    <style>
+    	.datetimepicker{
+    		z-index:10000000000;
+    	}
+    </style>
+</head>
+<body>
+<div id="wrapper">
+    <div th:replace="../common/nav"></div>
+    <div id="page-wrapper" class="gray-bg">    
+        <div th:replace="../common/top"></div>
+        <div class="row wrapper border-bottom white-bg page-heading">
+           <div class="">
+	           <div class="row">
+	               <div class="col-lg-12">
+	               <button type="button" class="btn btn-success" id="new_group_btn"><i class="fa fa-plus"></i>&nbsp新建分组</button>
+	               <button type="button" class="btn btn-primary" id="new_item_btn"><i class="fa fa-plus"></i>&nbsp添加票类</button>
+	               </div>
+	           </div>
+           </div>
+       </div>
+                <table class="footable table table-stripped toggle-arrow-tiny default breakpoint footable-loaded">
+            <tbody>
+            <th:block th:if="${not #lists.isEmpty(groups)}" th:each="item : ${groups}">
+            <tr class="footable-even" style="display: table-row;border:1px solid #e7eaec;background-color: #e6e6e6;">
+                <td width="30%" class="text-left footable-visible footable-last-column">
+                    [[${item.group_name}]]<!-- <i class="fa fa-minus"></i> -->
+                    <button class="btn btn-outline btn-info btn-xs" th:if="${item.id} != -1" th:onclick="'rename_group('+${item.id}+',\''+${item.group_name}+'\')'">重命名</button>
+                    <button class="btn btn-danger btn-info btn-xs" th:if="${item.id} != -1" th:onclick="'delete_group('+${item.id}+')'">删除</button>
+                </td>
+                <td width="70%" style="cursor: pointer;" onclick="$(this).parent().next().toggle(100);"></td>
+            </tr>
+            <tr>
+                    <td colspan="2">
+                    <table class="footable table table-stripped toggle-arrow-tiny default breakpoint footable-loaded">
+                        <thead>
+                    <tr>
+                        <th width="15%" data-toggle="true" class="footable-visible footable-first-column footable-sortable">票类名称<span class="footable-sort-indicator"></span></th>
+                        <th width="20%" data-hide="phone" class="footable-visible footable-sortable">周策略<span class="footable-sort-indicator"></span></th>
+                        <!-- <th width="30%" data-hide="all" class="footable-sortable">月策略<span class="footable-sort-indicator"></span></th> -->
+                        <th width="20%" data-hide="all" class="footable-sortable">时间策略<span class="footable-sort-indicator"></span></th>
+                        <th width="15%" class="text-right footable-visible footable-last-column" data-sort-ignore="true">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="footable-even" style="display: table-row;" th:if="${not #lists.isEmpty(item.schemas)}" th:each="schema : ${item.schemas}">
+                        <td class="footable-visible footable-first-column"><span class="footable-toggle"></span>
+                           [[${schema.schema_name}]]
+                        </td>
+                        <td class="footable-visible footable-first-column"><span class="footable-toggle"></span>
+                           [[${schema.week_rule}]]
+                        </td>
+                        <!-- <td class="footable-visible footable-first-column"><span class="footable-toggle"></span>
+                           [[${schema.month_rule}]]
+                        </td> -->
+                        <td class="footable-visible footable-first-column"><span class="footable-toggle"></span>
+                           [[${schema.time_rule}]]
+                        </td>
+                        <td class=" text-right footable-visible footable-first-column"><span class="footable-toggle"></span>
+                            <div class="btn-group">
+                                <button data-toggle="dropdown" class="btn btn-default dropdown-toggle btn-xs">移动到 <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="javascript:" th:each="gp : ${groups}" th:if="${gp.id} != ${item.id}" th:onclick="'change_group('+${schema.id}+','+${gp.id}+')'">[[${gp.group_name}]]</a></li>
+                                </ul>
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn btn-outline btn-info btn-xs" th:onclick="'edit_schema('+${schema.id}+')'">编辑</button>
+                                <button class="btn btn-outline btn-info btn-xs" th:onclick="'del_schema('+${schema.id}+')'">删除</button>
+                            </div>
+                            <!-- <div class="btn-group">
+                                <button class="btn btn-danger btn-info btn-xs" title="置顶" th:onclick="'top_schema('+${schema.id}+')'">顶</button>
+                                <button class="btn btn-default btn-info btn-xs" title="置底" th:onclick="'bottom_schema('+${schema.id}+')'">底</button>
+                            </div> -->
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                </td>
+            </tr>
+            </th:block>
+            </tbody>
+        </table>
+         <div th:replace="../common/foot"></div>
+    </div>
+</div>
+
+<div id="new_group_pop" style="display: none;">
+     <div class="ibox-content">
+          <form class="form-horizontal" action="" onsubmit="return false;">
+          	  <input type="hidden" value="" name="id" />
+              <div class="form-group"><label class="col-lg-2 control-label">分组名称</label>
+                  <div class="col-lg-10">
+                  	<input type="text" placeholder="请输入分组名称" class="form-control" name="group_name">
+                  </div>
+              </div>
+              <div class="form-group"><label class="col-lg-2 control-label">分组类型</label>
+                  <div class="col-lg-10">
+                    <select type="text" class="form-control select2" name="group_type">
+                       <option value="01">收银台</option>
+                       <option value="02">网售</option>
+                    </select>
+                  </div>
+              </div>
+              <div class="form-group">
+                  <div class="col-lg-offset-2 col-lg-10">
+                      <button class="btn btn-outline btn-primary" type="submit">确定</button>
+                      <button class="btn btn-outline btn-danger" onclick="layer.close(window.current_pop);" type="reset">取消</button>
+                  </div>
+              </div>
+          </form>
+      </div>
+ </div>
+ 
+ <div id="new_schema_pop" style="display: none;">
+     <div class="ibox-content">
+          <form class="form-horizontal" action="" onsubmit="return false;">
+          	  <input type="hidden" value="" name="id" />
+          	  <input type="hidden" value="" name="group_id" />
+          	  <div class="row">
+          	  		<div class="col-md-6">
+          	  			<div class="row">
+          	  				<div class="col-md-12">
+					              <div class="form-group"><label class="col-lg-2 control-label">票类名称</label>
+					                  <div class="col-lg-10">
+					                  	<input type="text" placeholder="票类名称" class="form-control" name="schema_name">
+					                  </div>
+					              </div>
+          	  				</div>
+          	  			</div>
+          	  			<div class="row">
+          	  				<div class="col-md-12">
+          	  					<div class="ibox ">
+			                        <div class="ibox-title">
+		                            		<span class="label label-warning pull-right">不选即全部时间有效</span>
+			                            <h5>周策略</h5>
+			                            <div class="ibox-tools">
+			                                <button class="btn btn-default btn-info btn-xs" name="week_check_all" title="全选">全选</button>
+			                            </div>
+			                        </div>
+			                        <div class="ibox-content">
+			                            <div class="form-group">
+		                                    <div class="col-sm-12" >
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="1" name="week_checker"> 星期一 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="2" name="week_checker"> 星期二 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="3" name="week_checker"> 星期三 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="4" name="week_checker"> 星期四 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="5" name="week_checker"> 星期五 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="6" name="week_checker"> 星期六 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="7" name="week_checker"> 星期日 </label> 
+		                                    </div>
+		                                </div>
+			                        </div>
+			                    </div>
+          	  				</div>
+          	  			  </div>
+          	  			<!-- <div class="row">
+          	  				<div class="col-md-12">
+          	  					<div class="ibox ">
+			                        <div class="ibox-title">
+		                            		<span class="label label-warning pull-right">不选即全部时间有效</span>
+			                            <h5>月策略</h5>
+			                            <div class="ibox-tools">
+			                                <button class="btn btn-default btn-info btn-xs" title="全选">全选</button>
+			                            </div>
+			                        </div>
+			                        <div class="ibox-content">
+			                            <div class="form-group">
+		                                    <div class="col-sm-12">
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 1 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 2 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 3 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 4 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 5 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 6 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 7 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 8 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 9 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 10 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 11 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 12 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 13 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 14 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 15 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 16 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 17 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 18 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 19 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 20 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 21 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 22 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 23 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 24 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 25 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 26 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 27 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 28 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 29 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 30 </label> 
+		                                    		<label class="checkbox-inline"> <input type="checkbox" value="option1" id="inlineCheckbox1"> 31 </label> 
+		                                    </div>
+		                                </div>
+			                        </div>
+			                    </div>
+          	  				</div>
+          	  			  </div> -->
+          	  			  <div class="row">
+          	  				<div class="col-md-12">
+          	  					<div class="ibox ">
+			                        <div class="ibox-title">
+		                            		<span class="label label-warning pull-right">不设置即全部时间有效</span>
+			                            <h5>时间策略</h5>
+			                            <div class="ibox-tools">
+			                            </div>
+			                        </div>
+			                        <div class="ibox-content">
+			                        		<div class="form-group" id="data_5">
+											<div class="input-daterange input-group" id="datepicker">
+												<input type="text" class="input-sm form-control time_rule" name="time_rule_start" value="00:00"> 
+												<span class="input-group-addon">to</span>
+												<input type="text" class="input-sm form-control time_rule" name="time_rule_end" value="23:59">
+											</div>
+										</div>
+			                        </div>
+			                    </div>
+          	  				</div>
+          	  			  </div>
+          	  		</div>
+          	  		<div class="col-md-6">
+          	  			<div class="row">
+          	  				<div class="col-md-12">
+          	  					<div class="ibox ">
+			                        <div class="ibox-title">
+		                            		<span class="label label-warning pull-right"></span>
+			                            <h5>票价列表<button class="btn btn-info btn-info btn-xs" name="add_price_item_btn" title="置顶">添加一条</button></h5>
+			                            <div class="ibox-tools">
+			                            </div>
+			                        </div>
+			                        <div class="ibox-content">
+			                        		<div class="row">
+		          	  						<div class="col-md-3">
+		          	  							<div class="form-group">
+													<label class="font-noraml">影片类型</label>
+												</div>
+		          	  						</div>
+		          	  						<div class="col-md-3">
+		          	  							<div class="form-group">
+													<label class="font-noraml">影片尺寸</label>
+												</div>
+		          	  						</div>
+		          	  						<div class="col-md-3">
+		          	  							<div class="form-group">
+													<label class="font-noraml">价格(“-”代表手动)</label>
+												</div>
+		          	  						</div>
+		          	  						<div class="col-md-3">
+		          	  							<div class="form-group">
+													<label class="font-noraml">操作</label>
+												</div>
+		          	  						</div>
+		          	  					</div>
+		          	  					<div name="price_list_div">
+			          	  					<div class="row" name="price_item">
+												<div class="col-md-3">
+													<div class="form-group">
+													<select class="form-control m-b" name="movie_dim">
+														<option>不限</option>
+									                    <option>2D</option>
+									                    <option>3D</option>
+									                </select>
+												</div>
+												</div>
+												<div class="col-md-3">
+													<div class="form-group">
+													<select class="form-control m-b" name="movie_size">
+														<option>不限</option>
+									                    <option>普通</option>
+									                    <option>IMAX</option>
+									                    <option>巨幕</option>
+									                     <option>中国巨幕</option>
+									                </select>
+												</div>
+												</div>
+												<div class="col-md-3">
+													<div class="form-group">
+														<div class="input-group date" name="movie_price_tip_0">
+															<input type="text" class="form-control" name="movie_price" value="" />
+														</div>
+													</div>
+												</div>
+												<div class="col-md-3">
+													<div class="form-group">
+														<div class="input-group date" style="line-height: 31px;text-align: center;">
+										                </div>
+													</div>
+												</div>
+											</div>
+		          	  					</div>
+			                        </div>
+			                    </div>
+          	  				</div>
+          	  			</div>
+          	  		</div>
+          	  </div>
+          	  <div class="form-group">
+                  <div class="col-lg-offset-2 col-lg-10">
+                      <button class="btn btn-outline btn-primary" type="submit">确定</button>
+                      <button class="btn btn-outline btn-danger" onclick="layer.close(window.current_pop);" type="reset">取消</button>
+                  </div>
+              </div>
+          </form>
+      </div>
+ </div>
+
+<!-- Mainly scripts -->
+<script th:src="|${pub_bucket}/inspinia/js/jquery-2.1.1.js|"></script>
+<script th:src="|${pub_bucket}/inspinia/js/bootstrap.min.js|"></script>
+<script th:src="|${pub_bucket}/inspinia/js/plugins/metisMenu/jquery.metisMenu.js|"></script>
+<script th:src="|${pub_bucket}/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js|"></script>
+<script th:src="|${pub_bucket}/inspinia/js/plugins/datapicker/bootstrap-datetimepicker.js|"></script>
+<script th:src="|${pub_bucket}/inspinia/js/plugins/datapicker/bootstrap-datetimepicker.zh-CN.js|"></script>
+
+<!-- Custom and plugin javascript -->
+<script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+
+<!-- iCheck -->
+<script th:src="|${pub_bucket}/inspinia/js/plugins/iCheck/icheck.min.js|"></script>
+<script th:src="|${pub_bucket}/layer/layer.js|"></script>
+<script type="text/javascript">
+	/*自适应高度*/
+	$(document).ready(function(){
+	  var windowHeight = $(window).height();
+	  if($("#content_area").height() < windowHeight){
+	      $("#content_area").height(windowHeight);
+	  }
+	});
+</script>
+<script type="text/javascript">
+var showErrTip = function(_form, name) {
+	_form.find("*[name=" + name + "]").parents(".form-group").addClass("has-error");
+	setTimeout(function() {_form.find("*[name=" + name + "]").parents(".form-group").removeClass("has-error");}, 1500)
+}
+
+$("#new_group_btn").click(function(){
+	$("#new_group_pop form")[0].reset();
+	$("#new_group_pop form").find("*[name=id]").val("");
+	   window.current_pop = layer.open({
+	    type: 1,
+	    title: '新建分组',
+	    maxmin: true,
+	    area: ['540px', '200px'],
+	    content: $("#new_group_pop")
+	  });
+});
+
+$("#new_group_pop form").find("button[type=submit]").click(function(){
+	var id = $("#new_group_pop form").find("*[name=id]").val();
+	var group_name = $("#new_group_pop form").find("*[name=group_name]").val();
+	var group_type = $("#new_group_pop form").find("*[name=group_type]").val();
+	
+	var error_items = [];
+	if (!group_name) {
+		error_items.push("group_name");
+	}
+	if (!group_type) {
+		error_items.push("group_type");
+	}
+	
+	if (error_items.length) {
+		for (var i = 0, ic = error_items.length; i < ic; i++) {
+			showErrTip($("#new_group_pop form"), error_items[i]);
+		}
+		return;
+	}
+	
+	var _btn = $(this);
+	_btn.attr("disabled","true");
+	
+	var load_pop = layer.load(1);
+	var post_data = {
+		"id" : id
+		,"group_name" : group_name
+		,"group_type" : group_type
+	};
+	$.post("[[${contextPath}]]/schema/group_add", post_data,function(msg) {
+		layer.close(load_pop);
+		if (msg.code === 0) {
+			layer.msg('操作成功', {icon : 1,time : 1000}, function() {
+				_btn.removeAttr("disabled");
+				location.reload();
+			});
+		}else{
+			_btn.removeAttr("disabled");
+			layer.msg(msg.msg, {icon : 5,time : 1000});
+		}
+	});
+})
+
+var rename_group = function(id,old_name){
+	$("#new_group_pop form")[0].reset();
+	$("#new_group_pop form").find("*[name=id]").val(id);
+	$("#new_group_pop form").find("*[name=group_name]").val(old_name);
+	   window.current_pop = layer.open({
+	    type: 1,
+	    title: '添加票类',
+	    maxmin: true,
+	    area: ['540px', '200px'],
+	    content: $("#new_group_pop")
+	  });
+}
+
+var change_group = function(schema_id,group_id){
+	var load_pop = layer.load(1);
+	var post_data = {
+		"schema_id" : schema_id
+		,"group_id" : group_id
+	};
+	$.post("[[${contextPath}]]/schema/change_group", post_data,function(msg) {
+		layer.close(load_pop);
+		if (msg.code === 0) {
+			layer.msg('操作成功', {icon : 1,time : 1000}, function() {
+				location.reload();
+			});
+		}else{
+			layer.msg(msg.msg, {icon : 5,time : 1000});
+		}
+	});
+}
+
+var delete_group = function(group_id){
+	if(!group_id){
+		return;
+	}
+	window.current_pop = layer.confirm('确认删除该分组？', {
+		btn : [ '确认', '取消' ]
+	//按钮
+	}, function() {
+		var post_data = {
+			"id" : group_id
+		}
+		var load_pop = layer.load(1);
+		$.post("[[${contextPath}]]/schema/delete_group", post_data,function(msg) {
+			layer.close(load_pop);
+			if (msg.code === 0) {
+				layer.msg('删除成功', {icon : 1,time : 1500}, function() {
+					location.reload();
+				});
+			}else{
+				layer.msg(msg.msg, {icon : 5,time : 1000});
+			}
+		});
+	}, function() {
+		layer.close(window.current_pop);
+	});
+}
+
+$('.time_rule').datetimepicker({
+    	weekStart:1,
+    todayBtn:1,
+    autoclose:1,
+    todayHighlight:1,
+    startView:1,
+    minView:0,
+    maxView:1,
+    forceParse:0,
+    format:'hh:ii'
+});
+
+$("#new_schema_pop button[name=week_check_all]").click(function(){
+	$("#new_schema_pop *[name=week_checker]").each(function(){
+		$(this).prop("checked",true)
+	})
+})
+
+window.movie_price_tip_ind = 1;
+$("#new_schema_pop *[name=add_price_item_btn]").click(function(){
+	add_a_price_item();
+})
+
+var add_a_price_item = function(){
+	var tip_name = "movie_price_tip_" + window.movie_price_tip_ind ++ ;
+	var price_item_html = `
+		<div class="row" name="price_item">
+			<div class="col-md-3">
+				<div class="form-group">
+				<select class="form-control m-b" name="movie_dim">
+					<option>不限</option>
+	                <option>2D</option>
+	                <option>3D</option>
+	            </select>
+			</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+				<select class="form-control m-b" name="movie_size">
+					<option>不限</option>
+	                <option>普通</option>
+	                <option>IMAX</option>
+	                <option>巨幕</option>
+	                <option>中国巨幕</option>
+	            </select>
+			</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<div class="input-group date" name="`+tip_name+`">
+						<input type="text" class="form-control" name="movie_price" value="" />
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<div class="input-group date" style="line-height: 31px;text-align: center;">
+	                </div>
+				</div>
+			</div>
+		</div>
+	`;
+	$("#new_schema_pop *[name=price_list_div]").append(price_item_html);
+}
+
+$("#new_item_btn").click(function(){
+	$("#new_schema_pop form")[0].reset()
+	$("#new_schema_pop *[name=id]").val("");
+	$("#new_schema_pop *[name=group_id]").val("");
+	$("#new_schema_pop *[name=price_list_div] *[name=price_item]").each(function(ind){
+		if(ind > 0){
+			$(this).remove();
+		}
+	})
+	window.current_pop = layer.open({
+	    type: 1,
+	    title: '添加票类',
+	    maxmin: true,
+	    area: ['1200px', '700px'],
+	    content: $("#new_schema_pop")
+	}); 
+})
+
+$("#new_schema_pop button[type=submit]").click(function(){
+	var id = $("#new_schema_pop *[name=id]").val();
+	var group_id = $("#new_schema_pop *[name=group_id]").val();
+	var schema_name = $("#new_schema_pop *[name=schema_name]").val();
+	
+	var time_rule_start = $("#new_schema_pop *[name=time_rule_start]").val();
+	var time_rule_end = $("#new_schema_pop *[name=time_rule_end]").val();
+	
+	var time_rule = time_rule_start+","+time_rule_end;
+	
+	var error_items = [];
+	if (!schema_name) {
+		error_items.push("schema_name");
+	}
+	
+	var week_rule = "";
+	$("#new_schema_pop *[name=week_checker]:checked").each(function(){
+		if(week_rule){
+			week_rule += ","
+		}
+		week_rule+=$(this).val();
+	})
+	if(!week_rule){
+		week_rule = "-";
+	}
+	
+	var price_item = [];
+	$("#new_schema_pop div[name=price_list_div] div[name=price_item]").each(function(){
+		var movie_dim = $(this).find("*[name=movie_dim]").val();
+		var movie_size = $(this).find("*[name=movie_size]").val();
+		var price = $(this).find("*[name=movie_price]").val();
+		if(!price){
+			error_items.push($(this).find("*[name=movie_price]").parent().attr("name"));
+		}else{
+			price_item.push({"movie_dimensional":movie_dim,"movie_size":movie_size,"price":price});
+		}
+	});
+	
+	if (error_items.length) {
+		for (var i = 0, ic = error_items.length; i < ic; i++) {
+			showErrTip($("#new_schema_pop form"), error_items[i]);
+		}
+		return;
+	}
+	
+	var _btn = $(this);
+	_btn.attr("disabled","true");
+	
+	var load_pop = layer.load(1);
+	var post_data = {
+		"id" : id
+		,"group_id" : group_id
+		,"schema_name" : schema_name
+		,"time_rule" : time_rule
+		,"week_rule" : week_rule
+		,"price_item" : JSON.stringify(price_item)
+	};
+	$.post("[[${contextPath}]]/schema/add", post_data,function(msg) {
+		layer.close(load_pop);
+		if (msg.code === 0) {
+			layer.msg('操作成功', {icon : 1,time : 1000}, function() {
+				_btn.removeAttr("disabled");
+				location.reload();
+			});
+		}else{
+			_btn.removeAttr("disabled");
+			layer.msg(msg.msg, {icon : 5,time : 1000});
+		}
+	});
+})
+
+var del_schema = function(id){
+	if(!id){
+		return;
+	}
+	window.current_pop = layer.confirm('确认删除该票类？', {
+		btn : [ '确认', '取消' ]
+	//按钮
+	}, function() {
+		var post_data = {
+			"id" : id
+		}
+		var load_pop = layer.load(1);
+		$.post("[[${contextPath}]]/schema/del", post_data,function(msg) {
+			layer.close(load_pop);
+			if (msg.code === 0) {
+				layer.msg('删除成功', {icon : 1,time : 1500}, function() {
+					location.reload();
+				});
+			}else{
+				layer.msg(msg.msg, {icon : 5,time : 1000});
+			}
+		});
+	}, function() {
+		layer.close(window.current_pop);
+	});
+}
+
+
+var edit_schema = function(id){
+	var post_data = {
+		"id" : id
+	}
+	var load_pop = layer.load(1);
+	$.post("[[${contextPath}]]/schema/get", post_data,function(msg) {
+		layer.close(load_pop);
+		if (msg.code === 0) {
+			$("#new_schema_pop form")[0].reset();
+			$("#new_schema_pop *[name=price_list_div] *[name=price_item]").each(function(ind){
+				if(ind > 0){
+					$(this).remove();
+				}
+			})
+			
+			$("#new_schema_pop *[name=id]").val(msg.data.id);
+			$("#new_schema_pop *[name=group_id]").val(msg.data.group_id);
+			$("#new_schema_pop *[name=schema_name]").val(msg.data.schema_name);
+			$("#new_schema_pop *[name=time_rule_start]").val(msg.data.time_rule.split(",")[0]);
+			$("#new_schema_pop *[name=time_rule_end]").val(msg.data.time_rule.split(",")[1]);
+			
+			if(msg.data.week_rule){
+				var week_rule_arr = msg.data.week_rule.split(",");
+				for(var i=0,ic=week_rule_arr.length;i<ic;i++){
+					$("#new_schema_pop *[name=week_checker][value="+week_rule_arr[i]+"]").prop("checked",true);
+				}
+			}
+			
+			$("#new_schema_pop *[name=price_list_div] *[name=price_item]").eq(0).find("*[name=movie_dim]").val(msg.data.items[0].movie_dimensional);
+			$("#new_schema_pop *[name=price_list_div] *[name=price_item]").eq(0).find("*[name=movie_size]").val(msg.data.items[0].movie_size);
+			$("#new_schema_pop *[name=price_list_div] *[name=price_item]").eq(0).find("*[name=movie_price]").val(msg.data.items[0].is_custom ? "-" : msg.data.items[0].priceYuan);
+			
+			if(msg.data.items.length > 1){
+				for(var i=1,ic=msg.data.items.length;i<ic;i++){
+					add_a_price_item();
+					var pitem_emt = $("#new_schema_pop *[name=movie_price_tip_"+(window.movie_price_tip_ind-1)+"]").parents("*[name=price_item]").eq(0);
+					console.log(pitem_emt[0])
+					pitem_emt.find("*[name=movie_dim]").val(msg.data.items[i].movie_dimensional);
+					pitem_emt.find("*[name=movie_size]").val(msg.data.items[i].movie_size);
+					pitem_emt.find("*[name=movie_price]").val(msg.data.items[i].is_custom ? "-" : msg.data.items[i].priceYuan);
+				}
+			}
+			
+			window.current_pop = layer.open({
+			    type: 1,
+			    title: '分组重命名',
+			    maxmin: true,
+			    area: ['1200px', '700px'],
+			    content: $("#new_schema_pop")
+			});
+		}else{
+			layer.msg(msg.msg, {icon : 5,time : 1000});
+		}
+	});
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>票务系统-售票系统</title>
+
+    <link th:href="|${pub_bucket}/inspinia/css/bootstrap.min.css|" rel="stylesheet">
+    <link th:href="|${pub_bucket}/inspinia/font-awesome/css/font-awesome.css|" rel="stylesheet">
+    <link th:href="|${pub_bucket}/inspinia/css/plugins/iCheck/custom.css|" rel="stylesheet">
+    <link th:href="|${pub_bucket}/inspinia/css/animate.css|" rel="stylesheet">
+    <link th:href="|${pub_bucket}/inspinia/css/style.css|" rel="stylesheet">
+</head>
+<body>
+	<div id="wrapper">
+		<div th:replace="../common/nav"></div>
+		<div id="page-wrapper" class="gray-bg">
+			<div th:replace="../common/top"></div>
+			<div class="row wrapper border-bottom white-bg page-heading">
+				<div class="col-lg-10">
+					<h2>售票系统</h2>
+					<ol class="breadcrumb">
+						<li><a href="javascript:;">Home</a></li>
+						<li><a href="javascript:;">售票系统列表</a></li>
+						<li class="active"><strong>管理售票系统</strong></li>
+					</ol>
+				</div>
+				<div class="col-lg-2"></div>
+			</div>
+			
+			<div class="wrapper wrapper-content animated fadeInRight">
+				<div class="row">
+					<div class="col-lg-12 goods_area">
+						<div class="wrapper wrapper-content animated fadeInUp" style="padding-top: 0px;">
+							<div class="ibox">
+								<div class="ibox-title">
+									<h5>售票系统列表</h5>
+									<div class="ibox-tools">
+										<a href="javascript:void(0)" class="btn btn-primary btn-xs add_goods" id="btn_add_edit_system">
+											<i class="fa fa-plus"></i>&nbsp添加售票系统
+										</a>
+									</div>
+								</div>
+								<div class="ibox-content">
+									<div class="table-responsive">
+										<table class="footable table table-stripped toggle-arrow-tiny default breakpoint footable-loaded" data-page-size="15">
+											<thead>
+												<tr>
+													<th data-toggle="true"
+														class="footable-visible footable-first-column footable-sortable">名称<span
+														class="footable-sort-indicator"></span></th>
+													<th data-hide="phone"
+														class="footable-visible footable-sortable">系统类型<span
+														class="footable-sort-indicator"></span></th>
+													<th data-hide="all" class="footable-sortable">渠道编号<span
+														class="footable-sort-indicator"></span></th>
+													<th data-hide="all" class="footable-sortable">添加时间<span
+														class="footable-sort-indicator"></span></th>
+													<th class="text-right footable-visible footable-last-column"
+														data-sort-ignore="true">操作</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:if="${#lists.isEmpty(systems)}">
+													<td colspan="5" style="text-align: center;">暂无数据</td>
+												</tr>
+												<tr class="footable-even" style="display: table-row;"
+													th:if="${not #lists.isEmpty(systems)}"
+													th:each="sys : ${systems}">
+													<td class="footable-visible footable-first-column"><span
+														class="footable-toggle"></span> [[${sys.config_name}]]</td>
+													<td class="footable-visible">[[${sys.ss_name}]]</td>
+													<td class="footable-visible">[[${sys.auth_chan_num}]]</td>
+													<td>[[${sys.c_time}]]</td>
+													<td class="text-right footable-visible footable-last-column">
+														<div class="btn-group">
+															<button class="btn btn-outline btn-info btn-xs"
+																th:onclick="'edit_sys('+${sys.id}+')'">编辑</button>
+															<button class="btn btn-outline btn-info btn-xs"
+																th:onclick="'del_sys('+${sys.id}+')'">删除</button>
+														</div>
+													</td>
+												</tr>
+											</tbody>
+											<tfoot>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>			
+			<div th:replace="../common/foot"></div>
+		</div>
+	</div>
+
+	<div id="add_edit_pop" style="display: none;">
+		<div class="ibox-content">
+			<form class="form-horizontal" th:action="${contextPath}+@{/system_add}" onsubmit="return false;">
+				<input type="hidden" value="" name="id" />
+				<div class="form-group">
+					<label class="col-lg-2 control-label">名称</label>
+					<div class="col-lg-10">
+						<input type="text" placeholder="名称" class="form-control" name="config_name">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">渠道编号</label>
+					<div class="col-lg-10">
+						<input type="text" placeholder="渠道编号" class="form-control" name="channel_code">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">渠道密钥</label>
+					<div class="col-lg-10">
+						<input type="password" placeholder="渠道密钥" class="form-control" name="channel_key">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">渠道API地址</label>
+					<div class="col-lg-10">
+						<input type="text" placeholder="渠道API地址" class="form-control" name="channel_address">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">影院系统</label>
+					<div class="col-sm-10">
+						<select class="form-control m-b" name="system_code">
+							<option value="">请选择</option>
+							<option th:each="sys : ${supportSystems}" th:value="${sys.code}">[[${sys.name}]]</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-offset-2 col-lg-10">
+						<button class="btn btn-outline btn-primary" type="submit">保存</button>
+						<button class="btn btn-outline btn-danger"
+							onclick="layer.close(window.current_pop);" type="reset">取消</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<!-- Mainly scripts -->
+	<script th:src="|${pub_bucket}/inspinia/js/jquery-2.1.1.js|"></script>
+	<script th:src="|${pub_bucket}/inspinia/js/bootstrap.min.js|"></script>
+	<script th:src="|${pub_bucket}/inspinia/js/plugins/metisMenu/jquery.metisMenu.js|"></script>
+	<script th:src="|${pub_bucket}/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js|"></script>
+	
+	<!-- Custom and plugin javascript -->
+	<script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+	
+	<!-- iCheck -->
+	<script th:src="|${pub_bucket}/inspinia/js/plugins/iCheck/icheck.min.js|"></script>
+	<script th:src="|${pub_bucket}/layer/layer.js|"></script>
+</body>
+
+<script type="text/javascript">
+	/*自适应高度*/
+	$(document).ready(function() {
+		var windowHeight = $(window).height();
+		if ($("#content_area").height() < windowHeight) {
+			$("#content_area").height(windowHeight);
+		}
+	});
+</script>
+<script type="text/javascript">
+	$("#btn_add_edit_system").click(function() {
+		$("#add_edit_pop form")[0].reset();
+		window.current_pop = layer.open({
+			type : 1,
+			title : '添加',
+			maxmin : true,
+			area : [ '700px', '400px' ],
+			content : $("#add_edit_pop")
+		});
+	});
+
+	var edit_sys = function(id) {
+		var post_data = {
+			"id" : id
+		}
+		var load_pop = layer.load(1);
+		$.post("[[${contextPath}]]/system/get", post_data, function(msg) {
+			layer.close(load_pop);
+			if (msg.code === 0) {
+				$("#add_edit_pop input[name=id]").val(msg.data.id);
+				$("#add_edit_pop input[name=config_name]").val(
+						msg.data.config_name);
+				$("#add_edit_pop input[name=channel_code]").val(
+						msg.data.auth_chan_num);
+				$("#add_edit_pop input[name=channel_key]").val(
+						msg.data.auth_chan_code);
+				$("#add_edit_pop input[name=channel_address]").val(
+						msg.data.auth_chan_url);
+				$("#add_edit_pop select[name=system_code]").val(
+						msg.data.ss_code);
+
+				window.current_pop = layer.open({
+					type : 1,
+					title : '添加',
+					maxmin : true,
+					area : [ '700px', '400px' ],
+					content : $("#add_edit_pop")
+				});
+			} else {
+				layer.msg(msg.msg, {
+					icon : 5,
+					time : 1000
+				});
+			}
+		});
+
+	}
+
+	var del_sys = function(id) {
+		window.current_pop = layer.confirm('删除后关联该系统的影城将无法使用，确认删除？', {
+			btn : [ '确认', '取消' ]
+		//按钮
+		}, function() {
+			var post_data = {
+				"id" : id
+			}
+			var load_pop = layer.load(1);
+			$.post("[[${contextPath}]]/system/del", post_data, function(msg) {
+				layer.close(load_pop);
+				if (msg.code === 0) {
+					layer.msg('删除成功', {
+						icon : 1,
+						time : 1500
+					}, function() {
+						location.reload();
+					});
+				} else {
+					layer.msg(msg.msg, {
+						icon : 5,
+						time : 1000
+					});
+				}
+			});
+		}, function() {
+			layer.close(window.current_pop);
+		});
+	}
+
+	var showErrTip = function(_form, name) {
+		_form.find("*[name=" + name + "]").parents(".form-group").addClass(
+				"has-error");
+		setTimeout(function() {
+			_form.find("*[name=" + name + "]").parents(".form-group")
+					.removeClass("has-error");
+		}, 1500)
+	}
+
+	$("#add_edit_pop button[type=submit]").click(
+			function() {
+				var id = $(this).parents("form").find("*[name=id]").val();
+				var config_name = $(this).parents("form").find(
+						"*[name=config_name]").val();
+				var channel_code = $(this).parents("form").find(
+						"*[name=channel_code]").val();
+				var channel_key = $(this).parents("form").find(
+						"*[name=channel_key]").val();
+				var channel_address = $(this).parents("form").find(
+						"*[name=channel_address]").val();
+				var system_code = $(this).parents("form").find(
+						"*[name=system_code]").val();
+
+				var error_items = [];
+				if (!config_name) {
+					error_items.push("config_name");
+				}
+				if (!channel_code) {
+					error_items.push("channel_code");
+				}
+				if (!channel_key) {
+					error_items.push("channel_key");
+				}
+				if (!channel_address) {
+					error_items.push("channel_address");
+				}
+				if (!system_code) {
+					error_items.push("system_code");
+				}
+
+				if (error_items.length) {
+					for (var i = 0, ic = error_items.length; i < ic; i++) {
+						showErrTip($(this).parents("form"), error_items[i]);
+					}
+					return;
+				}
+
+				var post_data = {
+					"ts" : new Date().getTime(),
+					"id" : id,
+					"config_name" : config_name,
+					"channel_code" : channel_code,
+					"channel_key" : channel_key,
+					"channel_address" : channel_address,
+					"system_code" : system_code
+				};
+
+				var load_pop = layer.load(1);
+				$.post("[[${contextPath}]]/system/add", post_data,
+						function(msg) {
+							layer.close(load_pop);
+							if (msg.code === 0) {
+								layer.alert('操作成功', {
+				    				skin: 'layui-layer-lan',
+				    				shift: 4 //动画类型
+				    			}, function(){
+				    				location.reload();
+				    			});
+							} else {
+								layer.alert(msg.msg, {icon : 2});
+							}
+						});
+			});
+</script>
+</html>

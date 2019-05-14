@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${str}]] | 就爱优品运营后台</title>
+<link th:href="@{{sp}/css/bootstrap.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/animate.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/style.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/iCheck/custom.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/jsTree/style.min.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/sweetalert/sweetalert.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/ladda/ladda-themeless.min.css|" rel="stylesheet">
+
+<link th:href="|${pub_bucket}/css/plugins/select2/select2.min.css|" rel="stylesheet">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div th:replace="../common/nav"></div>
+		<div id="page-wrapper" class="gray-bg">
+			<div th:replace="../common/top"></div>
+			<div class="row wrapper border-bottom white-bg page-heading">
+				<div class="col-sm-4">
+					<h2>就爱优品运营后台</h2>
+				</div>
+			</div>
+
+			<div class="wrapper wrapper-content animated fadeInRight ecommerce" style="padding-bottom:0px;">
+				<div class="ibox-content m-b-sm border-bottom">
+					<div class="row">
+						<div class="col-sm-2">							
+							<label>影厅：<select id="hall_select"></select></label>
+						</div>	
+						<div class="col-sm-2">							
+							<label>行数：<input type="text" value='' style="width:25px;height:22px;"></label>&nbsp;&nbsp;
+							<label>列数：<input type="text" value='' style="width:25px;height:22px;"></label>
+						</div>
+						<div class="col-sm-3">							
+							<label>座位方向：<select><option>从上到下</option></select>--<select><option>从左到右</option></select></label>
+						</div>
+						<div class="col-sm-2">							
+							<label><button class="btn btn-success" type="button" style="width:50px;height:30px;">创建</button></label>&nbsp;&nbsp;&nbsp;&nbsp;
+							<label><button class="btn btn-danger" type="button" style="width:50px;height:30px;">导出</button></label>
+						</div>
+						<div class="col-sm-2" align="right">
+						    <button id = "save_seat_tu" class="btn btn-success" type="button" style="height:30px;background:#787878">保存座位图</button>
+						</div>				
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-lg-8 goods_area">
+					<div class="wrapper wrapper-content animated fadeInUp" style="padding-top:0px;">
+						<div class="ibox">
+							<div class="ibox-content">
+								<p id="hall_name_p" style="text-align:center;"></p><hr>
+								<div class="table-responsive" style="position:relative; height:550px; overflow:auto;">
+                                	<table id="scrolli_c" style="position:absolute; width:2000px; height:590px; overflow-x:auto;">
+										<tbody id = "tbody_seat">
+		                                    
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 goods_area">
+					<div class="wrapper wrapper-content animated fadeInUp" style="padding-top:0px;">
+					    <div class="ibox-content m-b-sm border-bottom">
+					       <div class="row">
+						     <div class="col-sm-3">							
+							    <button class="btn btn-success" type="button" id="common_type" style="width:70px;">普通座</button>
+					             <br><br>
+					             <button class="btn btn-danger" type="button" id="love_type" style="width:70px;">情侣座</button>
+					             <br><br>
+					            <button class="btn btn-warning" type="button" id="VIP_type" style="width:70px;">VIP座</button>	
+						     </div>
+					         <div class="col-sm-1">
+					         </div>
+					         <div class="col-sm-5" style="background-color: #DDDDDD;" id = "seat_typec">
+					         </div>
+					       </div>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+		</div>
+	</div>
+	
+	
+	<!-- Mainly scripts -->
+	<script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/bootstrap.min.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/metisMenu/jquery.metisMenu.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/slimscroll/jquery.slimscroll.min.js(sp=${pub_bucket})}"></script>
+
+	<!-- Custom and plugin javascript -->
+	<script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/pace/pace.min.js(sp=${pub_bucket})}"></script>
+	<script th:src="|${pub_bucket}/js/plugins/jsTree/jstree.min.js|"></script>	
+	<script th:src="@{{sp}/third/layer3/layer.js(sp=${pub_bucket})}" type="text/javascript"></script>
+	<script th:src="|${pub_bucket}/js/plugins/sweetalert/sweetalert.min.js|"></script>
+	<!-- iCheck -->
+    <script th:src="|${pub_bucket}/js/plugins/iCheck/icheck.min.js|"></script>
+    
+    <!-- Ladda -->
+    <script th:src="|${pub_bucket}/js/plugins/ladda/spin.min.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/ladda/ladda.min.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/ladda/ladda.jquery.min.js|"></script>
+    
+    <script th:src="|${pub_bucket}/js/plugins/select2/select2.full.min.js|"></script>
+	<script>
+		$(document).ready(function() {
+
+			$('#loading-example-btn').click(function() {
+				btn = $(this);
+				simpleLoad(btn, true)
+				simpleLoad(btn, false)
+			});
+		});
+
+		function simpleLoad(btn, state) {
+			if (state) {
+				btn.children().addClass('fa-spin');
+				btn.contents().last().replaceWith(" Loading");
+			} else {
+				setTimeout(function() {
+					btn.children().removeClass('fa-spin');
+					btn.contents().last().replaceWith(" 分组管理");
+				}, 2000);
+			}
+		}
+		if([[${cinema_id}]]==''||[[${cinema_id}]]==null){
+	           layer.msg("门店信息为空查询失败", {
+	             shift : 6
+	            });
+		}
+		
+		//window.scrollTo((this.scrollWidth-this.offsetWidth)/2,0);
+		var url="[[${contextPath}]]" + "/ticketSeatsDetails/change";
+		$.post(url, {cinema_id:[[${cinema_id}]]}, function(data){
+			if(data.available) {
+				var arr = new Array();
+				var htmlo = "";$("#hall_select").html("");
+				for(var i=0;i<data.obj.length;i++){
+					var v1 = data.obj[i];
+				    for(var j=0;j<v1.dates.length;j++){
+				    	var v2 = v1.dates[j];
+						for(var z=0;z<v2.plans.length;z++){
+							var v3 = v2.plans[z];var flag = true;
+							for(a in arr){
+								if(v3.hallId==arr[a]){
+									flag = false;
+									break;
+								}
+							}
+							if(flag == true){
+								arr.push(v3.hallId);
+								htmlo += "<option value='" + v3.cinemaId + "," + v3.planId + "," + v3.lastUpdateTime + "," + v3.hallId + "'>" + v3.hall + "</option>"
+								//增加select中option的值
+							}					
+						}
+					}
+				}	
+				$("#hall_select").append(htmlo);
+				var hs = $("#hall_select option:first").val();
+				var hs1 = $("#hall_select option:first").text();
+				seat_tickets(hs,hs1);
+			}
+		});
+		function seat_tickets(hs,hs1){
+			var hss = hs.split(",");
+			$("#hall_name_p").html("");
+			$("#hall_name_p").append(hs1);
+			var url="[[${contextPath}]]" + "/ticketSeatsDetails/list";
+			$.post(url, {cinema_id:hss[0],plan_id:hss[1],last_update_time:hss[2],hall_id:hss[3]}, function(data){
+				if(data.available) {
+					$("#tbody_seat").html("");
+					htmls = "";
+					for(var i = 0 ; i < data.obj.rows.length ; i++){
+						htmls += "<ul>";
+						var seats = data.obj.rows[i].seats;
+						var seat_no_flag = "";
+						for(var j = 0 ; j < seats.length ; j++){
+							if(seats[j].seat_status!='road'){
+							seat_no_flag = parseInt(seat_no_flag)+parseInt(1);
+							if(seats[j].seat_no==seat_no_flag){seat_no_flag = "";continue;}
+							if(seats[j].seat_type=='100'){
+								htmls += "<li style='display: inline-block;margin-right:5px;'><img id='SEATS-" + seats[j].seat_no + "' name='" + seats[j].seat_no + "," + seats[j].seat_gr + "," + seats[j].seat_type + "' class='right_left' style='width:30px;height:30px' src='" + '[[${pub_bucket}]]' + "/inspinia/img/m1.png' onclick='clickCheckbox(this)'></li>";							
+							}
+							if(seats[j].seat_type=='101'){
+								htmls += "<li style='display: inline-block;margin-right:5px;'><img id='SEATS-" + seats[j].seat_no + "' name='" + seats[j].seat_no + "," + seats[j].seat_gr + "," + seats[j].seat_type + "' class='right_left' style='width:65px;height:33px' src='" + '[[${pub_bucket}]]' + "/inspinia/img/m2.png' onclick='clickCheckbox(this)'></li>";
+								seat_no_flag = seats[j].seat_no;
+							}
+							if(seats[j].seat_type=='102'){
+								htmls += "<li style='display: inline-block;margin-right:5px;'><img id='SEATS-" + seats[j].seat_no + "' name='" + seats[j].seat_no + "," + seats[j].seat_gr + "," + seats[j].seat_type + "' class='right_left' style='width:30px;height:30px' src='" + '[[${pub_bucket}]]' + "/inspinia/img/m3.png' onclick='clickCheckbox(this)'></li>";					
+							}}else{
+								htmls += "<li style='display: inline-block;margin-right:5px;width:30px;'></li>";
+							}
+						}
+						htmls += "</ul>";
+					}
+					$("#tbody_seat").append(htmls);
+				}else{
+			    	   var code = data.messages[0];
+			           layer.msg(code, {
+			             shift : 6
+			            });
+			    }
+			}); 
+			
+			var url="[[${contextPath}]]" + "/ticketSeatsDetails/get_ticket";
+			$.post(url, {cinema_id:hss[0],hall_id:hss[3]}, function(data){
+				htmlsl = "";$("#seat_typec").html("");
+				if(data.available) {
+					$("#seat_typec").html("");
+					for(var i = 0 ; i < data.obj.length ; i++){
+						htmlsl += "<div class='checkbox'><label><input type='checkbox' class='ticket_type_seat' value='" + data.obj[i].id + "'>" + data.obj[i].schema_name + "</label></div>";
+					}
+				}
+				$("#seat_typec").append(htmlsl);
+			});
+		}
+		
+		$("#hall_select").change(function(){
+			$("#hall_name_p").html("");
+			$("#seat_typec").html("");
+			seat_tickets($(this).val(),$("#hall_select").find("option:selected").text());
+		});
+		
+		var seat_row="";var seat_no="";var seat_type2="";
+		var seat_type1;
+		$("#common_type").click(function(){
+			seat_type1 = "common_type";
+		})
+		$("#love_type").click(function(){
+			seat_type1 = "love_type";
+		})
+		$("#VIP_type").click(function(){
+			seat_type1 = "VIP_type";
+		})
+		function clickCheckbox(obj){
+		   var s = $(obj).attr('name').split(",");
+		   seat_no = s[0];seat_row = s[1];seat_type2= s[2];
+		   if(seat_type1=='common_type'&&seat_type2=='100'){
+			   layer.msg('该座位已经是普通座', {
+		           shift : 6
+		       });
+		   }else if(seat_type1=='love_type'&&seat_type2=='101'){
+			   layer.msg('该座位已经是情侣座', {
+		           shift : 6
+		       });
+		   }else if(seat_type1=='VIP_type'&&seat_type2=='102'){
+			   layer.msg('该座位已经是VIP座位', {
+		           shift : 6
+		       });
+		   }else{
+			   if(seat_type1=="common_type"||seat_type1=="VIP_type"){
+				   var imgs = ""; var imgss = "";
+				   if(seat_type1 == 'common_type'){  
+					    imgs = "<img id='SEATS-" + seat_no + "' name='" + seat_no + "," + seat_row + "," + '100' + "' class='right_left' style='width:30px;height:30px' src='" + '[[${pub_bucket}]]' + "/inspinia/img/m1.png' onclick='clickCheckbox(this)'>";
+						imgss = "<li style='display: inline-block;margin-right:5px;'><img id='SEATS-" + parseInt(seat_no)+1 + "' name='" + parseInt(seat_no)+1 + "," + seat_row + "," + '100' + "' class='right_left' style='width:30px;height:30px' src='" + '[[${pub_bucket}]]' + "/inspinia/img/m1.png' onclick='clickCheckbox(this)'></li>";
+				   }else if(seat_type1=="VIP_type"){
+					    imgs = "<img id='SEATS-" + seat_no + "' name='" + seat_no + "," + seat_row + "," + '102' + "' class='right_left' style='width:30px;height:30px' src='" + '[[${pub_bucket}]]' + "/inspinia/img/m3.png' onclick='clickCheckbox(this)'>";
+						imgss = "<li style='display: inline-block;margin-right:5px;'><img id='SEATS-" + parseInt(parseInt(seat_no)+1) + "' name='" + parseInt(parseInt(seat_no)+1) + "," + seat_row + "," + '102' + "' class='right_left' style='width:30px;height:30px' src='" + '[[${pub_bucket}]]' + "/inspinia/img/m3.png' onclick='clickCheckbox(this)'></li>";
+				   }
+				   if(seat_type2=="101"){
+					   $(obj).parent('li').after(imgss);
+					   $(obj).replaceWith(imgs);
+					   //增加一个标签
+				   }else{
+					   $(obj).replaceWith(imgs);
+				   }
+			   }else if(seat_type1=="love_type"){
+				   var imgsss = "";
+				   var c1 = $(obj).parent('li').next().find('img').attr("name");
+				   var c2 = $(obj).parent('li').prev().find('img').attr("name");
+				   var flagsl = false;
+				   if(typeof(c1) != "undefined"){
+					   var n1 = c1.split(",");
+					   seat_nol1 = n1[0];seat_rowl1 = n1[1];seat_typel1 = n1[2];
+					   if(seat_typel1!='101'){
+						  imgsss = "<img id='SEATS-" + seat_no + "' name='" + seat_no + "," + seat_row + "," + '101' + "' class='right_left' style='width:65px;height:30px' src='" + '[[${pub_bucket}]]' + "/inspinia/img/m2.png' onclick='clickCheckbox(this)'>";
+						  $(obj).parent('li').next().remove();
+						  $(obj).replaceWith(imgsss);
+						  flagsl = true;
+					   }
+				   }
+				   if(flagsl==false&&typeof(c2) != "undefined"){
+					   var n2 = c2.split(",");
+					   seat_nol2 = n2[0];seat_rowl2 = n2[1];seat_typel2 = n2[2];
+					   if(seat_typel2!='101'){
+						 imgsss = "<img id='SEATS-" + seat_nol2 + "' name='" + seat_nol2 + "," + seat_row + "," + '101' + "' class='right_left' style='width:65px;height:30px' src='" + '[[${pub_bucket}]]' + "/inspinia/img/m2.png' onclick='clickCheckbox(this)'>";
+						 $(obj).parent('li').prev().find("img").replaceWith(imgsss);
+						 $(obj).parent('li').remove();
+						 flagsl = true;
+					   }
+				   }	   
+				   if(flagsl==false){
+					   layer.msg("请选择合适的座位", {
+				             shift : 6
+				            });
+				   }
+			   }else{
+				   layer.msg("请选择要转换的类型", {
+			             shift : 6
+			            });
+			   }
+		   }
+		}
+
+		$("#save_seat_tu").click(function(){
+			var hall_select_val =  $("#hall_select").find("option:selected").val();
+			var hall_select_text =  $("#hall_select").find("option:selected").text();
+			var hall_id = hall_select_val.split(",")[3];
+			var ticket_types = "";
+			$(".ticket_type_seat").each(function(){
+				if(this.checked){
+					ticket_types += $(this).val() + ",";
+				}
+			});
+			var seats_typesls = "";
+			$(".right_left").each(function(){
+				var seats_typesl = $(this).attr("name");
+				var seats_typest = $(this).attr("name").split(",");
+				if(seats_typest[2]=='101'){
+					seats_typesls += seats_typesl + "-";
+					seats_typesls += parseInt(parseInt(seats_typest[0])+1) + "," + seats_typest[1] + "," + seats_typest[2] + "-";
+				}else{
+					seats_typesls += seats_typesl + "-";
+				}
+			});
+			var url="[[${contextPath}]]" + "/ticketSeatsDetails/save_seatinformation"
+			$.post(url, {cinema_id:[[${cinema_id}]],hall_id:hall_id,ticket_types:ticket_types,seats_typesls:seats_typesls}, function(data){
+				   if(data.available) {
+					   layer.msg("更改座位信息成功", {
+				             shift : 6
+				            });
+					   seat_tickets(hall_select_val,hall_select_text);
+				      } else {
+				    	   var code = data.messages[0];
+				           layer.msg(code, {
+				             shift : 6
+				            });
+				      }
+		   });
+		});
+	</script>
+</body>
+
+</html>

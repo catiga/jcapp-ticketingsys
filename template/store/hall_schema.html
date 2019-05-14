@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>票务系统-影城管理</title>
+
+    <link th:href="|${pub_bucket}/inspinia/css/bootstrap.min.css|" rel="stylesheet">
+    <link th:href="|${pub_bucket}/inspinia/font-awesome/css/font-awesome.css|" rel="stylesheet">
+    <link th:href="|${pub_bucket}/inspinia/css/plugins/iCheck/custom.css|" rel="stylesheet">
+    <link th:href="|${pub_bucket}/inspinia/css/animate.css|" rel="stylesheet">
+    <link th:href="|${pub_bucket}/inspinia/css/style.css|" rel="stylesheet">
+</head>
+<body>
+ <div id="wrapper">
+<div th:replace="../common/nav"></div>
+	<div id="page-wrapper" class="gray-bg">    
+	    <div th:replace="../common/top"></div>
+	    <div class="row wrapper border-bottom white-bg page-heading">
+	    </div>
+	    <table class="footable table table-stripped toggle-arrow-tiny default breakpoint footable-loaded" data-page-size="15">
+            <thead>
+            <tr>
+                <th data-toggle="true" class="footable-visible footable-first-column footable-sortable">影厅名称<span class="footable-sort-indicator"></span></th>
+                <th data-hide="phone" class="footable-visible footable-sortable">影厅编号<span class="footable-sort-indicator"></span></th>
+                <th data-hide="phone" class="footable-visible footable-sortable">类型<span class="footable-sort-indicator"></span></th>
+                <th data-hide="phone" class="footable-visible footable-sortable">座位数<span class="footable-sort-indicator"></span></th>
+                <th class="text-right footable-visible footable-last-column" data-sort-ignore="true">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="footable-even" style="display: table-row;" th:if="${not #lists.isEmpty(halls)}" th:each="hall : ${halls}">
+                <td class="footable-visible footable-first-column"><span class="footable-toggle"></span>
+                   [[${hall.name}]]
+                </td>
+                <td class="footable-visible">
+                   [[${hall.id}]]
+                </td>
+                <td class="footable-visible">
+                   [[${hall.type}]]
+                </td>
+                <td class="footable-visible">
+                   [[${hall.seatNum}]]
+                </td>
+                <td class="text-right footable-visible footable-last-column">
+                    <div class="btn-group">
+                        <button class="btn btn-outline btn-success btn-xs btn-assign"   th:attr="store_id=${store_id},hall_id=${hall.id}">指定票类</button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            </tfoot>
+        </table>
+         <div th:replace="../common/foot"></div>
+	</div>
+</div>         
+              
+
+<div id="choose_schema_pop" style="display: none;">
+     <div class="ibox-content">
+          <form class="form-horizontal" action="" onsubmit="return false;">
+          	  <input type="hidden" value="" name="cinema_id" />
+          	  <input type="hidden" value="" name="hall_id" />
+          	  <div name="groups">
+              </div>
+              <div class="form-group">
+                  <div class="col-lg-offset-2 col-lg-10">
+                      <button class="btn btn-outline btn-primary" type="submit">确定</button>
+                      <button class="btn btn-outline btn-danger" onclick="layer.close(window.current_pop);" type="reset">取消</button>
+                  </div>
+              </div>
+          </form>
+      </div>
+ </div>
+
+<!-- Mainly scripts -->
+<script th:src="|${pub_bucket}/inspinia/js/jquery-2.1.1.js|"></script>
+<script th:src="|${pub_bucket}/inspinia/js/bootstrap.min.js|"></script>
+<script th:src="|${pub_bucket}/inspinia/js/plugins/metisMenu/jquery.metisMenu.js|"></script>
+<script th:src="|${pub_bucket}/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js|"></script>
+
+<!-- Custom and plugin javascript -->
+<script th:src="|${pub_bucket}/inspinia/js/plugins/pace/pace.min.js|"></script>
+
+<!-- iCheck -->
+<script th:src="|${pub_bucket}/inspinia/js/plugins/iCheck/icheck.min.js|"></script>
+<script th:src="|${pub_bucket}/layer/layer.js|"></script>
+<script type="text/javascript">
+	/*自适应高度*/
+	$(document).ready(function(){
+	  var windowHeight = $(window).height();
+	  if($("#content_area").height() < windowHeight){
+	      $("#content_area").height(windowHeight);
+	  }
+	});
+</script>
+<script type="text/javascript">
+
+var showErrTip = function(_form, name) {
+	_form.find("*[name=" + name + "]").parents(".form-group").addClass("has-error");
+	setTimeout(function() {_form.find("*[name=" + name + "]").parents(".form-group").removeClass("has-error");}, 1500)
+}
+
+var choose_group_all = function(btn){
+	var _btn = $(btn);
+	_btn.parents(".form-group").eq(0).find("input[type=checkbox]").prop("checked",true);
+}
+
+$(".btn-assign").click(function(){
+	var cinema_id = $(this).attr("store_id")
+	var hall_id = $(this).attr("hall_id")
+	var post_data = {
+		"cinema_id" : cinema_id
+		,"hall_id" : hall_id
+	}
+	var load_pop = layer.load(1);
+	$.post("[[${contextPath}]]/schema/hall_groups", post_data,function(msg) {
+		layer.close(load_pop);
+		if (msg.code === 0) {
+			$("#choose_schema_pop *[name=cinema_id]").val(cinema_id);
+			$("#choose_schema_pop *[name=hall_id]").val(hall_id);
+			$("#choose_schema_pop *[name=groups]").html("");
+			
+			for(var i=0,ic=msg.data.length;i<ic;i++){
+				var group = msg.data[i];
+				var schemas = group.schemas;
+				
+				var group_emt = `
+					<div class="form-group">
+	            	  	<label class="col-sm-3 control-label">`+group.group_name+`<button class="btn btn-outline btn-success btn-xs" onclick="choose_group_all(this)">全选</button></label>
+	                <div class="col-sm-9">
+				`;
+				
+				for(var j=0,jc=schemas.length;j<jc;j++){
+					var schema = schemas[j];
+					group_emt += '<label class="checkbox-inline"> <input type="checkbox" value="'+schema.id+'" '+(schema.selected ? 'checked' : '')+'> '+schema.schema_name+' </label>';
+				}
+				
+				group_emt += `
+					</div>
+		              </div>
+				`;
+				
+				$("#choose_schema_pop *[name=groups]").append(group_emt);
+			}
+			
+			
+			window.current_pop = layer.open({
+			    type: 1,
+			    title: '选择该影厅可用票类',
+			    maxmin: true,
+			    area: ['1200px', '500px'],
+			    content: $("#choose_schema_pop")
+			});
+		}else{
+			layer.msg(msg.msg, {icon : 5,time : 1000});
+		}
+	});
+});
+
+$("#choose_schema_pop button[type=submit]").click(function(){
+	var cinema_id = $("#choose_schema_pop *[name=cinema_id]").val();
+	var hall_id = $("#choose_schema_pop *[name=hall_id]").val();
+	
+	var all_schemas = "";
+	$("#choose_schema_pop input[type=checkbox]").each(function(){
+		if($(this).prop("checked")){
+			if(all_schemas){
+				all_schemas += ",";
+			}
+			all_schemas += $(this).val();
+		}
+	});
+	
+	if(!all_schemas){
+		layer.msg("必须为该影厅指定一个或以上的票类", {icon : 5,time : 1000});
+		return;
+	}
+	
+	var _btn = $(this);
+	_btn.attr("disabled","true");
+	
+	var load_pop = layer.load(1);
+	var post_data = {
+		"cinema_id" : cinema_id
+		,"hall_id" : hall_id
+		,"all_schemas" : all_schemas
+	};
+	$.post("[[${contextPath}]]/store/save_hall_schemas", post_data,function(msg) {
+		layer.close(load_pop);
+		if (msg.code === 0) {
+			layer.msg('操作成功', {icon : 1,time : 1000}, function() {
+				_btn.removeAttr("disabled");
+				layer.closeAll();
+			});
+		}else{
+			_btn.removeAttr("disabled");
+			layer.msg(msg.msg, {icon : 5,time : 1000});
+		}
+	});
+});
+
+</script>
+</body>
+</html>

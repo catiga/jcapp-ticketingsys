@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${str}]] | 票务系统-网售规则</title>
+<link th:href="@{{sp}/css/bootstrap.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/animate.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/style.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/jqui1114/jquery-ui.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/plugins/select2/select2.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<script th:src="@{{sp}/kindeditor/kindeditor-min.js(sp=${pub_bucket})}"> </script>
+</head>
+<script>
+
+var editor;
+KindEditor.ready(function(K) {
+    editor = K.create('textarea[name="mc_content"]', {
+        allowFileManager : true
+    });
+    K('input[name=getHtml]').click(function(e) {
+        alert(editor.html());
+    });
+    K('input[name=isEmpty]').click(function(e) {
+        alert(editor.isEmpty());
+    });
+    K('input[name=getText]').click(function(e) {
+        alert(editor.text());
+    });
+    K('input[name=selectedHtml]').click(function(e) {
+        alert(editor.selectedHtml());
+    });
+    K('input[name=setHtml]').click(function(e) {
+        editor.html('<h3>Hello KindEditor</h3>');
+    });
+    K('input[name=setText]').click(function(e) {
+        editor.text('<h3>Hello KindEditor</h3>');
+    });
+    K('input[name=insertHtml]').click(function(e) {
+        editor.insertHtml('<strong>插入HTML</strong>');
+    });
+    K('input[name=appendHtml]').click(function(e) {
+        editor.appendHtml('<strong>添加HTML</strong>');
+    });
+    K('input[name=clear]').click(function(e) {
+        editor.html('');
+    });
+});
+</script>
+<body>
+	<div id="wrapper">
+		<div th:replace="../../common/nav"></div>
+		<div id="page-wrapper" class="gray-bg">
+			<div th:replace="../../common/top"></div>   <!-- 顶部 -->
+			<div class="row wrapper border-bottom white-bg page-heading">
+				<div class="col-lg-10">
+					<h2>价格策略</h2>
+					<ol class="breadcrumb">
+						<li><a href="javascript:;">Home</a></li>
+						<li><a href="/ticketingsys/ticketSalesRules/list">价格策略管理</a></li>
+						<li class="active"><strong>创建影票网售规则</strong></li>
+					</ol>
+				</div>
+				<div class="col-lg-2"></div>
+			</div>
+			<div class="wrapper wrapper-content animated fadeInRight">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="ibox float-e-margins">
+							<div class="ibox-title">
+								<h5>基本信息</h5>
+								<div class="ibox-tools">
+									<a class="collapse-link"> <i class="fa fa-chevron-up"></i></a> 
+									<a class="dropdown-toggle" data-toggle="dropdown" href="/scm/goods/index"> <i class="fa fa-wrench"></i></a>
+									<ul class="dropdown-menu dropdown-user">
+										<li><a href="javascript:;">暂无</a></li>
+									</ul>
+									<a class="close-link"> <i class="fa fa-times"></i></a>
+								</div>
+							</div>
+							<div class="ibox-content">
+								<form class="goodsinfo_form" role="form" id="templatemo-preferences-form" method="post">
+		                             <div class="has-success has-feedback">
+		                                 <div class="row">
+		                                     <div class="col-md-6 margin-bottom-15">
+		                                         <label class="control-label" for="mc_name">规则名称</label> 
+		                                         <input name="mc_name" type="text" class="form-control" id="mc_name" placeholder="输入规则名称"> 
+		                                     </div>
+		                                     <div class="col-md-6 margin-bottom-15">
+		                                         <label class="control-label" for="mc_isPrice">是否保护最低票价</label>
+		                                         <select name="mc_isPrice " class="form-control margin-bottom-15" id="mc_isPrice" >
+		                                     	 <option  value="0">保护最低票价</option>
+		                                    	 <option  value="1">允许低于最低票价</option>
+		                                		 </select>
+		                                     </div>
+		                                 </div>
+		                             </div>
+		                             <div class="has-success has-feedback">
+		                                 <div class="row">
+		                                     <div class="col-md-12 margin-bottom-15">
+		                                         <label class="control-label" for="mc_info">规则简介</label> 
+		                                         <textarea name="mc_info" class="form-control" id="mc_info" placeholder="输入规则简介"></textarea> 
+		                                     </div> 
+		                                 </div>
+		                             </div>
+		                             <hr/>
+		                              <div id="checked_cinema"  class="has-success has-feedback" style="font-size:15px;">
+						  	    <div  style="float:left;padding-left: 0px;">
+							   	 <label class="control-label" for="coupon_validate_type" style="float:left;padding-left: 0px;">参与影城</label> 
+							    </div>
+						 		<input type="radio" id="uncheck_cinema" name="radiobutton" value="radiobutton" checked="checked" style="width: 20px;height:20px;margin-left:80px;"> 全部
+						  	    <input type="radio" id="check_cinema" name="radiobutton" value="radiobutton" style="width: 20px;height:20px;margin-left:20px;"> 部分影城
+							 </div>  
+							 <div class="example" style="margin-top:10px; margin-left:1.5px;" id="check_halls">
+							   </div>
+		                             <hr/>
+		                             <div class="has-success has-feedback">
+		                                 <div class="row">
+		                                     <div class="col-md-12 margin-bottom-15">
+		                                         <label for="proj_config" class="control-label">设置价格策略</label><br/>
+		                                     </div>
+		                                 </div>
+		                             </div>
+		                             <div class="row">
+										<div class="col-md-3 margin-bottom-15">
+										<label for="tb_num">价格策略类型</label> 
+										  <select name="tb_num " class="form-control margin-bottom-15" onchange="changeType()" id="tb_num" >
+		                                    	 <option  value="w">销售价格变动</option>
+		                                    	 <option  value="d">固定折扣销售</option>
+		                                    	 <option  value="s">指定销售价格</option>
+		                                    	 <option  value="y">最低票价变动</option>
+		                                  </select>
+										</div>
+										<div class="col-md-2 margin-bottom-15" >
+											<label for="tb_movie_type">影片类型</label> 
+											<select name="tb_movie_type" class="form-control margin-bottom-15" id="tb_movie_type">
+												<option value="不限">不限</option>
+												<option value="2D">2D</option>
+												<option value="3D">3D</option>
+											</select>
+											</div>
+										<div class="col-md-2 margin-bottom-15">
+											<label for="tb_gift">屏幕尺寸</label> 
+											 <select name="tb_gift " class="form-control margin-bottom-15" id="tb_gift" >
+												 <option value="不限">不限</option>
+		                                    	 <option value="普通">普通</option>
+											     <option value="IMAX">IMAX</option>
+											     <option value="巨幕">巨幕</option>
+											     <option value="中国巨幕">中国巨幕</option>
+		                                	 </select>
+										</div>
+										<div class="col-md-3 margin-bottom-15">
+											<label for="tb_gift1">价格变动值</label> 
+											<input name="tb_gift1" type="text" class="form-control" id="tb_gift1"  placeholder="输入金额，正数为加上；负数为减掉">
+										</div>
+										<div class="col-md-2 margin-bottom-15">
+											<label for="add_new_price_streg">&nbsp;</label> 
+											<button type="button" class="btn btn-primary form-control add_new_price_streg"   id="add_new_price_streg">添加一条</button>
+										</div>
+									</div>
+										<div class="row">
+		                   				<div class="has-success has-feedback" style="margin-top:30px;" id="times_value">                                         
+		                         			<div class="row" id="times_value1">
+		                        		</div>
+										</div>
+									</div>
+		                     <div class="has-success has-feedback" style="margin-top:30px;">                                                                                                                                                                                                             
+		                       <div class="row" style="margin-top:30px;">                                          
+		                           <div class="col-md-6 margin-bottom-15">
+		                              <label for="time_policy" class="control-label" style="float:left;width: 20%;">时间段设置</label>
+		                               <select class="form-control margin-bottom-15" id="time_policy" style="float:left;width: 50%;">
+		                                 <option value="0">全部时间有效</option>
+		                                 <option value="w">按周分时设置</option>
+		                                 <!-- <option value="d">按天分时设置</option> -->
+		                                </select>
+		                             </div>
+		                             <div class="col-md-6 margin-bottom-15">
+		                                 <label for="add_time_stregy" style="float:left;width: 20%;">&nbsp;</label> 
+		                                 <button type="button" class="btn btn-primary form-control add_time_stregy" style="float:left;width: 50%;">添加一条</button>
+		                             </div>
+		                        </div>
+		                  	</div>  
+		                    <div class="has-success has-feedback"  id = "weeks"  style="margin-top:30px;margin-left: 40px;">
+		                         <div class="row" >
+		                             <label class="checkbox-inline">
+		                                <input type="checkbox" id="inlineCheckbox1" class="week_day" dis_name="周一" value="1" style="width: 20px;height:20px;"  checked > <a >周一</a>
+		                             </label>
+		                            <label class="checkbox-inline">
+		                                   <input type="checkbox" id="inlineCheckbox2" class="week_day" dis_name="周二" value="2" style="width: 20px;height:20px;" checked> 周二
+		                            </label>
+		                            <label class="checkbox-inline">
+		                                  <input type="checkbox" id="inlineCheckbox3" class="week_day" dis_name="周三" value="3" style="width: 20px;height:20px;"checked> 周三
+		                            </label>
+		                            <label class="checkbox-inline">
+		                                  <input type="checkbox" id="inlineCheckbox3" class="week_day" dis_name="周四" value="4" style="width: 20px;height:20px;" checked> 周四
+		                            </label>
+		                            <label class="checkbox-inline">
+		                                 <input type="checkbox" id="inlineCheckbox3" class="week_day" dis_name="周五" value="5" style="width: 20px;height:20px;" checked> 周五
+		                            </label>
+		                            <label class="checkbox-inline">
+		                                  <input type="checkbox" id="inlineCheckbox3" class="week_day" dis_name="周六" value="6" style="width: 20px;height:20px;" checked> 周六
+		                            </label>
+		                            <label class="checkbox-inline">
+		                                  <input type="checkbox" id="inlineCheckbox3" class="week_day" dis_name="周日" value="7" style="width: 20px;height:20px;" checked> 周日
+		                            </label>                                            
+		                          </div>                                                                                                                                                                                                                                                                                          
+		                     </div>   
+		                     <div class="has-success has-feedback"  id="date">                                         
+		                         <div class="row" style="margin-top:30px;" >                                                 
+		                             <div class="col-md-6 margin-bottom-15">
+		                                 <label class="control-label" for="q_sd" style="float:left;width: 20%;" >开始日期：</label>
+		                                 <input name="q_sd" type="text" class="form-control" id="q_sd" placeholder="开始日期" style="float:left;width: 50%;">
+		                             </div>
+		                             <div class="col-md-6 margin-bottom-15">
+		                                 <label class="control-label" for="q_ed" style="float:left;width: 20%;" >结束日期：</label>
+		                                 <input name="q_ed" type="text" class="form-control" id="q_ed" placeholder="结束日期" style="float:left;width: 50%;">
+		                             </div>
+		                         </div>
+		                     </div>                                      
+		    
+		    				
+		                     <div class="has-success has-feedback"  id="time1" style="margin-top:30px;">                                         
+		                         <div class="row">
+		                             <div class="col-md-6 margin-bottom-15" >
+		                                 <label class="control-label"for="start_time" style="float:left;width: 20%;" >开始时间</label>
+		                                 <input type="text" class="form-control" id="start_time" placeholder="选择开始时间" style="float:left;width: 50%;"> 
+		                             </div>
+		                             <div class="col-md-6 margin-bottom-15" >
+		                                 <label class="control-label" for="end_time" style="float:left;width: 20%;">结束时间</label>
+		                                 <input type="text" class="form-control" id="end_time" placeholder="选择结束时间" style="float:left;width: 50%;">
+		                             </div>                                                  
+		                         </div>                                              
+		                     </div>
+		                      <div class="has-success has-feedback" style="margin-top:30px;" id="rule_content">                                         
+		                          <div class="row" id="rule_content1">
+		                          </div>
+		                     </div>
+		                             <div class="has-success has-feedback">
+		                                 <div class="row">
+		                                     <div class="col-md-6 margin-bottom-15">
+		                                         <label for="proj_config" class="control-label">限制影片</label><br/>
+		                                     </div>
+		                                     <!-- <div class="col-md-6 margin-bottom-15">
+		                                         <label for="proj_config" class="control-label">限制影城</label><br/>
+		                                     </div> -->
+		                                 </div>
+		                             </div>
+		                             <div class="has-success has-feedback">
+		                                 <div class="row">
+		                                     <div class="col-md-6 margin-bottom-15">
+		                                         <label for="mc_l_ms">选择参与活动的影片（为空则所有）</label> 
+		                                         <select id="v_mc_l_ms" class="js-example-basic-multiple" multiple="multiple" style="width:100%;">
+		                                         </select>
+		                                     </div>
+		                                    <!--  <div class="col-md-6 margin-bottom-15">
+		                                         <label for="m_mc_l_ms">选择参与活动的影城（为空则所有）</label> 
+		                                         <select id="m_mc_l_ms" class="js-example-basic-multiple" multiple="multiple" style="width:100%;">
+		                                         </select>
+		                                     </div> -->
+		                                 </div>
+		                             </div>
+		                             <hr/>
+		                             <div class="row">
+		                                 <div class="col-md-12 margin-bottom-15">
+		                                     <label class="control-label" for="mc_content">详细信息</label>
+		                                     <textarea name="mc_content" class="form-control" rows="3" id="mc_content"></textarea>
+		                                 </div>
+		                             </div>
+		                             
+		                             <div class="row templatemo-form-buttons">
+		                                 <div class="col-md-12">
+		                                     <button th:if="${rule.apstatus=='10' || rule.apstatus=='21'}" type="button" class="btn btn-primary save"  >保存</button>
+		                                     <!-- 
+		                                     <button type="reset" class="btn btn-default">重置</button>
+		                                      -->
+		                                 </div>
+		                             </div>
+		                         </form>
+							</div>
+						</div>
+					</div>
+				</div>
+             </div>
+		</div>
+	</div>
+	
+	   
+	<!-- Mainly scripts -->
+    <script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${pub_bucket})}"></script>
+    <script th:src="@{{sp}/js/bootstrap.min.js(sp=${pub_bucket})}"></script>
+    <script th:src="@{{sp}/js/plugins/metisMenu/jquery.metisMenu.js(sp=${pub_bucket})}"></script>
+    <script th:src="@{{sp}/js/plugins/slimscroll/jquery.slimscroll.min.js(sp=${pub_bucket})}"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+    <script th:src="@{{sp}/js/plugins/pace/pace.min.js(sp=${pub_bucket})}"></script>
+    
+    <script th:src="@{{sp}/third/layer3/layer.js(sp=${pub_bucket})}" type="text/javascript"></script>
+    <script th:src="@{{sp}/js/plugins/select2/select2.full.min.js(sp=${pub_bucket})}" type="text/javascript"></script>
+    
+    <script th:src="@{{sp}/jqui1114/jquery-ui.js(sp=${pub_bucket})}" type="text/javascript" charset="utf-8"></script>
+    <script th:src="@{{sp}/jqui1114/jquery-ui-timepicker-addon.js(sp=${pub_bucket})}" type="text/javascript" charset="utf-8"></script>
+    <script th:src="@{{sp}/jqui1114/jquery-ui-timepicker-zh-CN.js(sp=${pub_bucket})}" type="text/javascript" charset="utf-8"></script>
+	
+</body>
+
+<script type="text/javascript">
+$(function() {
+	var post_err_msg = "[[${error_msg}]]";
+    if(post_err_msg){
+        layer.msg(post_err_msg, {icon: 2}); 
+    }
+    //初始化日期选项隐藏
+    var time_type_v='[[${rule.time_type}]]';
+    if(time_type_v == null||time_type_v == '0'||time_type_v == ''){
+   		$("#weeks").hide();
+   		$("#time1").hide(); 
+    	$("#date").hide();
+    	$("#time_policy").val('0')
+    }else{
+    	$("#date").hide();
+    	$("#time_policy").val(time_type_v);
+    }
+    
+    $(".add_new_market").on("click", function(){
+        location.href = "[[${contextPath}]]/ticketSalesRules/add?" + Date.parse(new Date());
+    });
+    var url='[[${contextPath}]]/common/movieListInfoList';
+	$.post(url,{},function(data){
+		if(data.available) {
+			if(data.data && data.data.length>0) {
+				var table = data.data;
+				for (var i = 0; i < table.length; i++) {
+					var item = table[i];
+					$("#v_mc_l_ms").append("<option value=\""+item.label+"\">"+item.value+"</option>");
+				}
+				var mc_ms='[[${rule.movie_type}]]';
+				if(mc_ms!=""){ 
+					var smovie = mc_ms.split(',');
+					for(var i=0;i<smovie.length;i++){
+						$('#v_mc_l_ms option[value='+smovie[i]+']').attr("selected","selected");
+					}
+				} else {
+					$("#v_mc_l_ms").append("<option value=\"0\">影片信息加载失败</option>");
+				}
+			} else {
+				$("#v_mc_l_ms").append("<option value=\"0\">影片信息加载失败</option>");
+			}
+			$("#v_mc_l_ms").select2();
+		}
+		
+    });
+     var url1='[[${contextPath}]]/common/storeInfoList'
+    	$.post(url1,{},function(data){
+        	var table = data.obj;
+    		for (var i = 0; i < table.length; i++) {
+    			var item = table[i];
+    			$("#m_mc_l_ms").append("<option value=\""+item.id+"\">"+item.store_name+"</option>");
+    		}
+    		var mc_mt='[[${rule.store_type}]]';
+   		 	if(mc_mt!=""){
+   				var smovie = mc_mt.split(',');
+   				for(var i=0;i<smovie.length;i++){
+   				$('#m_mc_l_ms option[value='+smovie[i]+']').attr("selected","selected");
+   				}				
+   			}  
+    			$("#m_mc_l_ms").select2();
+        });
+	});
+	
+	function changeType(){
+		var m=$("#tb_num").val();
+		if(m=='w'||m=='y'){
+			$("#tb_gift1").attr("placeholder","输入金额，正数为加上；负数为减掉"); 
+			$("#tb_gift1").val("");
+		}
+		if(m=='d'){
+			$("#tb_gift1").attr("placeholder","输入折扣，例如80"); 
+			$("#tb_gift1").val("");
+		}
+		if(m=='s'){
+			$("#tb_gift1").attr("placeholder","输入销售价格"); 
+			$("#tb_gift1").val("");
+		}
+	 }
+
+	$(".add_new_price_streg").on("click", function() {
+		var tb_num = $("#tb_num option:selected").val();
+		var tb_movie_type = $("#tb_movie_type option:selected").val();
+		var tb_gift =$("#tb_gift option:selected").val();
+		var tb_gift1 = $.trim($(this).parent().parent().find("input[name='tb_gift1']").val());
+		
+		var tb_num_text = $.trim($("#tb_num option:selected").text());
+		var tb_movie_type_text = $.trim($("#tb_movie_type option:selected").text());
+		var tb_gift_text = $.trim($("#tb_gift option:selected").text());
+		var invalid = false;
+		
+		var m=$("#tb_num").val();
+		if(m=='w'||m=='y'){
+		$("input[name='tb_gift1']").each(function() {
+			var mc_price_value = $(this).val();
+			var reg = /(^(\-?)[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;//最多保留两位的正则校验
+			if(mc_price_value==null||mc_price_value.trim()==""||isNaN(mc_price_value)||!reg.test(mc_price_value)) {
+				$(this).val('');
+				invalid = true;
+				return;
+			}
+		  }); 
+		}
+		if(m=='d'){
+		$("input[name='tb_gift1']").each(function() {
+			var mc_price_value = $(this).val();
+			var r = /^\+?[1-9][0-9]*$/;//正整数的正则校验
+			if(mc_price_value==null||mc_price_value.trim()==""||isNaN(mc_price_value)||!r.test(mc_price_value)||mc_price_value>=100) {
+				$(this).val('');
+			    invalid = true;
+				return;
+			}
+		  }); 
+		}
+		if(m=='s'){
+			$("input[name='tb_gift1']").each(function() {
+				var mc_price_value = $(this).val();
+				var r = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
+				if(mc_price_value==null||mc_price_value.trim()==""||isNaN(mc_price_value)||!r.test(mc_price_value)) {
+					$(this).val('');
+				    invalid = true;
+					return;
+				}
+			  }); 
+			}
+		if(invalid) {
+			layer.msg("请输入合法的价格变动值", {icon: 2});
+			return;
+		}
+		var htmls = '<div class="alert alert-success alert-dismissible time_spec_rule"  style="float:left;width: 40%; margin-left:15px;">';
+        htmls += '<button type="button"  class="close btn" data-dismiss="alert" >';
+     	htmls += '<span aria-hidden="true" class="time_spec_value"  tb_num="' +tb_num+  '" tb_gift="'+tb_gift+'" aee="'+tb_movie_type+'" tb_gift1="'+tb_gift1+'">'+"删除此条"+'</span>';
+        htmls += '<span class="sr-only">Close</span>';
+        htmls += '</button>';
+        htmls += '<strong>' +'价格策略类型:'+ tb_num_text+'</strong>&nbsp;';
+        htmls += '<strong>' +'影片类型:'+ tb_movie_type_text+'</strong>&nbsp;';
+        htmls += '<strong>' +'屏幕尺寸:'+ tb_gift_text+ '</strong>&nbsp;';
+        htmls += '<strong>' +'价格变动值:'+ tb_gift1+'</strong>';
+        htmls += '</div>';
+		$("#times_value").after(htmls);
+	    $("#times_value1").show();
+	});
+	/* $("#mc_l_u_f").on("change", function() {
+		var v = $(this).val();
+		if(v=="w"||v=="m") {
+			$("#mc_l_u_v").removeAttr("disabled");
+		} else {
+			$("#mc_l_u_v").val("");
+			$("#mc_l_u_v").prop("disabled", true);
+		}
+	});
+	
+	$("#mc_l_f").change(function(){
+		var ched = $("#mc_l_f")[0].checked;
+		if(ched){
+			$("#mc_l_u_f").val(-1);
+			$("#mc_l_u_f").attr("disabled","disabled");
+			$("#mc_l_u_v").val("");
+			$("#mc_l_u_v").attr("disabled","disabled");
+		}else{
+			$("#mc_l_u_f").removeAttr("disabled");
+		}
+	});
+	
+	$("#mc_l_u").on("change", function() {
+		var v = $(this).val();
+		if(v==null||v.trim()=="") {
+			v = "0";
+		} else {
+			if(isNaN(v)) {
+				layer.msg("充值次数限制须为数字", {icon: 2});
+				$("#mc_l_u").val("");
+			} else {
+				if(parseInt(v)<0) {
+					layer.msg("充值次数限制须设置大于0的值", {icon: 2});
+					$("#mc_l_u").val("");
+				}
+			}
+		}
+	}); */
+	var id =[[${rule.id}]];
+	$("#mc_name").val('[[${rule.title}]]')
+	$("#mc_info").val('[[${rule.info}]]')
+	$("#mc_isPrice").val('[[${rule.allow_low_price}]]')
+		var itemList = '[[${rule.price_streg}]]'
+        if(itemList!=""){
+    	var s=itemList.split('/');
+    	var html = '';
+        for(var i=0;i<s.length;i++){
+        var time = s[i].split(',');
+        var m_time='';
+        var m_time1='';
+        var times1= time[3]/100;
+        if(time[0]=='w'){
+        	m_time='销售价格变动'
+        }
+        if(time[0]=='d'){
+        	m_time='固定折扣销售'
+        }
+        if(time[0]=='s'){
+        	m_time='指定销售价格'
+        }
+        if(time[0]=='y'){
+        	m_time='最低票价变动'
+        }
+        if(time[1]=='All'){
+        	m_time1='不限'
+        }else{
+        	m_time1=time[1];
+        }
+        var  htmls=  '<div class="alert alert-success alert-dismissible time_spec_rule"  style="float:left;width: 40%; margin-left:15px;">';
+	        htmls += '<button type="button"  class="close btn" data-dismiss="alert" >';
+	     	htmls += '<span aria-hidden="true" class="time_spec_value"  tb_num="' +time[0]+ '"aee="'+time[1]+'" tb_gift="'+time[2]+'" tb_gift1="'+times1+'">'+"删除此条"+'</span>';
+	        htmls += '<span class="sr-only">Close</span>';
+	        htmls += '</button>';
+	        htmls += '<strong>' +'价格策略类型:'+ m_time+'</strong>&nbsp;';
+	        htmls += '<strong >' +'影片类型:'+m_time1 +'</strong>&nbsp;';
+	        htmls += '<strong>' +'屏幕尺寸:'+ time[2]+ '</strong>&nbsp;';
+	        htmls += '<strong>' +'价格变动值:'+times1 +'</strong>';
+	        htmls += '</div>';
+			/* $(this).parent().parent().after(html); */
+			/* $("#times_value").after(htmls);
+		    $("#times_value1").show(); */
+			html=htmls+html;
+        } 
+        $("#times_value").after(html);
+	    $("#times_value1").show();
+       }
+	 
+        var itemList = '[[${rule.time_streg}]]'
+        if(itemList!=""){
+        	 var times_type='[[${rule.time_type}]]'
+        	 var htmls = "";
+             var s=itemList.split('/');
+             for(var i=0;i<s.length;i++){
+             var time = s[i].split('|');
+             var times1=time[0].split("——");
+             var htmls ="";
+             var times=time[1].split('-');
+             htmls += '<div class="alert alert-success alert-dismissible time_spec_rule1" style="float:left;width: 40%; margin-left:30px;">';
+         	        htmls += '<button type="button"  class="close btn" data-dismiss="alert" >';
+         	        if(times_type=='w'){
+             	     	htmls += '<span aria-hidden="true" class="time_spec_value1"  attr_start="' + times[0] + '" attr_end="' + times[1] + '" attr_v="' +  times1 + '">'+time[1]+'</span>';
+
+         	        }
+         	        if(times_type=='d'){
+             	     	htmls += '<span aria-hidden="true" class="time_spec_value1"  attr_start="' + times[0] + '" attr_end="' + times[1] + '" attr_v="' +  times1[0]+','+times1[1] + '">'+time[1]+'</span>';
+
+         	        }
+         	        htmls += '<span class="sr-only">Close</span>';
+         	        htmls += '</button>';
+         	        htmls += '<strong >' + time[0] + '</strong>';
+         	        htmls += '</div>';
+         	        $("#rule_content1").append(htmls);
+         	        $("#rule_content").show();	
+                }
+         }
+    
+   $(".save").on("click", function() {
+		var mc_name = $("#mc_name").val();
+		//var mc_no = $("#mc_no").val();
+		var mc_info = $("#mc_info").val();
+		var mc_isPrice = $("#mc_isPrice").val();
+		var hall_id ="";
+		var mc_l_ms = "";
+		var mc_l_ms_name = "";
+		
+		$("#v_mc_l_ms option:selected").each(function(){
+			if(mc_l_ms_name){mc_l_ms_name += ",";}
+			if(mc_l_ms){mc_l_ms += ",";}
+			mc_l_ms += $(this).val();
+			mc_l_ms_name += $(this).html();
+		});	
+		var mc_content = editor.html();
+		var mc_store="";
+		var mc_store_name="";
+	     $("input[name='stroe_value']:checked").each(function(){
+	            if(mc_store){mc_store += ",";}
+	            if(mc_store_name){mc_store_name += ",";}
+	            mc_store_name += $(this).attr("attr_name");
+	            mc_store += $(this).attr("attr_id");
+	      }); 
+	     var desi_movie_hall="";
+	        $("input[name='cinema_value']:checked").each(function(){
+	            if(desi_movie_hall){desi_movie_hall += ",";}
+	            desi_movie_hall += $(this).attr("attr_id");
+	        });
+		
+		if(mc_name==null||mc_name.trim()=="") {
+			layer.msg("请输入规则名称", {icon: 2});
+			return;
+		}
+		if(mc_info==null||mc_info.trim()=="") {
+			layer.msg("请输入规则简介描述", {icon: 2});
+			return;
+		}
+	     //设置时间策略
+	        var spru_time_spec = null;
+	        $(".time_spec_rule1").each(function() {
+	            var week_days = $(this).find(".time_spec_value1").attr('attr_v');
+	            var start = $(this).find(".time_spec_value1").attr("attr_start");
+	            var end = $(this).find(".time_spec_value1").attr("attr_end");
+	            var  times =  week_days + "|" + start + "-" + end ;
+	            spru_time_spec = spru_time_spec==null?times:times+ "/" +spru_time_spec ;
+	            
+	        });
+	       
+	       	var spru_time_type  = $("#time_policy").val();
+	        
+	        if(spru_time_type == 'w'&&spru_time_spec == null){
+				 layer.msg("请添加周时间策略", {icon: 2});
+				 return;
+			 }
+        	//设置价格策略
+			 var mc_p_streg = null;
+			 $(".time_spec_rule").each(function() {
+	         	var tb_num = $(this).find(".time_spec_value").attr("tb_num");
+	         	var tb_gift = $(this).find(".time_spec_value").attr("tb_gift");
+	         	var aee=$(this).find(".time_spec_value").attr("aee");
+	         	var tb_gift1= $(this).find(".time_spec_value").attr("tb_gift1");
+	        	var price =  tb_num + "," +aee+","+ tb_gift + "," + tb_gift1 ;
+	         	mc_p_streg = mc_p_streg==null?price:price+ "/" +mc_p_streg ;
+	        });
+		// begin to post
+		var index = layer.load();
+		var url = '[[${contextPath}]]/ticketSalesRules/save/?' + Date.parse(new Date());
+		$.post(url, {
+			    id:id,
+				mc_name:mc_name,//规则名称
+				mc_info:mc_info,//规则简介
+				mc_p_streg:mc_p_streg,//价格策略
+				mc_isPrice:mc_isPrice,//是否保护最低票价
+				spru_time_spec:spru_time_spec,//时间策略
+				spru_time_type:spru_time_type,
+				mc_store:mc_store,//限制影城
+				mc_store_name:mc_store_name,
+				hall_id:desi_movie_hall,
+				mc_content:mc_content,//详细信息
+				mc_l_ms:mc_l_ms,//限制影片
+				mc_l_ms_name:mc_l_ms_name,
+				}, 
+		function(data){
+			layer.close(index);
+			if(data.available) {
+				layer.alert('操作成功', {
+			        skin: 'layui-layer-lan',
+			        shift: 4 //动画类型
+			    }, function(){
+			    	location.href = '[[${contextPath}]]/ticketSalesRules/list/?' + Date.parse(new Date());				    	
+			    });
+			} else {
+				var code = data.messages[0];
+				//var msg = "未知错误";
+				layer.msg(code, {
+					shift : 6
+				});
+			}
+		});
+	});
+   
+
+  /*  $("#l_cal_t_n").on("change", function() {
+       var v = $.trim($(this).val());
+       if(v!=null&&v!="") {
+           if(isNaN(v)) {
+               $(this).val("");
+               layer.msg("请输入合法的充值总次数限制", {icon: 2});
+           } else {
+               if(parseFloat(v)<=0) {
+                   $(this).val("");
+                   layer.msg("请输入合法的充值总次数限制", {icon: 2});
+               }
+           }
+       }
+   });
+   $("#l_cal_t_a").on("change", function() {
+       var v = $.trim($(this).val());
+       if(v!=null&&v!="") {
+           if(isNaN(v)) {
+               $(this).val("");
+               layer.msg("请输入合法的充值总金额限制", {icon: 2});
+           } else {
+               if(parseFloat(v)<=0) {
+                   $(this).val("");
+                   layer.msg("请输入合法的充值总金额限制", {icon: 2});
+               }
+           }
+       }
+   });
+     */
+ </script>
+ <script>
+ //开始日前
+ $("#q_sd").datepicker();
+ $("#q_sd").datepicker("option", "showAnim", "slideDown");
+ $("#q_sd").datepicker("option", "dateFormat", "yy-mm-dd");
+ $("#q_ed").datepicker();
+ $("#q_ed").datepicker("option", "showAnim", "slideDown");
+ $("#q_ed").datepicker("option", "dateFormat", "yy-mm-dd");
+ //添加一条时间策略的判断
+
+ $(".add_time_stregy").on("click", function() {
+	 var time_policy = $("#time_policy").val();
+     if(time_policy=="0") {
+         layer.msg("该时间策略不可添加具体限制值", {icon: 2});
+         return;
+     }
+     var choose_week = null;
+     var choose_week_dis_name = null;
+     if(time_policy=="w") {
+         $(".week_day").each(function() {
+             if($(this).is(':checked')) {
+                 choose_week = choose_week==null?$(this).val():choose_week + "," + $(this).val();
+                 choose_week_dis_name = choose_week_dis_name==null?$(this).attr("dis_name"):choose_week_dis_name + "," + $(this).attr("dis_name");
+             }
+         });
+     } else if(time_policy=="d") {
+         //选择日期类型，获取开始日期，结束日期
+         var q_sd = $("#q_sd").val();
+         var q_ed = $("#q_ed").val();
+         var sdate1 = q_sd.split("-");
+ 		 var sdate2 = q_ed.split("-");
+ 		 var sdate1year = parseInt(sdate1[0])*10000+parseInt(sdate1[1])*100+parseInt(sdate1[2]);
+ 		 var sdate2year = parseInt(sdate2[0])*10000+parseInt(sdate2[1])*100+parseInt(sdate2[2]);
+         if(q_sd==null||q_sd==""||q_ed==null||q_ed=="") {
+             layer.msg("请设置开始日期和结束日期", {icon: 2});
+             return;
+         }
+		 if(sdate1year>sdate2year){
+        	 layer.msg("开始日期不能大于结束日期",{icon:2});
+        	 return;
+         }
+         choose_week = q_sd + "," + q_ed;
+         choose_week_dis_name = q_sd + "——" + q_ed;
+     }
+     
+     var start_time = $.trim($("#start_time").val());
+     var end_time = $.trim($("#end_time").val());
+     if(choose_week==null) {
+         layer.msg("请勾选价格策略执行的星期值", {icon: 2});
+         return;
+     }
+     if(start_time==null||start_time=="") {
+         start_time = null;
+     }
+     if(end_time==null||end_time=="") {
+         end_time = null;
+     }
+     
+     if((start_time==null&&end_time!=null)||(start_time!=null&&end_time==null)) {
+         layer.msg("请选择开始时间结束时间", {icon: 2});
+         return;
+     }
+     if(start_time==null||end_time==null) {
+         layer.msg("请选择开始时间结束时间", {icon: 2});
+         return;
+     }
+     var sts = start_time.split(":");
+     var ets = end_time.split(":");
+     if(parseInt(sts[0])>parseInt(ets[0])) {
+         layer.msg("结束时间须大于开始时间", {icon: 2});
+         return;
+     } else if(parseInt(sts[0])==parseInt(ets[0])) {
+         if(parseInt(sts[1])>=parseInt(ets[1])) {
+             layer.msg("结束时间须大于开始时间", {icon: 2});
+             return;
+         }
+     }
+     
+     var html = '<div class="alert alert-success alert-dismissible time_spec_rule1" style="float:left;width: 40%; margin-left:30px;">';
+     html = html + '<button type="button" class="close" data-dismiss="alert">';
+     if(start_time!=null) {
+         html = html + '<span aria-hidden="true" class="time_spec_value1" attr_start="' + start_time + '" attr_end="' + end_time + '"attr_v="' + choose_week + '">' + start_time + '-' + end_time + '</span>';
+     } else {
+         html = html + '<span aria-hidden="true">&times;</span>';
+     }
+     html = html + '<span class="sr-only">Close</span>';
+     html = html + '</button>';
+     html = html + '<strong attr_v="' + choose_week + '">' + choose_week_dis_name + '</strong>';
+     html = html + '</div>';
+     
+ 
+     $("#rule_content1").append(html);
+     $("#start_time").val("");
+     $("#end_time").val("");
+     $("#q_sd").val("");
+     $("#q_ed").val("");
+     $("#rule_content").show();
+ });
+ //开始时间
+ $("#start_time").datetimepicker({
+     timeOnly:true,
+     datepicker:false,
+     step:5,
+     format:'H:i',
+     onShow:function( currentDateTime ){
+     this.setOptions({
+     maxTime:$(".enddatepicker").val()?$(".enddatepicker").val():false
+     });
+     },
+     onChangeDateTime:function( currentDateTime ){
+     this.setOptions({
+     maxTime:$(".enddatepicker").val()?$(".enddatepicker").val():false
+     });
+     }
+ });
+ 
+ // 结束时间
+ $("#end_time").datetimepicker({
+     timeOnly:true,
+     datepicker:false,
+     step:5,
+     format:'H:i',
+     onShow:function( currentDateTime ){
+     this.setOptions({
+     maxTime:$(".enddatepicker").val()?$(".enddatepicker").val():false
+     });
+     },
+     onChangeDateTime:function( currentDateTime ){
+     this.setOptions({
+     maxTime:$(".enddatepicker").val()?$(".enddatepicker").val():false
+     });
+     }
+ });
+ 
+ // 时间段的选择方式
+ $("#time_policy").on("change", function() {
+     var v = $(this).val();
+     //xslayer.msg("该时间策略不可添加具体限制值", {icon: 2});
+     var s='[[${rule.time_type}]]';
+     timeStrategy(v,s);
+ });
+
+ function timeStrategy(v,s){
+     if(v=="w") {     //按周分时设置 
+         $("#date").hide();
+         $("#weeks").show();
+         $("#time1").show();
+         if(s=='w'){
+          $("#rule_content").show();
+         }else{
+          $("#rule_content").hide()
+         }
+         
+     } else if(v=="d") {   //  按日分时设置
+         $("#date").show();
+         $("#weeks").hide();
+         $("#time1").show();
+         if(s=='d'){
+             $("#rule_content").show();
+          }else{
+            $("#rule_content").hide()
+         }
+     }else{  // 全天有效
+         $("#date").hide();
+         $("#weeks").hide();
+         $("#time1").hide();
+         $("#rule_content").hide();
+     }
+ }
+ var store = '[[${rule.store_type}]]';
+ if(store!=""&&store!=null){
+    $("#check_cinema").attr("checked",true);
+    data_cinema();
+  }else{
+   $("#uncheck_cinema").attr("check",true);
+  }
+	var html1 ="";
+	$("#check_cinema").change(function(){
+	 if(html1==''){
+	   data_cinema();
+	 }else{
+		$("#check_halls").show();
+	 }
+ })
+ //从接口请求数据，动态生成div
+ function data_cinema(){
+	var url='[[${contextPath}]]/common/hallsList'
+	$.post(url,{},function(data){
+	if(data.available){
+  var table = data.obj;
+  for (var i = 0; i < table.length; i++) {
+		html1 = '';
+		var item = table[i];
+	    var hall =item.hall;
+		html1+='<div name="choose_halls"><input type="checkbox" class="parnter_cinema" name="stroe_value" attr_name="' + item.CinemaStoreName + '"  id= "i'+item.id+'" attr_id="' + item.id + '" value="" style="width: 15px;height:15px;margin-left:140px;">'+item.CinemaStoreName
+		if(hall!=null&&hall!=''){
+			 html1+='<div style="margin-left:210px;">'
+		  for(var j = 0; j < hall.length; j++){
+			var hall_data =hall[j];
+			html1+='<input  type="checkbox"  class="children_hall'+item.id+'" name="cinema_value" value="default" id="j'+hall_data.id+'" attr_id="' + hall_data.id + '"  style="width: 15px;height:15px;"  >'+hall_data.CinemaHallName +"&nbsp;"
+			+"&nbsp;"+"&nbsp;"+"&nbsp;"		
+			/* if(j%5==0){
+				
+				 html1+='<input  type="checkbox"  class="children_hall" name="cinema_value" value="default" id="j'+hall_data.id+'"  attr_id="' + hall_data.id + '" style="width: 15px;height:15px;margin-left:210px;">'+hall_data.CinemaHallName 
+			}else{
+				 html1+='<input  type="checkbox"  class="children_hall" name="cinema_value" value="default" id="j'+hall_data.id+'" attr_id="' + hall_data.id + '"  style="width: 15px;height:15px;margin-left:15px;">'+hall_data.CinemaHallName
+			} */
+		  }
+			 html1+='</div>'
+		}
+		html1+='</div>'
+	    $("#check_halls").append(html1);
+	    Show_check();
+	    Clik_check();
+	    choose_hall(item.id);
+	   }
+	  }
+	 })
+ $("#check_halls").show();
+}  
+	
+$("#uncheck_cinema").change(function(){
+	  $("#check_halls").hide();
+})
+//选择影城、影厅   
+function Clik_check(){
+	$(".parnter_cinema").click(function(){
+	   var cinema_indexID=$(this).attr("attr_id");
+	   var check_status =$(this).is(':checked'); 
+	   $(".children_hall"+cinema_indexID).each(function() {
+		 var hall_indexID = $(this).attr("attr_id");
+		 var cinema_id = hall_indexID.split("-");
+		 var hall_id =('#j'+hall_indexID);
+		 if(cinema_id[0]==cinema_indexID){
+		   if(check_status){
+			  $(hall_id).prop("checked",true);
+		   }else{
+			  $(hall_id).removeAttr("checked");
+		   }
+		  }
+     })
+  })
+}
+/* function edit_schema(id, basic_id){
+	 alert("4444");
+}  */
+function choose_hall(id){
+	 $(".children_hall"+id).click(function(){
+		 var cinema_id = $(this).attr("attr_id").split("-")[0]; 
+		 var close_flag = true ;
+		 $(".children_hall"+cinema_id).each(function() {
+			 //alert(cinema_id)
+			 var check_status = $(this).is(':checked');
+			 var hall_indexID = $(this).attr("attr_id");
+		     var cinema_ids = hall_indexID.split("-");
+			 if(cinema_id == cinema_ids[0]){
+				 if(check_status){
+					 close_flag = false;
+				 }
+			 }
+		 });
+		 if(close_flag){
+			 $("#i"+cinema_id).removeAttr("checked");
+		 }else{
+			 $("#i"+cinema_id).prop("checked",true);
+		 }
+	 });
+}
+//显示已选择的影城、影厅
+function Show_check(){
+	var store = '[[${rule.store_type}]]';
+	var cinema = '[[${rule.hall_id}]]'
+	var cinema_ids= cinema.split(",");
+	var store_id=store.split(",");
+	$(".parnter_cinema").each(function(){
+	  var cinema_indexID=$(this).attr("attr_id");
+	  for(var i = 0; i < store_id.length; i++){
+	     if(store_id[i]==cinema_indexID){
+	      $(this).attr("checked",true);
+	     }
+	  }
+	  var check_status =$(this).is(':checked'); 
+	$(".children_hall"+cinema_indexID).each(function() {
+	    var hall_indexID = $(this).attr("attr_id");
+		var cinema_id = hall_indexID.split("-");
+	    var hall_id =('#j'+hall_indexID);
+		 if(cinema_id[0]==cinema_indexID){
+	      if(check_status){
+		    for(var i = 0; i < cinema_ids.length; i++){
+		      if(cinema_ids[i]==hall_indexID){
+				$(hall_id).attr("checked",true);
+			  }
+		    }
+		  }else{
+			 $(hall_id).attr("checked",false);
+		  }
+	    }
+   })
+ })
+}
+</script>
+
+</html>

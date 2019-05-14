@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>票务系统-影城管理</title>
+
+    <link th:href="|${pub_bucket}/inspinia/css/bootstrap.min.css|" rel="stylesheet">
+    <link th:href="|${pub_bucket}/inspinia/font-awesome/css/font-awesome.css|" rel="stylesheet">
+    <link th:href="|${pub_bucket}/inspinia/css/plugins/iCheck/custom.css|" rel="stylesheet">
+    <link th:href="|${pub_bucket}/inspinia/css/animate.css|" rel="stylesheet">
+    <link th:href="|${pub_bucket}/inspinia/css/style.css|" rel="stylesheet">
+    <link th:href="|${pub_bucket}/css/plugins/sweetalert/sweetalert.css|" rel="stylesheet">
+</head>
+<body>
+ <div id="wrapper">
+<div th:replace="../common/nav"></div>
+	<div id="page-wrapper" class="gray-bg">    
+	    <div th:replace="../common/top"></div>
+	    <div class="row wrapper border-bottom white-bg page-heading">
+			<div class="col-sm-4">
+				<h2>[[${store.store_name}]]</h2>
+				<ol class="breadcrumb">
+					<li><a href="javascript:;">Home</a></li>
+					<li class="active"><strong>网售手续费管理</strong></li>
+				</ol>
+			</div>
+		</div>
+	    <table class="footable table table-stripped toggle-arrow-tiny default breakpoint footable-loaded" data-page-size="15">
+            <thead>
+            <tr class="footable-even" style="display: table-row;border:1px solid #e7eaec;background-color: #e6e6e6;">
+                <td width="30%" class="text-left footable-visible footable-last-column">
+                    影城手续费<!-- <i class="fa fa-minus"></i> -->
+                    <button class="btn btn-outline btn-info btn-xs set_handle_fee">
+                    	<span th:if="${store_default_fee!=null}">[[${store_default_fee/100}]]元</span>
+                    	<span th:if="${store_default_fee==null}">未设置</span>
+                    </button>
+                </td>
+                <td width="70%" style="cursor: pointer;" colspan="5">仅对部分售票系统有效，同时售票系统会员卡购票不支持增加服务费。</td>
+            </tr>
+            <tr>
+                <th data-toggle="true" class="footable-visible footable-first-column footable-sortable">影厅名称<span class="footable-sort-indicator"></span></th>
+                <th data-hide="phone" class="footable-visible footable-sortable">影厅编号<span class="footable-sort-indicator"></span></th>
+                <th data-hide="phone" class="footable-visible footable-sortable">类型<span class="footable-sort-indicator"></span></th>
+                <th data-hide="phone" class="footable-visible footable-sortable">座位数<span class="footable-sort-indicator"></span></th>
+                <th class="text-right footable-visible footable-last-column" data-sort-ignore="true">服务费</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="footable-even" style="display: table-row;" th:if="${not #lists.isEmpty(hall_with_fee)}" th:each="hall : ${hall_with_fee}">
+                <td class="footable-visible footable-first-column"><span class="footable-toggle"></span>
+                   [[${hall[0].name}]]
+                </td>
+                <td class="footable-visible">
+                   [[${hall[0].id}]]
+                </td>
+                <td class="footable-visible">
+                   [[${hall[0].type}]]
+                </td>
+                <td class="footable-visible">
+                   [[${hall[0].seatNum}]]
+                </td>
+                <td class="text-right footable-visible footable-last-column">
+                    <div class="btn-group">
+                        <button class="btn btn-outline btn-success btn-xs btn-assign set_handle_fee" th:hall_num="${hall[0].id}">
+                        	<span th:if="${hall[1]!=null}">[[${hall[1].fee/100}]]元</span>
+                        	<span th:if="${hall[1]==null}">未设置</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            </tfoot>
+        </table>
+         <div th:replace="../common/foot"></div>
+	</div>
+</div>         
+              
+
+<div id="templatemo-preferences-form" style="display:none;padding-left:15px;padding-right:15px">
+	<div class="row">
+		<div class="col-md-12 margin-bottom-15">
+			<label class="control-label" for="store_no">手续费</label> 
+			<input type="text" class="form-control" id="handle_fee" placeholder="请输入手续费金额">
+		</div>
+	</div>
+	<div class="row templatemo-form-buttons" style="margin-top:15px;">
+		<div class="col-md-12">
+			<button data-style="zoom-in" class="ladda-button btn btn-primary save_handle_fee" style="width:100%">保存</button>
+		</div>
+	</div>
+</div>
+
+<!-- Mainly scripts -->
+<script th:src="|${pub_bucket}/inspinia/js/jquery-2.1.1.js|"></script>
+<script th:src="|${pub_bucket}/inspinia/js/bootstrap.min.js|"></script>
+<script th:src="|${pub_bucket}/inspinia/js/plugins/metisMenu/jquery.metisMenu.js|"></script>
+<script th:src="|${pub_bucket}/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js|"></script>
+
+<!-- Custom and plugin javascript -->
+<script th:src="|${pub_bucket}/inspinia/js/plugins/pace/pace.min.js|"></script>
+
+<script th:src="|${pub_bucket}/js/plugins/sweetalert/sweetalert.min.js|"></script>
+
+<!-- iCheck -->
+<script th:src="|${pub_bucket}/inspinia/js/plugins/iCheck/icheck.min.js|"></script>
+<script th:src="|${pub_bucket}/layer/layer.js|"></script>
+<script type="text/javascript">
+	/*自适应高度*/
+	$(document).ready(function(){
+	  var windowHeight = $(window).height();
+	  if($("#content_area").height() < windowHeight){
+	      $("#content_area").height(windowHeight);
+	  }
+	});
+</script>
+<script th:inline="javascript">
+function checkRate(nubmer) {
+	var re = /^[0-9]+.?[0-9]*$/; //判断字符串是否为数字 //判断正整数 /^[1-9]+[0-9]*]*$/ 
+	if (!re.test(nubmer)) {
+		return false;
+　　}
+	return true;
+}
+$(function() {
+	let store_id = '[[${store.id}]]';
+	$(".set_handle_fee").on("click", function() {
+		$("#handle_fee").val('');
+		hall_num = $(this).attr('hall_num');
+		layer.open({
+			area : [ '70%', '80%' ],
+			type : 1,
+			title:"设置手续费",
+			content : $("#templatemo-preferences-form")
+		});
+	});
+	let hall_num = null;
+	$(".save_handle_fee").on('click', function() {
+		let handle_fee = $.trim($("#handle_fee").val());
+		if(!checkRate(handle_fee)) {
+			layer.msg("请输入正确的手续费", {icon: 2});
+			return;
+		}
+		if(!hall_num) {
+			hall_num = -1;	//说明是影城默认手续费
+		}
+		var index = layer.load(0, {shade: false});
+		$.post('/ticketingsys/store/aj/set_handle_fee', {store_id:store_id, hall_num:hall_num, fee:handle_fee}, function(data) {
+			layer.closeAll();
+			if(data.available) {
+				swal({title: "Good job!", text: "操作成功", type: "success"}, function() {
+					location.reload();
+				});
+			} else {
+				var code = data.messages[0];
+				var msg = "操作失败：" + code;
+				layer.msg(msg, {shift: 6});
+			}
+		});
+	});
+});
+</script>
+</body>
+</html>
