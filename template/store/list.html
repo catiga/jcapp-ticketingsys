@@ -733,8 +733,24 @@ $(function() {
 	
 	$(".do_refresh_cache").on("click", function() {
 		let end_date = $.trim($("#end_date").val());
+		let index = layer.load(0, {shade: false});
 		$.post('/ticketingsys/store/aj/refresh_cache', {store_id:store_id, store_basic:store_basic, end_date:end_date}, function(data) {
-			console.log(data);
+			layer.closeAll();
+			if(data.available) {
+				layer.alert('操作成功', {
+    				skin: 'layui-layer-lan',
+    				shift: 4 //动画类型
+    			}, function(){
+    				location.reload();
+    			});
+			} else {
+				var code = data.messages[0];
+				if(data.messages.length>1) {
+					code = data.messages[1] + code;
+				}
+				var msg = "操作失败：" + code;
+				layer.alert(msg, {icon : 2});
+			}
 		});
 	});
 });
