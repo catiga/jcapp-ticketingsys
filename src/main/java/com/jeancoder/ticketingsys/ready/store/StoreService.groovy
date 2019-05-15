@@ -175,6 +175,7 @@ class StoreService {
 		DatabasePower sqlpower = DatabaseSource.getDatabasePower();
 		String sql = '''
 			select
+			a.id as id,
 			a.store_no as cinemaCode,
 			b.ss_code as systemSsCode,
 			b.auth_chan_num as authChannelNo,

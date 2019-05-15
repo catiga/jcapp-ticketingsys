@@ -28,6 +28,59 @@ class SssHelper{
 	JCLogger  logger = LoggerSource.getLogger();
 	
 	/**
+	 * 刷新指定影城缓存
+	 * @param cinemaAuthInfo
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
+	public CinemaPlanResult refresh_cinema_plans(CinemaAuthInfo cinemaAuthInfo,Date startDate,Date endDate) {
+		//cache option
+		String cacheKey = plan_pre+cinemaAuthInfo.getCinemaCode();	//缓存关键字，不应该有开始日期和截止日期
+//		def cacheObj = MemSource.getMemPower().getAsString(cacheKey);
+//		if(cacheObj != null) {
+//			cacheObj = JackSonBeanMapper.fromJson(cacheObj, CinemaPlanResult);
+//			return cacheObj;
+//		}
+		//cache option
+		String tc_ss_type = cinemaAuthInfo.getSystemSsCode()
+		String channel_url = cinemaAuthInfo.getAuthChannelUrl()
+		String channel_num = cinemaAuthInfo.getAuthChannelNo()
+		String channel_code = cinemaAuthInfo.getAuthChannelCode()
+		SscAuthModel auth_model = TicketingsysFactory.direct_generateAuthModel(TicketingSysTypeHelper.transToOldCode(tc_ss_type) , channel_url, channel_num, channel_code);
+		
+		SscOp ssc_op = TicketingsysFactory.generateSscOp(auth_model);
+		
+		def start = System.currentTimeMillis();
+		CinemaPlanResult planResult = ssc_op.get_cinema_plans(cinemaAuthInfo.getCinemaCode(), startDate, endDate);
+		def end = System.currentTimeMillis();
+		if("0".equals(planResult.getCode())) {
+			//同步影讯信息
+			FilmHelper.INSTANCE.syncFilmPoster(planResult.getResult(),cinemaAuthInfo.pid);
+		}
+		if(TicketingSysTypeHelper.transToOldCode(tc_ss_type)==TcSsConstants._tc_ss_oristar) {
+			//晨星系统特殊处理
+			def halls = ssc_op.get_cinema_hall_list(cinemaAuthInfo.getCinemaCode());
+			for(x in planResult.getResult()) {
+				for(y in halls.getResult()) {
+					if(x.hallId==y.id) {
+						x.hallName = y.name;
+					}
+				}
+			}
+		}//
+		
+		if("0".equals(planResult.getCode()) && planResult.result) {
+			//返回正常情况下才加入缓存
+			//cache option
+			def add_result = MemSource.getMemPower().setUntilAsString(cacheKey,JackSonBeanMapper.toJson(planResult) , commonExp);
+			//cache option
+		}
+		
+		return planResult;
+	}
+	
+	/**
 	 * 直接取场次，不走缓存，为锁座使用
 	 * @param cinemaAuthInfo
 	 * @param startDate
@@ -80,7 +133,8 @@ class SssHelper{
 	 */
 	public CinemaPlanResult get_cinema_plans(CinemaAuthInfo cinemaAuthInfo,Date startDate,Date endDate) {
 		//cache option
-		String cacheKey = plan_pre+cinemaAuthInfo.getCinemaCode()+startDate.getTime()+endDate.getTime();
+		//String cacheKey = plan_pre+cinemaAuthInfo.getCinemaCode()+startDate.getTime()+endDate.getTime();
+		String cacheKey = plan_pre+cinemaAuthInfo.getCinemaCode();
 		def cacheObj = MemSource.getMemPower().getAsString(cacheKey);
 		if(cacheObj != null) {
 			cacheObj = JackSonBeanMapper.fromJson(cacheObj, CinemaPlanResult);
