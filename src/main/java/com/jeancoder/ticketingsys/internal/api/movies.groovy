@@ -218,6 +218,6 @@ public Integer getData(def c_id) {
 	} catch (any) {
 		LoggerSource.getLogger(this.getClass().getName()).error("getData__",any)
 	}
-	return 7;	//默认返回7天
+	return 60;	//默认返回60天
 	
 }
