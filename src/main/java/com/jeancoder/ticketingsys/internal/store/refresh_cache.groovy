@@ -22,7 +22,7 @@ if(cinemas==null || cinemas.empty) {
 }
 
 for(cinema in cinemas) {
-	def cinema_id = cinema.id;
+	def cinema_id = cinema.id.longValue();
 	def pid = cinema.proj_id;
 	
 	CinemaAuthInfo cinemaAuthInfo = StoreService.INSTANCE.getCinemaAuthInfo(cinema_id);
