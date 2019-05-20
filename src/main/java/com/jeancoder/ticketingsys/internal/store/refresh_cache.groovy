@@ -3,6 +3,8 @@ package com.jeancoder.ticketingsys.internal.store
 import java.text.SimpleDateFormat
 
 import com.jeancoder.app.sdk.JC
+import com.jeancoder.app.sdk.source.LoggerSource
+import com.jeancoder.core.log.JCLogger
 import com.jeancoder.jdbc.JcTemplate
 import com.jeancoder.ticketingsys.ready.common.SimpleAjax
 import com.jeancoder.ticketingsys.ready.entity.Cinema
@@ -12,8 +14,11 @@ import com.jeancoder.ticketingsys.ready.store.dto.CinemaAuthInfo
 import com.jeancoder.ticketingsys.ready.support.Codes
 import com.jeancoder.ticketingsys.ready.support.Res
 
+JCLogger logger = LoggerSource.getLogger();
 def store_basic = JC.request.param('store_basic');
 def end_date = JC.request.param('end_date');	//yyyy-MM-dd
+
+logger.info('store_basic=' + store_basic + ':::end_date=' + end_date);
 
 List<Cinema> cinemas = JcTemplate.INSTANCE().find(Cinema, 'select * from Cinema where store_basic=? and flag!=?', store_basic, -1);
 
@@ -26,7 +31,7 @@ for(cinema in cinemas) {
 	def pid = cinema.proj_id;
 	
 	CinemaAuthInfo cinemaAuthInfo = StoreService.INSTANCE.getCinemaAuthInfo(cinema_id);
-	
+	logger.info('cinema_id=' + cinema_id + ', and ' + (cinemaAuthInfo==null));
 	if(cinemaAuthInfo == null) {
 		return SimpleAjax.notAvailable(Codes.COMMON_CINEMA_CONFIG_ERROR.code + ',' + Codes.COMMON_CINEMA_CONFIG_ERROR.msg);
 	}
