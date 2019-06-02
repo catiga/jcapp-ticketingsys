@@ -23,6 +23,9 @@ println "PreInterceptor"+request.getPathInfo();
 request.setAttribute("domain", domain)
 SysProjectInfo project = NativeUtil.connect(SysProjectInfo.class, 'project', '/incall/project', ["domain":domain]);
 request.setAttribute("current_project", project);
-request.setAttribute('pub_bucket', 'https://cdn.iplaysky.com/static/');
+
+//request.setAttribute('pub_bucket', 'https://cdn.iplaysky.com/static/');
+request.setAttribute('pub_bucket', 'https://static.pdr365.com/static/');
+
 GlobalHolder.setProj(project);
 return true;
