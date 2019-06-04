@@ -282,7 +282,7 @@ try {
 	order.setStore_name(store.getStore_name())
 	order.setHall_id(matchPlan.getHallId())
 	order.setHall_name(matchPlan.getHallName())
-	order.setPlan_date(plan_date);
+	order.setPlan_date(matchPlan.getStartTime().split(" ")[0]);
 	order.setPlan_time(matchPlan.getStartTime().split(" ")[1])
 	order.setPlan_id(plan_id)
 	order.setFilm_name(matchPlan.getMovieInfo().get(0).getMovieName())
