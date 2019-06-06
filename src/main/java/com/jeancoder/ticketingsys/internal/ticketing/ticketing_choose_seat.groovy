@@ -1,10 +1,12 @@
 package com.jeancoder.ticketingsys.internal.ticketing
 
+import com.jeancoder.app.sdk.JC
 import com.jeancoder.app.sdk.source.CommunicationSource
 import com.jeancoder.core.log.JCLogger
 import com.jeancoder.core.log.JCLoggerFactory
 import com.jeancoder.core.result.Result
 import com.jeancoder.core.util.StringUtil
+import com.jeancoder.jdbc.JcTemplate
 import com.jeancoder.ticketingsys.ready.common.AvailabilityStatus
 import com.jeancoder.ticketingsys.ready.common.SimpleAjax
 import com.jeancoder.ticketingsys.ready.order.TicketingSaleService
@@ -16,11 +18,17 @@ import com.jeancoder.ticketingsys.ready.order.entity.TicketSaleSeat
 JCLogger Logger = JCLoggerFactory.getLogger(this.getClass().getName())
 List<TicketGatherDto> list = new ArrayList<TicketGatherDto>();
 try {
-	def order_no = StringUtil.trim((String)CommunicationSource.getParameter("order_no"));
-	Logger.info("order_no_"+order_no)
-	List<TicketSaleInfo> order_items = new ArrayList<TicketSaleInfo>();
+	def order_no = JC.internal.param("order_no");
+	def order_id = JC.internal.param('order_id');
 	
-	order_items = TicketingSaleService.INSTANCE.get_ticketingsys_saleinfo_item(order_no);
+	Logger.info("order_no_"+order_no)
+	List<TicketSaleInfo> order_items = null;
+	
+	if(order_id) {
+		order_items = JcTemplate.INSTANCE().find(TicketSaleInfo, "select * from TicketSaleInfo where id=?", order_id);
+	} else {
+		order_items = TicketingSaleService.INSTANCE.get_ticketingsys_saleinfo_item(order_no);
+	}
 
 	for(TicketSaleInfo order:order_items){
 		TicketGatherDto tgdto = new TicketGatherDto();
