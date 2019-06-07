@@ -325,7 +325,7 @@ if(code_type=='2000') {
 	
 	RemoteTicketResult remoteResult = ssc_op.process_ticket(cinemaAuthInfo.getCinemaCode(), order.getPlan_id(), order_no, order_no, 
 		remote.getLock_flag(), seat_nos, matchPlan.getCineUpdateTime(), null, MoneyUtil.divide(order.getTotal_amount(), "100"));
-	
+	LOGGER.info(JackSonBeanMapper.toJson(remoteResult));
 	if(!"0".equals(remoteResult.getCode())) {
 		DatabaseSource.getDatabasePower().rollbackTransaction();
 		LOGGER.error(Codes.CINEMA_CONN_FAILED.msg);
