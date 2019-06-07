@@ -311,6 +311,11 @@ if(code_type=='2000') {
 			if(pay_amount.toString()=='0' || pay_amount.toString()=='0.0' || pay_amount.toString()=='0.00') {
 				LOGGER.info('' + ', WILL BE MODIFIED=' + oseat.getPub_fee())
 				seat.setPay_amount(oseat.getPub_fee());
+			} else {
+				//比较实际支付价格和最低票价的关系
+				if(Float.parseFloat(pay_amount)<=Float.parseFloat(oseat.getPub_fee())) {
+					seat.setPay_amount(oseat.getPub_fee());
+				}
 			}
 		} catch(any) {
 			LOGGER.error('reset error.', any);
