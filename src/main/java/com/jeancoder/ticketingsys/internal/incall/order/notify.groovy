@@ -313,7 +313,7 @@ if(code_type=='2000') {
 				seat.setPay_amount(oseat.getPub_fee());
 			} else {
 				//比较实际支付价格和最低票价的关系
-				if(Float.parseFloat(pay_amount.toString())<=Float.parseFloat(oseat.getPub_fee().toString())) {
+				if(Float.parseFloat(oseat.getSale_fee().toString())<=Float.parseFloat(oseat.getPub_fee().toString())) {
 					seat.setPay_amount(oseat.getPub_fee());
 				}
 			}
