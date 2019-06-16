@@ -323,7 +323,11 @@ if(code_type=='2000') {
 		seat.setSeat_id(oseat.getSeat_no())
 		seat.setSettlePrice(oseat.getPub_fee())
 		LOGGER.info('oseat.service_fee=' + oseat.getService_fee());
-		seat.setService_fee(oseat.getService_fee()?oseat.getService_fee().toString():'0.00');
+		if(oseat.getService_fee()!=null) {
+			seat.setService_fee(oseat.getService_fee().toString() + "");
+		} else {
+			seat.setService_fee("0");
+		}
 		seat_nos.add(seat);
 	}
 	
