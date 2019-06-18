@@ -72,7 +72,7 @@ try {
 	JcTemplate.INSTANCE().update(order);
 	//OrderService.INSTANCE.addOuUpdateOrder(order);
 	
-	result.setData(Res.Success(unres));
+	result.setData(Res.Success(true));
 	return result;
 }catch(Exception e) {
 	logger.error('', e);
