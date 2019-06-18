@@ -254,7 +254,7 @@ class OrderService {
 	}
 	
 	public SeatOrderDto getSeatBuyedOrder(String planId,String seatId) {
-		String str = OrderConstants._order_status_delivering_ + "," + OrderConstants._order_status_delivering_nopub_+","+OrderConstants._order_status_delivering_nopub_ok_+",3900,3901"
+		String str = OrderConstants._order_status_taked_ + "," + OrderConstants._order_status_delivering_ + "," + OrderConstants._order_status_delivering_nopub_+","+OrderConstants._order_status_delivering_nopub_ok_+",3900,3901"
 					
 		String sql = '''
 			select
