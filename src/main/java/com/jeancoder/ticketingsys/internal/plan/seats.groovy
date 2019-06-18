@@ -149,6 +149,9 @@ try {
 		if(lockord != null) {
 			seat.setSeatState("2");
 			seat.setLockOrder(lockord)
+		} else {
+			//一般情况为已经自动解锁的订单，需要恢复为可选状态
+			seat.setSeatState('4');
 		}
 		//检查座位是否有已购订单
 		SeatOrderDto buyord = OrderService.INSTANCE.getSeatBuyedOrder(plan_id, seat.getCineSeatId());
