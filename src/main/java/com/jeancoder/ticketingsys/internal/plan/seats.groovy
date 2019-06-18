@@ -45,7 +45,7 @@ try {
 	 * 7:锁定
 	 * 5:其他
 	 */
-	//logger.info("remoteResult____" + JackSonBeanMapper.toJson(remoteResult));
+	logger.info("remoteResult____" + JackSonBeanMapper.toJson(remoteResult));
 	for(PlanSeatState seat : remoteResult.getResult()) {
 		String os = seat.getSeatState();
 		//转换成我们协议的状态
