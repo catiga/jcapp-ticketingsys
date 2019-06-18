@@ -59,11 +59,13 @@ try {
 		unlock_seat_nos.add(oseat.getSeat_no());
 	}
 	
-	boolean unres = ssc_op.batch_unlock(cinemaAuthInfo.getCinemaCode(), order.getPlan_id(), remote.getLock_flag(), unlock_seat_nos, order.getOrder_no());
-	
-	if(!unres) {
-		result.setData(Res.Failed(Codes.CINEMA_GENORDER_UNLOCK_FAILED));
-		return result;
+	if(remote!=null) {
+		boolean unres = ssc_op.batch_unlock(cinemaAuthInfo.getCinemaCode(), order.getPlan_id(), remote.getLock_flag(), unlock_seat_nos, order.getOrder_no());
+		
+		if(!unres) {
+			result.setData(Res.Failed(Codes.CINEMA_GENORDER_UNLOCK_FAILED));
+			return result;
+		}
 	}
 	
 	order.setOrder_status(OrderConstants._order_status_remote_unlock_by_front_);
