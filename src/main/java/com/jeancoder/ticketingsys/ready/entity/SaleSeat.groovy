@@ -4,6 +4,7 @@ import java.sql.Timestamp
 
 import com.jeancoder.jdbc.bean.JCBean
 import com.jeancoder.jdbc.bean.JCID
+import com.jeancoder.jdbc.bean.JCNotColumn
 
 @JCBean(tbname = 'data_tc_ss_sale_order_seat')
 class SaleSeat {
@@ -40,5 +41,8 @@ class SaleSeat {
 	BigDecimal service_fee = new BigDecimal(0);
 	
 	BigInteger tclass_id;	//单座的销售票类ID
+	
+	@JCNotColumn
+	String tclass_name;		//票类名称冗余字段
 	
 }

@@ -1,19 +1,13 @@
 package com.jeancoder.ticketingsys.internal.ticketing
 
-import java.net.URLDecoder
-import java.util.List
-
 import com.jeancoder.app.sdk.JC
 import com.jeancoder.app.sdk.source.LoggerSource
 import com.jeancoder.core.log.JCLogger
-import com.jeancoder.core.log.JCLoggerFactory
-import com.jeancoder.core.util.JackSonBeanMapper
 import com.jeancoder.jdbc.JcTemplate
 import com.jeancoder.ticketingsys.ready.dto.SimpleAjax
 import com.jeancoder.ticketingsys.ready.entity.SaleOrder
 import com.jeancoder.ticketingsys.ready.entity.SaleSeat
-import com.jeancoder.ticketingsys.ready.support.MoneyUtil
-import com.jeancoder.ticketingsys.ready.util.DateUtil
+import com.jeancoder.ticketingsys.ready.entity.TicketSchema
 
 // order_id, order_seat_id 这样入参
 JCLogger Logger = LoggerSource.getLogger();
@@ -31,6 +25,16 @@ if(order==null) {
 List<SaleSeat> seats = JcTemplate.INSTANCE().find(SaleSeat, 'select * from SaleSeat where order_id=?', order_id);
 if(seats==null || seats.empty) {
 	return SimpleAjax.notAvailable('obj_not_found,座位信息为空');
+}
+
+for(x in seats) {
+	BigInteger tclass_id = x.tclass_id;
+	if(tclass_id) {
+		TicketSchema schema = JcTemplate.INSTANCE().get(TicketSchema, 'select * from TicketSchema where id=?', tclass_id);
+		if(schema!=null) {
+			x.tclass_name = schema.schema_name;
+		}
+	}
 }
 
 return SimpleAjax.available('', [order, seats]);
