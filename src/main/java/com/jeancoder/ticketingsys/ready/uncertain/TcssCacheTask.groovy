@@ -42,7 +42,7 @@ class TcssCacheTask {
 				now.add(Calendar.DATE, getData(cinema.config_id.longValue()));
 				Date end_time = now.getTime()
 				//用异步任务控制超时时间来同步影讯，设置请求超时时间为10s
-				JC.thread.run(15*1000L, {
+				JC.thread.run(30*1000L, {
 					CinemaPlanResult planResult = SssHelper.INSTANCE.get_cinema_plans(cinemaAuthInfo, start_time, end_time);
 					return planResult
 				}, {
