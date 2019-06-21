@@ -42,7 +42,7 @@ class TcssCacheTask {
 				now.add(Calendar.DATE, getData(cinema.config_id.longValue()));
 				Date end_time = now.getTime()
 				//用异步任务控制超时时间来同步影讯，设置请求超时时间为10s
-				JC.thread.run(10*1000L, {
+				JC.thread.run(15*1000L, {
 					CinemaPlanResult planResult = SssHelper.INSTANCE.get_cinema_plans(cinemaAuthInfo, start_time, end_time);
 					return planResult
 				}, {
@@ -55,8 +55,13 @@ class TcssCacheTask {
 							Logger.error('cinema_id=' + cinema.id +', cinema_name=' + cinema.store_name + ' sync_data_failed_2.');
 						}
 					} else {
-						Logger.error(JackSonBeanMapper.toJson(e));
-						Logger.error('cinema_id=' + cinema.id +', cinema_name=' + cinema.store_name + ' sync_data_failed.');
+						if(e.code == '10001') {
+							//超时任务
+							Logger.error('cinema_id=' + cinema.id +', cinema_name=' + cinema.store_name + ' sync_data_TIMEOUT.');
+						} else {
+							//其他错误
+							Logger.error('cinema_id=' + cinema.id +', cinema_name=' + cinema.store_name + ' sync_data_failed...' + JackSonBeanMapper.toJson(e));
+						}
 					}
 				});
 			}
