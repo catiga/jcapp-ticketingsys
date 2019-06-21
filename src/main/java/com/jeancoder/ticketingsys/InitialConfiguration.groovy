@@ -43,9 +43,10 @@ JC.thread.timeTask(10000, default_exe_time_diff, {
 });
 
 //新增一个任务，每20分钟刷新一次影讯缓存
+/*
 def tcss_cache_time_diff = 10*60*1000L;    //默认10分钟刷新一次
 JC.thread.timeTask(30*1000, tcss_cache_time_diff, {
 	TcssCacheTask.sync_data();
 });
-
+*/
 
