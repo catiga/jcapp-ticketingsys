@@ -122,6 +122,21 @@ class SssHelper{
 		return true;
 	}
 	
+	public CinemaPlanResult just_get_cinema_plans_from_cache(CinemaAuthInfo cinemaAuthInfo,Date startDate,Date endDate) {
+		//cache option
+		//String cacheKey = plan_pre+cinemaAuthInfo.getCinemaCode()+startDate.getTime()+endDate.getTime();
+		String cacheKey = plan_pre+cinemaAuthInfo.getCinemaCode();
+		def cacheObj = MemSource.getMemPower().getAsString(cacheKey);
+		if(cacheObj != null) {
+			cacheObj = JackSonBeanMapper.fromJson(cacheObj, CinemaPlanResult);
+			return cacheObj;
+		}
+		CinemaPlanResult result = new CinemaPlanResult();
+		result.code = '9001';
+		result.msg = '请稍后访问，正在同步影讯场次信息'
+		return result;
+	}
+	
 	/**
 	 * TODO 可以考虑加缓存
 	 * 获取影城全部排期

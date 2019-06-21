@@ -65,7 +65,8 @@ try {
 	Date end_time = now.getTime()
 	
 	def start_ttt = Calendar.getInstance().getTimeInMillis();
-	CinemaPlanResult planResult = SssHelper.INSTANCE.get_cinema_plans(cinemaAuthInfo, start_time, end_time);
+	//CinemaPlanResult planResult = SssHelper.INSTANCE.get_cinema_plans(cinemaAuthInfo, start_time, end_time);
+	CinemaPlanResult planResult = SssHelper.INSTANCE.just_get_cinema_plans_from_cache(cinemaAuthInfo, start_time, end_time);
 	def end_ttt = Calendar.getInstance().getTimeInMillis();
 	if((end_ttt - start_ttt)/1000>1.5) {
 		logger.info('cache_get_time: cinema_id=' + id + '::: exhausted_time=' + (end_ttt - start_ttt)/1000 + "");
