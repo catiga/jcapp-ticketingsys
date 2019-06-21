@@ -4,16 +4,14 @@ import com.jeancoder.app.sdk.JC
 import com.jeancoder.ticketingsys.ready.dto.FuncUtil
 import com.jeancoder.ticketingsys.ready.dto.sys.AppFunction
 import com.jeancoder.ticketingsys.ready.uncertain.KeepCertain
+import com.jeancoder.ticketingsys.ready.uncertain.TcssCacheTask
 import com.jeancoder.ticketingsys.ready.util.JackSonBeanMapper
 import com.jeancoder.ticketingsys.ready.util.NativeUtil
-
 
 JC.interceptor.add('project/PreInterceptor', null);
 JC.interceptor.add('token/PreInterceptor', null);
 JC.interceptor.add('mod/PreInterceptor', null);
 JC.interceptor.add('general/PreInterceptor', null);
-
-
 
 AppFunction mod_g_1 = FuncUtil.build_app_func(1, '售票系统', null, 'system/list', 'fa-shopping-cart');
 
@@ -43,4 +41,11 @@ default_exe_time_diff = 9*60*1000L;	//改为9分钟执行一次
 JC.thread.timeTask(10000, default_exe_time_diff, {
 	KeepCertain.fuckoff(null);
 });
+
+//新增一个任务，每20分钟刷新一次影讯缓存
+def tcss_cache_time_diff = 20*1000L;    //默认20分钟刷新一次
+JC.thread.timeTask(60*1000, tcss_cache_time_diff, {
+	TcssCacheTask.sync_data();
+});
+
 
