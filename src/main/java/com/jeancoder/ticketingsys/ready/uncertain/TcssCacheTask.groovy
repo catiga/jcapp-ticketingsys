@@ -43,12 +43,16 @@ class TcssCacheTask {
 				Date end_time = now.getTime()
 				//用异步任务控制超时时间来同步影讯，设置请求超时时间为10s
 				JC.thread.run(30*1000L, {
-					CinemaPlanResult planResult = SssHelper.INSTANCE.get_cinema_plans(cinemaAuthInfo, start_time, end_time);
-					return planResult
+					try {
+						CinemaPlanResult planResult = SssHelper.INSTANCE.get_cinema_plans(cinemaAuthInfo, start_time, end_time);
+						return planResult;
+					}catch(any) {
+						return null;
+					}
 				}, {
 					e->
 					if(e.success) {
-						if("0".equals(planResult.getCode()) && planResult.result) {
+						if(e.data && "0".equals(e.data.getCode()) && e.data.result) {
 							//这个是正常的同步了场次
 						} else {
 							Logger.error(JackSonBeanMapper.toJson(e));
