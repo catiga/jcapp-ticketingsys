@@ -19,7 +19,7 @@ class MaoyanHelper {
 	
 	private String comming_pre = "comming@";
 	//private Long commonExp = 1000L*60L*30L;
-	private Long commonExp = 5*24*60*60L;
+	private Long commonExp = 5*24*60*60L;	//5天缓存
 	
 	public String getSnapshot(String movieName) {
 		String useName = movieName;
@@ -108,7 +108,6 @@ class MaoyanHelper {
 	public String getComming() {
 		String cacheKey = comming_pre;
 		Object cacheObj = MemSource.getMemPower().get(cacheKey);
-		cacheObj = null;
 		if(cacheObj != null) {
 			//return (String)cacheObj;
 			//清除缓存
