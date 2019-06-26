@@ -41,16 +41,21 @@ import groovy.json.JsonSlurper
 
 JCLogger logger = LoggerSource.getLogger();
 
+String plan_id = JC.internal.param("plan_id");
+String last_update_time = JC.internal.param("last_update_time");
+
+/**
+ * seat_ids: [{"schema_item_id":17,"custom_price":9,"seat_id":"00100049"}]
+ */
+String seat_ids = JC.internal.param("seat_ids");
+String plan_date = JC.internal.param("plan_date");
+String phone_number = JC.internal.param("phone_number");
+def pid = JC.internal.param('pid');
+def log_id = JC.internal.param('log_id');
+
 try {
 	DatabaseSource.getDatabasePower().beginTransaction();
 	Long id = Long.valueOf(JC.internal.param("cinema_id"));
-	String plan_id = JC.internal.param("plan_id");
-	String last_update_time = JC.internal.param("last_update_time");
-	String seat_ids = JC.internal.param("seat_ids");
-	String plan_date = JC.internal.param("plan_date");
-	String phone_number = JC.internal.param("phone_number");
-	def pid = JC.internal.param('pid');
-	def log_id = JC.internal.param('log_id');
 	
 	try {
 		pid = new BigInteger(pid);
@@ -101,6 +106,9 @@ try {
 	String total_amount = "0";
 	List<SeatBuy> seats = new ArrayList<SeatBuy>();
 	for(def seat_item : seat_items) {
+		if(seat_item['seat_id']==null) {
+			return Res.Failed(Codes.COMMON_PARAM_ERROR,"请选择要售卖的座位");
+		}
 		SchemaChildItem schemaItem = SchemaService.INSTANCE.getSchemaItemById(Long.valueOf(seat_item["schema_item_id"]));
 		String unitPrice = MoneyUtil.multiple(""+schemaItem.getPriceYuan(), "100");
 		if(schemaItem.getIs_custom()) {
