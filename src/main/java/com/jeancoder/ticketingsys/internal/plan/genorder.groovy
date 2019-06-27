@@ -66,6 +66,9 @@ try {
 	String order_no = OrderNoHelper.gene();
 	
 	def seat_items = new JsonSlurper().parseText(seat_ids);
+	if(!seat_items) {
+		return Res.Failed(Codes.COMMON_PARAM_ERROR,"请选择要售卖的票类与座位");
+	}
 	
 	StoreInfo store = StoreService.INSTANCE.getById(id);
 	CinemaAuthInfo cinemaAuthInfo = StoreService.INSTANCE.getCinemaAuthInfo(id);
