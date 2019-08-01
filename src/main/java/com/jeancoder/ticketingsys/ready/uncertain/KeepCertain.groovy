@@ -78,10 +78,10 @@ class KeepCertain {
 		def now_date = datesdf.format(Calendar.getInstance().getTime());
 		def now_time = datesdf_HHmmss.format(Calendar.getInstance().getTime());
 		
-		def sql = 'select * from SaleOrder where flag!=? and (order_status=? or order_status=? or order_status=? or order_status=?) and plan_date>=?';
+		def sql = 'select * from SaleOrder where flag!=? and (order_status=? or order_status=? or order_status=? or order_status=?) and plan_date>=? and proj_id!=';
 		Logger.info('LOOP_LOCK_SQL:::' + sql + ', param=' + now_date);
 		try {
-			List<SaleOrder> result = JcTemplate.INSTANCE().find(SaleOrder, sql, -1, '2900', '2901', '3900', '3901', now_date);
+			List<SaleOrder> result = JcTemplate.INSTANCE().find(SaleOrder, sql, -1, '2900', '2901', '3900', '3901', now_date, 2);	//先把邯郸的锁座关了
 			if(result) {
 				Logger.info('need check order result size=' + result.size());
 				for(SaleOrder x in result) {
