@@ -16,6 +16,7 @@ import com.jeancoder.ticketingsys.ready.order.OrderService
 import com.jeancoder.ticketingsys.ready.order.dto.OrderSeatItemDto
 import com.jeancoder.ticketingsys.ready.order.entity.DataTcSsSaleOrderInfo
 import com.jeancoder.ticketingsys.ready.order.entity.DataTcSsSaleOrderRemote
+import com.jeancoder.ticketingsys.ready.prefer.Prefer
 import com.jeancoder.ticketingsys.ready.prefer.PreferFactory
 import com.jeancoder.ticketingsys.ready.store.StoreService
 import com.jeancoder.ticketingsys.ready.store.dto.StoreInfo
@@ -26,7 +27,11 @@ def card_code = JC.internal.param('unicode');
 def oid = JC.internal.param('o_id');
 def pref = JC.internal.param('pref');
 def pid = JC.internal.param('pid');
-def op = JC.internal.param('op')?.trim();
+def op = JC.internal.param('op')?.toString()?.trim();
+
+def ct = JC.internal.param('ct')?.toString()?.trim();
+def mobile = JC.internal.param('mobile')?.toString()?.trim();
+
 if(pref!='100'&&pref!='200') {
 	return SimpleAjax.notAvailable('unsupport_type,不支持的优惠类型');
 }
@@ -41,8 +46,6 @@ if(!tcss_order.order_status.startsWith('0')) {
 
 DataTcSsSaleOrderRemote remote = OrderService.INSTANCE.getRemoteByOrderNo(tcss_order.order_no);
 List<OrderSeatItemDto> items = OrderService.INSTANCE.getOrderSeats(Long.parseLong(oid.toString()));
-//println "preferential___" + JackSonBeanMapper.toJson(items);
-// [goods_id, [cat_ids, cat_ids], price, num]
 def param = [];
 
 def store_id = tcss_order.store_id;
@@ -71,7 +74,7 @@ for(x in items) {
 	param.add([x.seat_no, sale_fee,pub_fee]);
 }
 StoreInfo store = StoreService.INSTANCE.getById(tcss_order.store_id);
-def computer = PreferFactory.generate(pref);
+Prefer computer = PreferFactory.generate(pref);
 
 def order_param = [:];
 order_param['on'] = tcss_order.order_no;
@@ -92,6 +95,18 @@ if(store_id==5) {
 		}
 	}
 }
+
+//临时代码开始//
+def mobile_limits = ['13980349218', '13308141980', '18116518288', '15984588919',
+	'18089572520', '13684268996', '15328996655', '18089590838', '13778556060', '15008110205', '18623328288', '18180158277', '13501020884'];
+
+if(ct && ct=='C_PSBC') {
+	if(mobile && ( mobile in mobile_limits)) {
+		ret_obj['data']['pref_amount'] = new BigDecimal('900');
+	}
+}
+//临时代码结束//
+
 return ret_obj;
 
 
