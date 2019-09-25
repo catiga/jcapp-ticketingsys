@@ -7,6 +7,7 @@ import com.jeancoder.app.sdk.JC
 import com.jeancoder.app.sdk.source.DatabaseSource
 import com.jeancoder.app.sdk.source.LoggerSource
 import com.jeancoder.core.log.JCLogger
+import com.jeancoder.core.log.JCLoggerFactory
 import com.jeancoder.jdbc.JcTemplate
 import com.jeancoder.ticketingsys.ready.dto.SimpleAjax
 import com.jeancoder.ticketingsys.ready.entity.SaleOrder
@@ -50,10 +51,13 @@ BigInteger user_id = apid;
 //根据 apid 查找一下用户信息
 
 JCLogger Logger = LoggerSource.getLogger(this.class);
+
+JCLogger Logger_2 = JCLoggerFactory.getLogger('genorder');
 def pid = JC.internal.param('pid');
 def mobile = JC.internal.param('mobile')//获取手机号
 
 Logger.info('mobile==========' + mobile);
+Logger_2.info('mobile_2==========' + mobile);
 
 try {
 	DatabaseSource.getDatabasePower().beginTransaction();
