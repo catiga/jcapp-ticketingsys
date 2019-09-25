@@ -56,8 +56,6 @@ def hall_id = tcss_order.hall_id;
 BigDecimal pref_amount = new BigDecimal(0);
 
 for(x in items) {
-	//param.add([x.seat_no, x.sale_fee,x.pub_fee]);
-
 	def sale_fee = x.sale_fee;
 	def pub_fee = x.pub_fee;
 	
@@ -107,9 +105,13 @@ if(ct && ct=='C_PSBC') {
 		if(ret_obj && ret_obj.available) {
 			ret_obj['data']['pref_amount'] = new BigDecimal('900');
 		} else {
+			//开始计算总价
+			def stand_seat_price = new BigDecimal('900');
+			def ticket_num = new BigDecimal(items.size());
+			
 			PrepData for_trade_prep = new PrepData(order_id:oid,oc:tcss_order.o_c,prefcode:'100');
-			for_trade_prep.pref_amount = new BigDecimal(tcss_order.pay_amount).subtract(new BigDecimal('900'));
-			for_trade_prep.pay_amount = new BigDecimal('900');
+			for_trade_prep.pref_amount = new BigDecimal(tcss_order.pay_amount).subtract(stand_seat_price.multiply(ticket_num));
+			for_trade_prep.pay_amount = stand_seat_price.multiply(ticket_num);
 			ret_obj = SimpleAjax.available('', for_trade_prep);
 		}
 	}
