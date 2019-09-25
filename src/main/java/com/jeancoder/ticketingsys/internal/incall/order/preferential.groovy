@@ -18,6 +18,7 @@ import com.jeancoder.ticketingsys.ready.order.entity.DataTcSsSaleOrderInfo
 import com.jeancoder.ticketingsys.ready.order.entity.DataTcSsSaleOrderRemote
 import com.jeancoder.ticketingsys.ready.prefer.Prefer
 import com.jeancoder.ticketingsys.ready.prefer.PreferFactory
+import com.jeancoder.ticketingsys.ready.prep.PrepData
 import com.jeancoder.ticketingsys.ready.store.StoreService
 import com.jeancoder.ticketingsys.ready.store.dto.StoreInfo
 
@@ -102,7 +103,14 @@ def mobile_limits = ['13980349218', '13308141980', '18116518288', '15984588919',
 
 if(ct && ct=='C_PSBC') {
 	if(mobile && ( mobile in mobile_limits)) {
-		ret_obj['data']['pref_amount'] = new BigDecimal('900');
+		if(ret_obj && ret_obj.available) {
+			ret_obj['data']['pref_amount'] = new BigDecimal('900');
+		} else {
+			PrepData for_trade_prep = new PrepData(order_id:oid,oc:tcss_order.o_c,prefcode:'100');
+			for_trade_prep.pref_amount = new BigDecimal('900');
+			for_trade_prep.pay_amount = new BigDecimal('900');
+			ret_obj = SimpleAjax.available('', for_trade_prep);
+		}
 	}
 }
 //临时代码结束//
