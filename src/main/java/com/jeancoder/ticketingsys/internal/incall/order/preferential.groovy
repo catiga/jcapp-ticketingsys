@@ -21,6 +21,7 @@ import com.jeancoder.ticketingsys.ready.prefer.PreferFactory
 import com.jeancoder.ticketingsys.ready.prep.PrepData
 import com.jeancoder.ticketingsys.ready.store.StoreService
 import com.jeancoder.ticketingsys.ready.store.dto.StoreInfo
+import com.jeancoder.ticketingsys.ready.util.MoneyUtil
 
 JCLogger LOGGER = JCLoggerFactory.getLogger('GOODS_ORDER_NOTIFY');
 
@@ -107,7 +108,7 @@ if(ct && ct=='C_PSBC') {
 			ret_obj['data']['pref_amount'] = new BigDecimal('900');
 		} else {
 			PrepData for_trade_prep = new PrepData(order_id:oid,oc:tcss_order.o_c,prefcode:'100');
-			for_trade_prep.pref_amount = new BigDecimal('900');
+			for_trade_prep.pref_amount = new BigDecimal(tcss_order.pay_amount).subtract(new BigDecimal('900'));
 			for_trade_prep.pay_amount = new BigDecimal('900');
 			ret_obj = SimpleAjax.available('', for_trade_prep);
 		}
