@@ -52,6 +52,9 @@ BigInteger user_id = apid;
 JCLogger Logger = LoggerSource.getLogger(this.class);
 def pid = JC.internal.param('pid');
 def mobile = JC.internal.param('mobile')//获取手机号
+
+Logger.info('mobile==========' + mobile);
+
 try {
 	DatabaseSource.getDatabasePower().beginTransaction();
 	Long id = Long.valueOf(JC.internal.param("cinema_id"));
