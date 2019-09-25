@@ -49,15 +49,11 @@ def apid = BigInteger.valueOf(Long.valueOf(JC.internal.param('apid')));
 BigInteger user_id = apid;
 
 //根据 apid 查找一下用户信息
-
-JCLogger Logger = LoggerSource.getLogger(this.class);
-
-JCLogger Logger_2 = JCLoggerFactory.getLogger('genorder');
+JCLogger Logger = JCLoggerFactory.getLogger('genorder');
 def pid = JC.internal.param('pid');
 def mobile = JC.internal.param('mobile')//获取手机号
 
-Logger.info('mobile==========' + mobile);
-Logger_2.info('mobile_2==========' + mobile);
+Logger.info('mobile_2==========' + mobile);
 
 try {
 	DatabaseSource.getDatabasePower().beginTransaction();
@@ -207,18 +203,6 @@ try {
 		}
 		total_amount = MoneyUtil.add(total_amount, filter_price?filter_price:unitPrice);
 		
-		/* old code 
-		DataTcSsSaleOrderSeat seat = new DataTcSsSaleOrderSeat();
-		seat.setSeat_gr(gseat.getxCoord())
-		seat.setSeat_gc(gseat.getyCoord())
-		seat.setSeat_sr(gseat.getRow())
-		seat.setSeat_sc(gseat.getColumn())
-		seat.setSeat_no(gseat.getCineSeatId())
-		seat.setSale_fee(filter_price?filter_price:unitPrice)
-		seat.setPub_fee(pub_fee);
-		seat.setHandle_fee("0")
-		seatList.add(seat);
-		*/
 		SaleSeat seat = new SaleSeat();
 		seat.setSeat_gr(gseat.getxCoord())
 		seat.setSeat_gc(gseat.getyCoord())
@@ -254,28 +238,6 @@ try {
 
 	// 保存订单
 	SimpleDateFormat clocksdf = new SimpleDateFormat("HH:mm:ss");
-	/* old code
-	DataTcSsSaleOrderInfo order = new DataTcSsSaleOrderInfo();
-	order.setOrder_no(order_no);
-	order.setTotal_amount(total_amount);
-	order.pay_amount = total_amount;
-	order.setOrder_status(OrderConstants._order_status_create_);
-	order.setStore_id(store.getId().intValue())
-	order.setStore_name(store.getStore_name())
-	order.setHall_id(matchPlan.getHallId())
-	order.setHall_name(matchPlan.getHallName())
-	order.setPlan_date(plan_date);
-	order.setPlan_time(matchPlan.getStartTime().split(" ")[1])
-	order.setPlan_id(plan_id)
-	order.setFilm_name(matchPlan.getMovieInfo().get(0).getMovieName())
-	order.setTicket_sum(seatList.size());
-	order.user_id = user_id;		//ap_id
-	order.proj_id = store.proj_id;
-	order.film_dimensional = movieInfo.film_dimensional;
-	order.film_no = matchPlan.getMovieInfo().get(0).getCineMovieNum();
-	order.store_basic = store.store_basic;
-	OrderService.INSTANCE.addOuUpdateOrder(order);
-	*/
 	SaleOrder order = new SaleOrder();
 	//先设置票类
 	if(match_schema!=null && match_schema.id!=null) {
