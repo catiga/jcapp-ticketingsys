@@ -1,6 +1,7 @@
 package com.jeancoder.ticketingsys.entry.movie
 import java.text.SimpleDateFormat
 
+import com.jeancoder.app.sdk.JC
 import com.jeancoder.app.sdk.source.DatabaseSource
 import com.jeancoder.app.sdk.source.LoggerSource
 import com.jeancoder.app.sdk.source.RequestSource
@@ -10,6 +11,8 @@ import com.jeancoder.core.http.JCResponse
 import com.jeancoder.core.log.JCLogger
 import com.jeancoder.core.power.DatabasePower
 import com.jeancoder.core.result.Result
+import com.jeancoder.ticketingsys.ready.entity.MovieInfo
+import com.jeancoder.jdbc.JcTemplate
 import com.jeancoder.ticketingsys.ready.film.MaoyanHelper
 import com.jeancoder.ticketingsys.ready.film.entity.DataTcSsMovieCelebrity
 import com.jeancoder.ticketingsys.ready.film.entity.DataTcSsMovieInfo
@@ -24,12 +27,59 @@ JCRequest req = RequestSource.getRequest();
 JCResponse res = ResponseSource.getResponse();
 Result result = new Result();
 JCLogger logger = LoggerSource.getLogger(this.class);
+
+String maoyanJsonDataReg = "<script>var AppData =([^>]*);</script>"
+
+String movieInfoIdStr = JC.request.param("org_id");
+String myid = JC.request.param("film_my_id");
+
+//获取更多信息
+String film_cat = JC.request.param('film_cat');
+String film_diff = JC.request.param('film_diff');
+String film_dimen = JC.request.param('film_dimen');
+String film_name = JC.request.param('film_name');
+String film_pub_date = JC.request.param('film_pub_date');
+String film_score = JC.request.param('film_score');
+String film_img = JC.request.param('film_img');
+
+//首先尝试更新基本信息
+def base_update = false;
 try {
-	String maoyanJsonDataReg = "<script>var AppData =([^>]*);</script>"
-	
-	String movieInfoIdStr = req.getParameter("org_id");
-	String myid = req.getParameter("film_my_id");
-	
+	MovieInfo movie = JcTemplate.INSTANCE().get(MovieInfo, 'select * from MovieInfo where id=?', movieInfoIdStr);
+	if(movie!=null) {
+		if(film_cat) {
+			movie.film_type = film_cat;
+		}
+		if(film_diff) {
+			try {
+				movie.time_diff = Integer.valueOf(film_diff);
+			} catch(e) {
+			}
+		}
+		if(film_dimen) {
+			movie.film_dimensional = film_dimen;
+		}
+		if(film_name) {
+			movie.film_name = film_name;
+		}
+		if(film_pub_date) {
+			try {
+				film_pub_date = film_pub_date.substring(0, 10);
+				movie.release_date = new SimpleDateFormat('yyyy-MM-dd').parse(film_pub_date);
+			} catch(e) {}
+		}
+		if(film_score) {
+			movie.film_score = film_score;
+		}
+		if(film_img) {
+			movie.pic_entry = film_img;
+			movie.pic_small = film_img;
+		}
+		JcTemplate.INSTANCE().update(movie);
+		base_update = true;
+	}
+}catch(any) {}
+try {
 	String defaultHtml = MaoyanHelper.INSTANCE.getMovieHtml(myid);
 	
 	String test = MaoyanHelper.INSTANCE.regexpFetchContent(maoyanJsonDataReg,1,defaultHtml);
@@ -126,6 +176,10 @@ try {
 	result.setData(Res.Success());
 	return result;
 }catch(Exception e) {
+	if(base_update) {
+		result.setData(Res.Success());
+		return result;
+	}
 	logger.error("同步影片信息失败",e)
 	result.setData(Res.Failed(Codes.INTERNAL_SERVER_ERROR));
 	return result;

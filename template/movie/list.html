@@ -173,6 +173,11 @@ $("#get_my_snapshot_btn").click(function(){
 				var my_ids = $("#sync_movie_info_pop form *[name=film_my_id]");
 				my_ids.html("");
 				
+				//部分新增
+				movie_result_set = my_data.movies.list;
+				console.log(movie_result_set);
+				//部分新增
+				
 				for(var i=0,ic=my_data.movies.list.length;i<ic;i++){
 					var my_snapshot = my_data.movies.list[i];
 					my_ids.append('<option value="'+my_snapshot.id+'">'+my_snapshot.nm+'(上映日期:'+my_snapshot.rt+')</option>');
@@ -215,7 +220,10 @@ $("#yxtb").click(function(){
 			layer.msg(msg.msg, {icon : 5,time : 1000});
 		}
 	});
-})
+});
+
+//影片数据缓存
+var movie_result_set = null;
 $("#sync_movie_info_pop button[type=submit]").click(function(){
 	var org_id = $("#sync_movie_info_pop *[name=org_id]").val();
 	
@@ -238,6 +246,22 @@ $("#sync_movie_info_pop button[type=submit]").click(function(){
 		"org_id" : org_id,
 		"film_my_id" : film_my_id
 	};
+	
+	if(movie_result_set) {
+		for(var i=0; i<movie_result_set.length; i++) {
+			let snap = movie_result_set[i];
+			if(snap.id==film_my_id) {
+				post_data.film_cat = snap.cat;
+				post_data.film_name = snap.nm;
+				post_data.film_score = snap.sc;
+				post_data.film_pub_date = snap.rt;
+				post_data.film_dimen = snap.ver;
+				post_data.film_diff = snap.dur;
+				post_data.film_img = snap.img;
+			}
+		}
+	}
+	console.log(post_data);
 	$.post("[[${contextPath}]]/movie/myutil_mdetail", post_data,function(msg) {
 		layer.close(load_pop);
 		if (msg.code === 0) {
