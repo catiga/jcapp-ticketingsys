@@ -72,6 +72,7 @@ try {
 			movie.film_score = film_score;
 		}
 		if(film_img) {
+			film_img = film_img.replaceAll('w.h', '260.340');
 			movie.pic_entry = film_img;
 			movie.pic_small = film_img;
 		}
