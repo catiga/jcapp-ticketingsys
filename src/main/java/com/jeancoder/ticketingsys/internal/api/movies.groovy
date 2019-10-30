@@ -34,36 +34,30 @@ JCLogger logger = LoggerSource.getLogger(this.getClass().getName());
 if(!cinema_id) {
 	return Res.Failed(Codes.COMMON_PARAM_ERROR);
 }
+
+Long id = Long.valueOf(JC.internal.param('cinema_id').toString());
+Cinema cinema = JcTemplate.INSTANCE().get(Cinema, 'select * from Cinema where id=?', id);
+if(cinema==null) {
+	return Res.Failed(Codes.COMMON_CINEMA_CONFIG_ERROR);
+}
+def pid = cinema.proj_id;
+CinemaAuthInfo cinemaAuthInfo = StoreService.INSTANCE.getCinemaAuthInfo(id);
+if(cinemaAuthInfo == null) {
+	return Res.Failed(Codes.COMMON_CINEMA_CONFIG_ERROR);
+}
+
+Calendar now = Calendar.getInstance(TimeZone.getDefault());
+now.setTime(new Date());
+now.set(Calendar.HOUR,0);
+now.set(Calendar.MINUTE,0);
+now.set(Calendar.SECOND,0);
+now.set(Calendar.MILLISECOND,0);
+
+Date start_time = now.getTime()
+now.add(Calendar.DATE, getData(id));
+Date end_time = now.getTime()
+
 try {
-
-	Long id = Long.valueOf(JC.internal.param('cinema_id').toString());
-
-	Cinema cinema = JcTemplate.INSTANCE().get(Cinema, 'select * from Cinema where id=?', id);
-
-	if(cinema==null) {
-		return Res.Failed(Codes.COMMON_CINEMA_CONFIG_ERROR);
-	}
-	def pid = cinema.proj_id;
-	
-	CinemaAuthInfo cinemaAuthInfo = StoreService.INSTANCE.getCinemaAuthInfo(id);
-
-	if(cinemaAuthInfo == null) {
-		return Res.Failed(Codes.COMMON_CINEMA_CONFIG_ERROR);
-	}
-
-	Calendar now = Calendar.getInstance(TimeZone.getDefault());
-	now.setTime(new Date());
-
-	now.set(Calendar.HOUR,0);
-	now.set(Calendar.MINUTE,0);
-	now.set(Calendar.SECOND,0);
-	now.set(Calendar.MILLISECOND,0);
-
-	Date start_time = now.getTime()
-
-	now.add(Calendar.DATE, getData(id));
-	Date end_time = now.getTime()
-	
 	def start_ttt = Calendar.getInstance().getTimeInMillis();
 	CinemaPlanResult planResult = SssHelper.INSTANCE.get_cinema_plans(cinemaAuthInfo, start_time, end_time);
 	//CinemaPlanResult planResult = SssHelper.INSTANCE.just_get_cinema_plans_from_cache(cinemaAuthInfo, start_time, end_time);
