@@ -36,6 +36,7 @@ class SyncThread extends Thread {
 		try {
 			json = new JsonSlurper().parseText(snapshotStr);
 		}catch(JsonException e) {
+			logger.error('save_movie error exception:', e);
 			//保存一个无名称的影片
 			DataTcSsMovieInfo film = new DataTcSsMovieInfo();
 			film.setFilm_no(movie.getCineMovieNum());
