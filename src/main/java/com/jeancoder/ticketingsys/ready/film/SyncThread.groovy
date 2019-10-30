@@ -101,7 +101,7 @@ println json;
 
 			DataTcSsMovieInfo film = new DataTcSsMovieInfo();
 			film.setFilm_no(movie.getCineMovieNum());
-			film.setFilm_name(maoyanData["movie"]["nm"]);
+			film.setFilm_name(maoyanData["movie"]["nm"] + '999');
 			film.setFilm_subtitle(movie.getMovieSubtitle());
 			film.setFilm_brief("");
 			film.setFilm_content(maoyanData["movie"]["dra"]);
