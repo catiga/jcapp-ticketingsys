@@ -1,7 +1,7 @@
 package com.jeancoder.ticketingsys.ready.film
 
+import com.jeancoder.app.sdk.source.LoggerSource
 import com.jeancoder.core.log.JCLogger
-import com.jeancoder.core.log.JCLoggerFactory
 import com.jeancoder.ticketingsys.ready.film.entity.DataTcSsMovieCelebrity
 import com.jeancoder.ticketingsys.ready.film.entity.DataTcSsMovieInfo
 import com.jeancoder.ticketingsys.ready.film.entity.DataTcSsMoviePicture
@@ -12,8 +12,7 @@ import groovy.json.JsonException
 import groovy.json.JsonSlurper
 
 class SyncThread extends Thread {
-	//JCLogger logger = LoggerSource.getLogger();
-	static JCLogger logger = JCLoggerFactory.getLogger('sync movie thread');
+	JCLogger logger = LoggerSource.getLogger();
 	
 	private CinemaPlanMovie movie;
 	private Long pid;
