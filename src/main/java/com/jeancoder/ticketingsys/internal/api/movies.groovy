@@ -76,7 +76,7 @@ try {
 	try {
 		market_info = JC.internal.call(SimpleAjax.class, 'market', 'market/get_all_market_rule', ["pid":pid]) 
 	} catch (Exception e) {
-		logger.error("获取可用的票务营销活动失败", e);
+		logger.error("无获取可用的票务营销活动失败，或获取活动失败");
 	}
 	
 	List<MovieDatePlanMovie> movies = new ArrayList<MovieDatePlanMovie>();
@@ -103,11 +103,11 @@ try {
 			matchMovie.setProperties(movieInfo)
 			movies.add(matchMovie);
 		}
-		matchMovie.setCelebritys(FilmService.INSTANCE.getCelesByMovieId(movieInfo.getId()))
 		matchMovie.setName(mname);
 		if(movieInfo != null) {
 			matchMovie.setScore(movieInfo.getFilm_score());
-			matchMovie.setImg(movieInfo.getPic_small())
+			matchMovie.setImg(movieInfo.getPic_small());
+			matchMovie.setCelebritys(FilmService.INSTANCE.getCelesByMovieId(movieInfo.getId()));
 		}
 
 		MovieDatePlanDate matchDate = matchMovie.matchAddedDate(plan.getBusinessDate());
@@ -126,13 +126,13 @@ try {
 		}
 		TicketPriceDto item = new TicketPriceDto();
 		item.running_time_by_plan(plan.getStartTime());
-		item.movie_dimensional = movieInfo.film_dimensional;
-		item.movie_size = movieInfo.film_size;
+		item.movie_dimensional = movieInfo!=null?movieInfo.film_dimensional:pmovie.movieDimensional;
+		item.movie_size = movieInfo!=null?movieInfo.film_size:pmovie.movieSize;
 		item.store_limit = id + '';
 		
 		//item.movie_limit = movieInfo.id + '';
 		//传入影片编码
-		item.movie_limit = movieInfo.film_no;
+		item.movie_limit = movieInfo!=null?movieInfo.film_no:pmovie.cineMovieNum;
 		
 		item.price = new BigDecimal(price);
 		item.hall_limit = plan.getHallId();
