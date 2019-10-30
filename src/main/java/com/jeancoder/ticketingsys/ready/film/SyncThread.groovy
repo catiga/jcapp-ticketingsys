@@ -1,5 +1,8 @@
 package com.jeancoder.ticketingsys.ready.film
 
+import groovy.json.JsonException
+import groovy.json.JsonSlurper
+
 import com.jeancoder.app.sdk.source.LoggerSource
 import com.jeancoder.core.log.JCLogger
 import com.jeancoder.ticketingsys.ready.film.entity.DataTcSsMovieCelebrity
@@ -8,12 +11,8 @@ import com.jeancoder.ticketingsys.ready.film.entity.DataTcSsMoviePicture
 import com.jeancoder.ticketingsys.ready.film.service.FilmService
 import com.piaodaren.ssc.model.CinemaPlanMovie
 
-import groovy.json.JsonException
-import groovy.json.JsonSlurper
-
 class SyncThread extends Thread {
 	JCLogger logger = LoggerSource.getLogger();
-	
 	private CinemaPlanMovie movie;
 	private Long pid;
 	public SyncThread() {}
@@ -36,6 +35,7 @@ class SyncThread extends Thread {
 		def json = null;
 		try {
 			json = new JsonSlurper().parseText(snapshotStr);
+			logger.info(json);
 		}catch(JsonException e) {
 			logger.error('save_movie error exception:', e);
 			//保存一个无名称的影片
