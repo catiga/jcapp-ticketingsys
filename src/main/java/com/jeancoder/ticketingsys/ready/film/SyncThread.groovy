@@ -80,6 +80,7 @@ println json;
 		if(test == null) {
 			//保存一个无名称的影片
 			DataTcSsMovieInfo film = new DataTcSsMovieInfo();
+			film.film_name = movie.movieName;
 			film.setFilm_no(movie.getCineMovieNum());
 			film.setFilm_subtitle(movie.getMovieSubtitle());
 			film.setFilm_language(movie.getMovieLanguage());
@@ -162,6 +163,7 @@ println json;
 		}catch(Exception e) {
 			//保存一个无名称的影片
 			DataTcSsMovieInfo film = new DataTcSsMovieInfo();
+			film.film_name = movie.movieName + '8';
 			film.setFilm_no(movie.getCineMovieNum());
 			film.setFilm_subtitle(movie.getMovieSubtitle());
 			film.setFilm_language(movie.getMovieLanguage());
