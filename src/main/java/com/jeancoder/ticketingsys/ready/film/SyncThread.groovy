@@ -50,7 +50,7 @@ class SyncThread extends Thread {
 			//影讯获取失败 保存该影片影讯状态为失败状态
 			return;
 		}
-
+println json;
 		if(json["movies"] == null) {
 			//快照获取失败
 			//保存一个无名称的影片
