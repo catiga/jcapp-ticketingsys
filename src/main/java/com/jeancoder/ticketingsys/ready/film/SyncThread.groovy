@@ -38,6 +38,7 @@ class SyncThread extends Thread {
 		}catch(JsonException e) {
 			//保存一个无名称的影片
 			DataTcSsMovieInfo film = new DataTcSsMovieInfo();
+			film.film_name = movie.movieName;
 			film.setFilm_no(movie.getCineMovieNum());
 			film.setFilm_subtitle(movie.getMovieSubtitle());
 			film.setFilm_language(movie.getMovieLanguage());
@@ -55,7 +56,7 @@ println json;
 			//快照获取失败
 			//保存一个无名称的影片
 			DataTcSsMovieInfo film = new DataTcSsMovieInfo();
-			film.setFilm_name(movie.movieName + '7');
+			film.setFilm_name(movie.movieName);
 			film.setFilm_no(movie.getCineMovieNum());
 			film.setFilm_subtitle(movie.getMovieSubtitle());
 			film.setFilm_language(movie.getMovieLanguage());
@@ -78,9 +79,10 @@ println json;
 		String test = MaoyanHelper.INSTANCE.regexpFetchContent(maoyanJsonDataReg,1,defaultHtml);
 
 		if(test == null) {
+			//TODO 因为猫眼增加了验证机器人，所以为空
 			//保存一个无名称的影片
 			DataTcSsMovieInfo film = new DataTcSsMovieInfo();
-			film.film_name = movie.movieName + '6';
+			film.film_name = movie.movieName;
 			film.setFilm_no(movie.getCineMovieNum());
 			film.setFilm_subtitle(movie.getMovieSubtitle());
 			film.setFilm_language(movie.getMovieLanguage());
@@ -101,7 +103,7 @@ println json;
 
 			DataTcSsMovieInfo film = new DataTcSsMovieInfo();
 			film.setFilm_no(movie.getCineMovieNum());
-			film.setFilm_name(maoyanData["movie"]["nm"] + '999');
+			film.setFilm_name(maoyanData["movie"]["nm"]);
 			film.setFilm_subtitle(movie.getMovieSubtitle());
 			film.setFilm_brief("");
 			film.setFilm_content(maoyanData["movie"]["dra"]);
@@ -163,7 +165,7 @@ println json;
 		}catch(Exception e) {
 			//保存一个无名称的影片
 			DataTcSsMovieInfo film = new DataTcSsMovieInfo();
-			film.film_name = movie.movieName + '8';
+			film.film_name = movie.movieName;
 			film.setFilm_no(movie.getCineMovieNum());
 			film.setFilm_subtitle(movie.getMovieSubtitle());
 			film.setFilm_language(movie.getMovieLanguage());
