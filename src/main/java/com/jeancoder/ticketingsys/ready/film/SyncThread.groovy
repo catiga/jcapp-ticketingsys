@@ -35,11 +35,10 @@ class SyncThread extends Thread {
 		def json = null;
 		try {
 			json = new JsonSlurper().parseText(snapshotStr);
-			logger.info(json);
 		}catch(JsonException e) {
-			logger.error('save_movie error exception:', e);
 			//保存一个无名称的影片
 			DataTcSsMovieInfo film = new DataTcSsMovieInfo();
+			film.setFilm_name('test name');
 			film.setFilm_no(movie.getCineMovieNum());
 			film.setFilm_subtitle(movie.getMovieSubtitle());
 			film.setFilm_language(movie.getMovieLanguage());
