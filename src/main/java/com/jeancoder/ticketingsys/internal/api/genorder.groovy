@@ -65,7 +65,6 @@ try {
 	}
 } catch(any) {
 }
-Logger.info('order_config_rule===' + order_config_rule);
 try {
 	DatabaseSource.getDatabasePower().beginTransaction();
 	Long id = Long.valueOf(JC.internal.param("cinema_id"));
@@ -79,9 +78,10 @@ try {
 	
 	if(order_config_rule) {
 		for(x in order_config_rule) {
+			Logger.info(x['key'] + '---' + x['value']);
 			if(x['key']=='prefix') {
 				prefix = x['value'];
-			} else if(x['key']=='withstore' && x['value']=='1') {
+			} else if(x['key']=='withstore' && x['value'].toString()=='1') {
 				store_with = true;
 			}
 		}
