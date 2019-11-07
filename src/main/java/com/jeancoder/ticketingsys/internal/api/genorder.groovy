@@ -55,6 +55,18 @@ def mobile = JC.internal.param('mobile')//获取手机号
 
 Logger.info('mobile_2==========' + mobile);
 
+def order_config_rule = null;
+try {
+	//在这里获取配置的订单前缀
+	SimpleAjax ajax = JC.internal.call(SimpleAjax, 'project', '/sys/get_conf_by_code', [code:'ORNU']);
+	
+	if(ajax && ajax.available && ajax.data) {
+		Logger.info(':::' + ajax.data);
+		order_config_rule = JackSonBeanMapper.jsonToList(ajax.data);
+	}
+} catch(any) {
+}
+
 try {
 	DatabaseSource.getDatabasePower().beginTransaction();
 	Long id = Long.valueOf(JC.internal.param("cinema_id"));
@@ -64,6 +76,16 @@ try {
 	String plan_date = JC.internal.param("plan_date");
 
 	String order_no = OrderNoHelper.gene();
+	def prefix = null; def store_with = false;
+	if(order_config_rule) {
+		for(x in order_config_rule) {
+			if(x['prefix']) {
+				prefix = x['value'];
+			} else if(x['withstore']=='1') {
+				store_with = true;
+			}
+		}
+	}
 
 	StoreInfo store = StoreService.INSTANCE.getById(id);
 	CinemaAuthInfo cinemaAuthInfo = StoreService.INSTANCE.getCinemaAuthInfo(id);
@@ -72,6 +94,14 @@ try {
 		DatabaseSource.getDatabasePower().rollbackTransaction();
 		return Res.Failed(Codes.COMMON_CINEMA_CONFIG_ERROR);
 	}
+	
+	if(store_with && store.store_no!=null) {
+		order_no = store.store_no.trim() + order_no;
+	}
+	if(prefix) {
+		order_no = prefix.toString().trim() + order_no;
+	}
+	
 	//该影城支持的默认分类
 	List<HallSchemaWithItem> cinemaSchemas = SchemaService.INSTANCE.getCinemaSchemas_online(id,pid);
 
