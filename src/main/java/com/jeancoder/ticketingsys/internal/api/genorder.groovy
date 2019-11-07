@@ -66,7 +66,7 @@ try {
 	}
 } catch(any) {
 }
-
+Logger.info('order_config_rule===' + order_config_rule);
 try {
 	DatabaseSource.getDatabasePower().beginTransaction();
 	Long id = Long.valueOf(JC.internal.param("cinema_id"));
