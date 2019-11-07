@@ -61,8 +61,8 @@ try {
 	SimpleAjax ajax = JC.internal.call(SimpleAjax, 'project', '/sys/get_conf_by_code', [code:'ORNU']);
 	
 	if(ajax && ajax.available && ajax.data) {
-		Logger.info(':::' + ajax.data);
 		order_config_rule = (ajax.data);
+		Logger.info(':::' + order_config_rule + ',' + order_config_rule==null);
 	}
 } catch(any) {
 }
@@ -77,6 +77,8 @@ try {
 
 	String order_no = OrderNoHelper.gene();
 	def prefix = null; def store_with = false;
+	
+	Logger.info(order_config_rule.getClass().getName());
 	if(order_config_rule) {
 		for(x in order_config_rule) {
 			if(x['prefix']) {
