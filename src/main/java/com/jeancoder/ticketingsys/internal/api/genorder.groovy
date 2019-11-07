@@ -62,7 +62,6 @@ try {
 	
 	if(ajax && ajax.available && ajax.data) {
 		order_config_rule = (ajax.data);
-		Logger.info(':::' + order_config_rule + ',' + order_config_rule==null);
 	}
 } catch(any) {
 }
@@ -78,12 +77,11 @@ try {
 	String order_no = OrderNoHelper.gene();
 	def prefix = null; def store_with = false;
 	
-	Logger.info(order_config_rule.getClass().getName());
 	if(order_config_rule) {
 		for(x in order_config_rule) {
-			if(x['prefix']) {
+			if(x['key']=='prefix') {
 				prefix = x['value'];
-			} else if(x['withstore']=='1') {
+			} else if(x['key']=='withstore' && x['value']=='1') {
 				store_with = true;
 			}
 		}
