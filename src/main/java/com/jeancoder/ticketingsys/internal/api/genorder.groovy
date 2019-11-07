@@ -62,7 +62,7 @@ try {
 	
 	if(ajax && ajax.available && ajax.data) {
 		Logger.info(':::' + ajax.data);
-		order_config_rule = JackSonBeanMapper.jsonToList(ajax.data);
+		order_config_rule = (ajax.data);
 	}
 } catch(any) {
 }
