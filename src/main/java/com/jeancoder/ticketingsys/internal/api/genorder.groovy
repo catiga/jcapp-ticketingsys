@@ -96,7 +96,12 @@ try {
 	}
 	
 	if(store_with && store.store_no!=null) {
-		order_no = store.store_no.trim() + order_no;
+		def store_basic_id = store.store_basic;
+		def real_store_info = JC.internal.call('project', '/incall/store_by_id', [id:store_basic_id, pid:pid]);
+		try {
+			real_store_info = JackSonBeanMapper.jsonToMap(real_store_info);
+			order_no = real_store_info['store_no'].trim() + order_no;
+		} catch(any) {}
 	}
 	if(prefix) {
 		order_no = prefix.toString().trim() + order_no;
