@@ -60,7 +60,7 @@ try {
 		order_param['sid'] = store_id;
 		order_param['hall_id'] = order.hall_id;
 		order_param['film_no'] = order.film_no;
-		other_param['mobile'] = mobile;
+		order_param['mobile'] = mobile;
 		SimpleAjax ret_obj = computer.compute(order_param, market_id, op, param);
 		pref_data = ret_obj;
 	} else if(coupon_id) {
