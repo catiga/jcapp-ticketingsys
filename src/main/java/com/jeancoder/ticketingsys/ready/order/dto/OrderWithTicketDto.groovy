@@ -26,6 +26,9 @@ class OrderWithTicketDto {
 	private String pay_type;
 	private String o_c;
 	private String film_no;
+	
+	String film_dimensional;
+	
 	//private String handle_fee;
 	private Date drawback_time;
 	private Date refund_time;
