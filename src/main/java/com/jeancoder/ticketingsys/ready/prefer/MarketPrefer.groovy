@@ -27,9 +27,9 @@ class MarketPrefer extends Prefer {
 		def film_no = order_param['film_no']
 		def mobile = order_param['mobile'];
 		def ap_id = order_param['ap_id'];
-		def film_dimensional = order_param['film_dimensional'];
+		def film_dimen = order_param['film_dimen'];
 		
-		def param = [market_id:market_id,g:de_list,film_no:film_no,film_dimensional:film_dimensional,hall_id:hall_id.toString()];
+		def param = [market_id:market_id,g:de_list,film_no:film_no,film_dimen:film_dimen,hall_id:hall_id.toString()];
 		MCCompute ret_data = null;
 		try {
 			def p = JackSonBeanMapper.mapToJson(param);

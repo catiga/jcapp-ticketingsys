@@ -222,5 +222,11 @@ class OrderWithTicketDto {
 	public void setFilm_no(String film_no) {
 		this.film_no = film_no;
 	}
+	public String getFilm_dimensional() {
+		return film_dimensional;
+	}
+	public void setFilm_dimensional(String film_dimensional) {
+		this.film_dimensional = film_dimensional;
+	}
 	
 }
