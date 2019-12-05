@@ -52,9 +52,10 @@ class MarketPrefer extends Prefer {
 			McInfo mc_info = new McInfo();
 			McForCashier mfc_obj = new McForCashier(prep_amount:ret_data.offerAmount);
 			mfc_obj.items = ret_data.items;
-
-			PrepData for_trade_prep = new PrepData(order_id:oid,oc:oc,prefcode:'200',other:mfc_obj);
-			for_trade_prep.pref_amount = ret_data.offerAmount;		//券最大可优惠金额
+			
+			//prefcode:300 代表营销活动
+			PrepData for_trade_prep = new PrepData(order_id:oid,oc:oc,prefcode:'300',other:mfc_obj);
+			for_trade_prep.pref_amount = ret_data.offerAmount;		//活动最大可优惠金额
 			for_trade_prep.pay_amount = ret_data.totalAmount;
 			return SimpleAjax.available('', for_trade_prep);
 		} else {
