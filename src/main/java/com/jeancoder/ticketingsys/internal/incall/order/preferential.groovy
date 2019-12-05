@@ -34,7 +34,9 @@ def op = JC.internal.param('op')?.toString()?.trim();
 def ct = JC.internal.param('ct')?.toString()?.trim();
 def mobile = JC.internal.param('mobile')?.toString()?.trim();
 
-if(pref!='100'&&pref!='200') {
+def market_id = JC.internal.param('market_id');
+
+if(pref!='100'&&pref!='200'&&pref!='300') {
 	return SimpleAjax.notAvailable('unsupport_type,不支持的优惠类型');
 }
 
@@ -59,21 +61,15 @@ for(x in items) {
 	def sale_fee = x.sale_fee;
 	def pub_fee = x.pub_fee;
 	
-	if(store_id==5 && "100".equals(pref)) {
-		//证明是包头的优惠券计算 传原价计算。
-		// 证明是包头的
-		//增加传入影厅编号，针对包头执行特殊的价格计算
-		if(hall_id=='0000000000000008') {
-			sale_fee = '2500';
-		} else {
-			sale_fee = '2000';
-		}
-		pub_fee = sale_fee;
-	}
 	pref_amount = pref_amount.add(new BigDecimal(x.sale_fee).subtract(new BigDecimal(sale_fee)));
 	param.add([x.seat_no, sale_fee,pub_fee]);
 }
 StoreInfo store = StoreService.INSTANCE.getById(tcss_order.store_id);
+if(market_id) {
+	//优先计算活动
+	pref = '300';
+	card_code = market_id;
+}
 Prefer computer = PreferFactory.generate(pref);
 
 def order_param = [:];
@@ -97,25 +93,25 @@ if(store_id==5) {
 }
 
 //临时代码开始//
-def mobile_limits = ['13980349218', '13308141980', '18116518288', '15984588919',
-	'18089572520', '13684268996', '15328996655', '18089590838', '13778556060', '15008110205', '18623328288', '18180158277', '13501020884'];
-
-if(ct && ct=='C_PSBC') {
-	if(mobile && ( mobile in mobile_limits)) {
-		if(ret_obj && ret_obj.available) {
-			ret_obj['data']['pref_amount'] = new BigDecimal('900');
-		} else {
-			//开始计算总价
-			def stand_seat_price = new BigDecimal('900');
-			def ticket_num = new BigDecimal(items.size());
-			
-			PrepData for_trade_prep = new PrepData(order_id:oid,oc:tcss_order.o_c,prefcode:'100');
-			for_trade_prep.pref_amount = new BigDecimal(tcss_order.pay_amount).subtract(stand_seat_price.multiply(ticket_num));
-			for_trade_prep.pay_amount = stand_seat_price.multiply(ticket_num);
-			ret_obj = SimpleAjax.available('', for_trade_prep);
-		}
-	}
-}
+//def mobile_limits = ['13980349218', '13308141980', '18116518288', '15984588919',
+//	'18089572520', '13684268996', '15328996655', '18089590838', '13778556060', '15008110205', '18623328288', '18180158277', '13501020884'];
+//
+//if(ct && ct=='C_PSBC') {
+//	if(mobile && ( mobile in mobile_limits)) {
+//		if(ret_obj && ret_obj.available) {
+//			ret_obj['data']['pref_amount'] = new BigDecimal('900');
+//		} else {
+//			//开始计算总价
+//			def stand_seat_price = new BigDecimal('900');
+//			def ticket_num = new BigDecimal(items.size());
+//			
+//			PrepData for_trade_prep = new PrepData(order_id:oid,oc:tcss_order.o_c,prefcode:'100');
+//			for_trade_prep.pref_amount = new BigDecimal(tcss_order.pay_amount).subtract(stand_seat_price.multiply(ticket_num));
+//			for_trade_prep.pay_amount = stand_seat_price.multiply(ticket_num);
+//			ret_obj = SimpleAjax.available('', for_trade_prep);
+//		}
+//	}
+//}
 //临时代码结束//
 
 return ret_obj;
