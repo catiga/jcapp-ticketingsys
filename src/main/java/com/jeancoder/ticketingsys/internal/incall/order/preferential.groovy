@@ -35,6 +35,7 @@ def ct = JC.internal.param('ct')?.toString()?.trim();
 def mobile = JC.internal.param('mobile')?.toString()?.trim();
 
 def market_id = JC.internal.param('market_id');
+def ap_id = JC.internal.param('ap_id');
 
 if(pref!='100'&&pref!='200'&&pref!='300') {
 	return SimpleAjax.notAvailable('unsupport_type,不支持的优惠类型');
@@ -81,6 +82,11 @@ order_param['sid'] = store.store_basic;
 order_param['lock_flag'] = remote.lock_flag;
 order_param['hall_id'] = tcss_order.hall_id;
 order_param['film_no'] = tcss_order.film_no;
+order_param['film_dimen'] = tcss_order.film_dimensional;
+order_param['mobile'] = mobile;
+order_param['ap_id'] = ap_id;
+
+
 SimpleAjax ret_obj = computer.compute(order_param, card_code, op, param);
 
 if(store_id==5) {
