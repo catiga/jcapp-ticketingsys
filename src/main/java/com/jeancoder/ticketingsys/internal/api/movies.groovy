@@ -5,11 +5,11 @@ import java.text.SimpleDateFormat
 import com.jeancoder.app.sdk.JC
 import com.jeancoder.app.sdk.source.LoggerSource
 import com.jeancoder.core.log.JCLogger
+import com.jeancoder.core.log.JCLoggerFactory
 import com.jeancoder.core.util.StringUtil
 import com.jeancoder.jdbc.JcTemplate
 import com.jeancoder.ticketingsys.ready.dto.SimpleAjax
 import com.jeancoder.ticketingsys.ready.entity.Cinema
-import com.jeancoder.ticketingsys.ready.entity.Movie
 import com.jeancoder.ticketingsys.ready.film.dto.DataTcSsMovieFullInfo
 import com.jeancoder.ticketingsys.ready.film.service.FilmService
 import com.jeancoder.ticketingsys.ready.plan.dto.MovieDatePlanDate
@@ -25,17 +25,17 @@ import com.jeancoder.ticketingsys.ready.store.dto.CinemaAuthInfo
 import com.jeancoder.ticketingsys.ready.support.Codes
 import com.jeancoder.ticketingsys.ready.support.MoneyUtil
 import com.jeancoder.ticketingsys.ready.support.Res
-import com.jeancoder.ticketingsys.ready.util.JackSonBeanMapper
 import com.piaodaren.ssc.model.CinemaPlan
 import com.piaodaren.ssc.model.CinemaPlanMovie
 import com.piaodaren.ssc.model.CinemaPlanResult
 def cinema_id = JC.internal.param('cinema_id')?.toString()?.trim();
-JCLogger logger = LoggerSource.getLogger(this.getClass().getName());
+JCLogger logger = JCLoggerFactory.getLogger(this.getClass().getName());
 if(!cinema_id) {
 	return Res.Failed(Codes.COMMON_PARAM_ERROR);
 }
 
-Long id = Long.valueOf(JC.internal.param('cinema_id').toString());
+Long id = Long.valueOf(cinema_id);
+logger.info('get_plan_cinema_id=' + cinema_id);
 Cinema cinema = JcTemplate.INSTANCE().get(Cinema, 'select * from Cinema where id=?', id);
 if(cinema==null) {
 	return Res.Failed(Codes.COMMON_CINEMA_CONFIG_ERROR);

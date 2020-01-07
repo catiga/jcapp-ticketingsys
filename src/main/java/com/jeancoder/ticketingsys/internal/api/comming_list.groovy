@@ -21,7 +21,5 @@ try {
 	def data = new JsonSlurper().parseText(s);
 	return Res.Success(data);
 }catch(any) {
-	logger.error('get_comming_list_error', any);
-	any.printStackTrace();
 	return Res.Failed(Codes.INTERNAL_SERVER_ERROR);
 }
