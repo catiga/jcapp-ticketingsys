@@ -17,9 +17,11 @@ JCLogger logger = JCLoggerFactory.getLogger('comming_list');
 
 try {
 	String s = MaoyanHelper.INSTANCE.getComming();
+	logger.info('comming_str=' + s);
 	def data = new JsonSlurper().parseText(s);
 	return Res.Success(data);
-}catch(Exception e) {
-	logger.error('get_comming_list_error', e);
+}catch(any) {
+	logger.error('get_comming_list_error', any);
+	any.printStackTrace();
 	return Res.Failed(Codes.INTERNAL_SERVER_ERROR);
 }
