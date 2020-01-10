@@ -2,11 +2,10 @@ package com.jeancoder.ticketingsys.ready.schema
 
 import java.math.RoundingMode
 import java.text.SimpleDateFormat
-import java.util.List
 
 import com.jeancoder.app.sdk.source.DatabaseSource
-import com.jeancoder.app.sdk.source.LoggerSource
 import com.jeancoder.core.log.JCLogger
+import com.jeancoder.core.log.JCLoggerFactory
 import com.jeancoder.core.power.DatabasePower
 import com.jeancoder.ticketingsys.ready.constant.TicketingsysConstant
 import com.jeancoder.ticketingsys.ready.dto.sys.MarketInfoDto
@@ -30,7 +29,7 @@ import com.piaodaren.ssc.model.CinemaPlanMovie
 
 class SchemaService {
 	public static final SchemaService INSTANCE = new SchemaService();
-	JCLogger logger = LoggerSource.getLogger(this.getClass());
+	JCLogger logger = JCLoggerFactory.getLogger(this.getClass());
 	public void addOrUpdateGroup(TicketPriceSchemaGroup group) {
 		DatabasePower dbpower = DatabaseSource.getDatabasePower();
 		dbpower.doUpdateSerialize(group, "id");
@@ -674,6 +673,7 @@ class SchemaService {
 				}
 				if (status) {
 					//尺寸和类型不匹配
+					logger.info('unmatched:' + ticketPriceDto.movie_limit + '------' + ticketPriceDto.movie_dimensional)
 					continue;
 				}
 			}
