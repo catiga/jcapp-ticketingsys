@@ -126,7 +126,18 @@ try {
 		}
 		TicketPriceDto item = new TicketPriceDto();
 		item.running_time_by_plan(plan.getStartTime());
-		item.movie_dimensional = movieInfo!=null?movieInfo.film_dimensional:pmovie.movieDimensional;
+		
+		def dimension = movieInfo!=null?movieInfo.film_dimensional:pmovie.movieDimensional;
+		dimension = dimension.toUpperCase();	//转换大写
+		if(dimension.indexOf('3D')>-1) {
+			//优先匹配3D情况
+			dimension = '3D';
+		} else {
+			dimension = '2D';
+		}
+		
+		item.movie_dimensional = dimension;
+		
 		item.movie_size = movieInfo!=null?movieInfo.film_size:pmovie.movieSize;
 		item.store_limit = id + '';
 		
