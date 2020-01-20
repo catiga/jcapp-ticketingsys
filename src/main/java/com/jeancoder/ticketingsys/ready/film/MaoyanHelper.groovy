@@ -108,7 +108,7 @@ class MaoyanHelper {
 	public String getComming() {
 		String cacheKey = comming_pre;
 		Object cacheObj = MemSource.getMemPower().get(cacheKey);
-		if(cacheObj != null) {
+		if(cacheObj != null && cacheObj.toString().trim()!='') {
 			//return (String)cacheObj;
 			//清除缓存
 			//MemSource.getMemPower().delete(cacheKey);
