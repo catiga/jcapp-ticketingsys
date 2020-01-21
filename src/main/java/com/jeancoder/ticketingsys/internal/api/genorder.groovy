@@ -230,8 +230,9 @@ try {
 		} else {
 			dimension = '2D';
 		}
+		Logger.info('dimension======' + dimension + ', pmovie=' + pmovie.getMovieName());
 		
-		item.movie_dimensional = movieInfo.film_dimensional;
+		item.movie_dimensional = dimension;
 		item.movie_size = movieInfo.film_size;
 		item.store_limit = id + '';
 		
