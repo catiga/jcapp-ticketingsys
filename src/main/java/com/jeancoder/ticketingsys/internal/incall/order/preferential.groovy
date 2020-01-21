@@ -68,11 +68,11 @@ for(x in items) {
 StoreInfo store = StoreService.INSTANCE.getById(tcss_order.store_id);
 LOGGER.info('preferential market_id====' + market_id);
 if(market_id && market_id.toString().trim()!='') {
-	LOGGER.info('难道进入这里了?');
 	//优先计算活动
 	pref = '300';
 	card_code = market_id;
 }
+LOGGER.info('preferential pref_code=' + pref);
 Prefer computer = PreferFactory.generate(pref);
 
 def order_param = [:];
