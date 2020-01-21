@@ -39,6 +39,7 @@ import com.jeancoder.ticketingsys.ready.support.TicketingSysTypeHelper
 import com.jeancoder.ticketingsys.ready.util.JackSonBeanMapper
 import com.piaodaren.ssc.factory.SscOp
 import com.piaodaren.ssc.model.CinemaPlan
+import com.piaodaren.ssc.model.CinemaPlanMovie
 import com.piaodaren.ssc.model.CinemaPlanResult
 import com.piaodaren.ssc.model.HallSeat
 import com.piaodaren.ssc.model.HallSeatResult
@@ -215,8 +216,21 @@ try {
 		if(settle_price) {
 			pub_fee = MoneyUtil.multiple(settle_price, '100');
 		}
+		
+		CinemaPlanMovie pmovie = matchPlan.getMovieInfo().get(0);
+		
 		TicketPriceDto item = new TicketPriceDto();
 		item.running_time_by_plan(matchPlan.getStartTime());
+		
+		def dimension = movieInfo!=null?movieInfo.film_dimensional:pmovie.movieDimensional;
+		dimension = dimension.toUpperCase();	//转换大写
+		if(dimension.indexOf('3D')>-1) {
+			//优先匹配3D情况
+			dimension = '3D';
+		} else {
+			dimension = '2D';
+		}
+		
 		item.movie_dimensional = movieInfo.film_dimensional;
 		item.movie_size = movieInfo.film_size;
 		item.store_limit = id + '';
