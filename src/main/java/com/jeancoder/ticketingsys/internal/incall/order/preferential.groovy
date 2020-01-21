@@ -67,7 +67,7 @@ for(x in items) {
 }
 StoreInfo store = StoreService.INSTANCE.getById(tcss_order.store_id);
 LOGGER.info('preferential market_id====' + market_id);
-if(market_id) {
+if(market_id && market_id.toString().trim()!='') {
 	//优先计算活动
 	pref = '300';
 	card_code = market_id;
