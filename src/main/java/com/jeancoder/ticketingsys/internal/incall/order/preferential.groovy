@@ -66,6 +66,7 @@ for(x in items) {
 	param.add([x.seat_no, sale_fee,pub_fee]);
 }
 StoreInfo store = StoreService.INSTANCE.getById(tcss_order.store_id);
+LOGGER.info('preferential market_id====' + market_id);
 if(market_id) {
 	//优先计算活动
 	pref = '300';
