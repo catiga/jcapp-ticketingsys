@@ -11,6 +11,7 @@ import com.jeancoder.core.log.JCLoggerFactory
 import com.jeancoder.jdbc.JcTemplate
 import com.jeancoder.ticketingsys.ready.dto.SimpleAjax
 import com.jeancoder.ticketingsys.ready.entity.SaleOrder
+import com.jeancoder.ticketingsys.ready.entity.SaleRemote
 import com.jeancoder.ticketingsys.ready.entity.SaleSeat
 import com.jeancoder.ticketingsys.ready.entity.TicketHandleFee
 import com.jeancoder.ticketingsys.ready.film.dto.DataTcSsMovieFullInfo
@@ -332,10 +333,15 @@ try {
 		return Res.Failed(Codes.CINEMA_CHOOSE_SEAT_SELLED);
 	}
 
-	DataTcSsSaleOrderRemote remote = new DataTcSsSaleOrderRemote();
+//	DataTcSsSaleOrderRemote remote = new DataTcSsSaleOrderRemote();
+//	remote.setLock_flag(remoteResult);
+//	remote.setOrder_id(order.getId().longValue());
+//	OrderService.INSTANCE.addOrUpdateRemote(remote);
+	
+	SaleRemote remote = new SaleRemote();
 	remote.setLock_flag(remoteResult);
-	remote.setOrder_id(order.getId().longValue());
-	OrderService.INSTANCE.addOrUpdateRemote(remote);
+	remote.setOrder_id(order.getId());
+	JcTemplate.INSTANCE().save(remote);
 
 	DatabaseSource.getDatabasePower().commitTransaction();
 
