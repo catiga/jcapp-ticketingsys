@@ -1,13 +1,12 @@
 package com.jeancoder.ticketingsys.internal.api
+
 import java.text.SimpleDateFormat
 
 import com.jeancoder.app.sdk.JC
-import com.jeancoder.app.sdk.source.LoggerSource
 import com.jeancoder.core.log.JCLogger
+import com.jeancoder.core.log.JCLoggerFactory
 import com.jeancoder.jdbc.JcTemplate
 import com.jeancoder.ticketingsys.ready.entity.SaleOrder
-import com.jeancoder.ticketingsys.ready.order.OrderService
-import com.jeancoder.ticketingsys.ready.order.dto.SeatOrderDto
 import com.jeancoder.ticketingsys.ready.plan.dto.HpPlanSeatsDto
 import com.jeancoder.ticketingsys.ready.plan.dto.PlanSeat
 import com.jeancoder.ticketingsys.ready.ssc.SssHelper
@@ -24,7 +23,7 @@ import com.piaodaren.ssc.model.HallSeatResult
 import com.piaodaren.ssc.model.PlanSeatState
 import com.piaodaren.ssc.model.PlanSeatStateResult
 
-JCLogger logger = LoggerSource.getLogger(this.class);
+JCLogger logger = JCLoggerFactory.getLogger(this.class);
 
 try {
 	Long id = Long.valueOf(JC.internal.param("cinema_id"));
@@ -90,6 +89,8 @@ try {
 	
 	int leftSeat = 0;
 	int soldSeat = 0;
+	
+	logger.info(JackSonBeanMapper.toJson(remoteResult.getResult()));
 	
 	for(PlanSeatState seat : remoteResult.getResult()) {
 		//转换成我们协议的状态
