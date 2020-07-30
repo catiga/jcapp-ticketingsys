@@ -558,7 +558,7 @@ class SchemaService {
 			if(!StringUtil.isEmpty(store_ids)&&!StringUtil.isEmpty(item.store_type)){
 				Boolean flag1=true;
 				String [] store_id=store_ids.split(',');
-				String [] store_type=item.store_type.split(',');
+				String [] store_type = item.store_type.split(',');
 				int t=0;
 				for (int i=0;i<store_id.length;i++) {
 					for(int j=0;j<store_type.length;j++){
@@ -593,8 +593,8 @@ class SchemaService {
 			String movie_ids=ticketPriceDto.movie_limit;
 			if (!StringUtil.isEmpty(movie_ids)&&!StringUtil.isEmpty(item.movie_type)) {
 				Boolean flag2=true;
-				String[] movie_id=movie_ids.split(',');
-				String[] movie_type=item.movie_type.split(',');
+				String[] movie_id = movie_ids.split(',');
+				String[] movie_type = item.movie_type.split(',');
 				int t=0;
 				for (int i=0;i<movie_id.length;i++) {
 					for(int j=0;j<movie_type.length;j++){
@@ -611,12 +611,12 @@ class SchemaService {
 			}
 			//判断时间策略
 			if (item.time_type.equals('w')) {//按周分时设置
-				String [] time_value=item.time_streg.split('/');
-				Boolean flag=true;
-				String []time_run=ticketPriceDto.running_time.split(',');//数据类型为1,14:00(周1下午2点)
+				String [] time_value = item.time_streg.split('/');
+				Boolean flag = true;
+				String []time_run = ticketPriceDto.running_time.split(',');//数据类型为1,14:00(周1下午2点)
 				for(int i=0;i<time_value.length;i++){
-					String [] time_value1=time_value[i].split(';');//1,2,3,4;00:00;23:59类型时间
-					String [] time_value3=time_value1[0].split(',');
+					String [] time_value1 = time_value[i].split(';');//1,2,3,4;00:00;23:59类型时间
+					String [] time_value3 = time_value1[0].split(',');
 					for (int j=0;j<time_value3.length;j++) {
 						if(time_value3[j].equals(time_run[0])){
 							SimpleDateFormat hourmintssdf = new SimpleDateFormat("HH:mm");//时间格式转换
@@ -636,9 +636,10 @@ class SchemaService {
 			}
 
 			//尺寸，影片类型判断
-			BigDecimal price=null;//价格变动值
-			String price_type='';//价格类型
-			String movie_price_streg=item.price_streg;
+			BigDecimal price = null;//价格变动值
+			String price_type = '';//价格类型
+			String movie_price_streg = item.price_streg;
+			logger.info('取得的匹配价格策略为=' + JackSonBeanMapper.toJson(item));
 			if (!StringUtil.isEmpty(movie_price_streg)) {
 				Boolean status=true;
 				String [] movie_type=movie_price_streg.split('/');//w,2D,普通,700/d,All,中国巨幕,8000
