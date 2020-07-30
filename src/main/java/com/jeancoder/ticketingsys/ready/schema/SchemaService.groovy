@@ -550,32 +550,35 @@ class SchemaService {
 	public def filterPriceRlues(TicketPriceDto ticketPriceDto,def pid) {
 		//def pid=GlobalHolder.getProj().getId();
 		//def pid = 1;
-		def apstatus='20';//状态20为网售规则已开启状态
+		def apstatus = '20';//状态20为网售规则已开启状态
 		List<TicketSalesRules> rules = ticketSalesRulesService.getAll(pid, apstatus)//查询所有可用的网售规则
 		for(TicketSalesRules item : rules) {
 			//门店限制
-			String store_ids=ticketPriceDto.store_limit;
+			String store_ids = ticketPriceDto.store_limit;
 			if(!StringUtil.isEmpty(store_ids)&&!StringUtil.isEmpty(item.store_type)){
-				Boolean flag1=true;
-				String [] store_id=store_ids.split(',');
+				Boolean flag1 = true;
+				String [] store_id = store_ids.split(',');
 				String [] store_type = item.store_type.split(',');
 				int t=0;
 				for (int i=0;i<store_id.length;i++) {
 					for(int j=0;j<store_type.length;j++){
 						if (store_id[i].equals(store_type[j])) {
-							flag1=false;
+							flag1 = false;
 							t++;
 						}
 					}
 				}
 				if (flag1||t!=store_id.length) {
 					//门店不匹配
+					if(item.id==new BigInteger(22)) {
+						logger.info('22因为影城限制被跳过')
+					}
 					continue;
 				}
 			}
 			String hall_id = ticketPriceDto.hall_limit;
 			if(!StringUtil.isEmpty(hall_id)&&!StringUtil.isEmpty(item.hall_id)){
-				Boolean flag3=true;
+				Boolean flag3 = true;
 				String [] hall_ids = item.hall_id.split(",");//6-52,6-51
 				for(int i = 0 ; i<hall_ids.length;i++){
 					String s = hall_ids[i].split("-")[1];
@@ -586,13 +589,16 @@ class SchemaService {
 				}
 				if (flag3) {
 					//影厅不匹配
+					if(item.id==new BigInteger(22)) {
+						logger.info('22因为影厅限制被跳过')
+					}
 					continue;
 				}
 			}
 			//影片限制
-			String movie_ids=ticketPriceDto.movie_limit;
+			String movie_ids = ticketPriceDto.movie_limit;
 			if (!StringUtil.isEmpty(movie_ids)&&!StringUtil.isEmpty(item.movie_type)) {
-				Boolean flag2=true;
+				Boolean flag2 = true;
 				String[] movie_id = movie_ids.split(',');
 				String[] movie_type = item.movie_type.split(',');
 				int t=0;
@@ -606,6 +612,9 @@ class SchemaService {
 				}
 				if (flag2||t!=movie_id.length) {
 					//影片不匹配
+					if(item.id==new BigInteger(22)) {
+						logger.info('22因为影片限制被跳过')
+					}
 					continue;
 				}
 			}
@@ -631,6 +640,9 @@ class SchemaService {
 					}
 				}
 				if (flag) {
+					if(item.id==new BigInteger(22)) {
+						logger.info('22因为时间限制被跳过')
+					}
 					continue;
 				}
 			}
@@ -639,15 +651,15 @@ class SchemaService {
 			BigDecimal price = null;//价格变动值
 			String price_type = '';//价格类型
 			String movie_price_streg = item.price_streg;
-			logger.info('取得的匹配价格策略为=' + JackSonBeanMapper.toJson(item));
+			//logger.info('取得的匹配价格策略为=' + JackSonBeanMapper.toJson(item));
 			if (!StringUtil.isEmpty(movie_price_streg)) {
-				Boolean status=true;
-				String [] movie_type=movie_price_streg.split('/');//w,2D,普通,700/d,All,中国巨幕,8000
+				Boolean status = true;
+				String [] movie_type = movie_price_streg.split('/');//w,2D,普通,700/d,All,中国巨幕,8000
 				for (int i=0;i<movie_type.length;i++) {
-					String [] movie_type1=movie_type[i].split(',');
+					String [] movie_type1 = movie_type[i].split(',');
 					if (ticketPriceDto.getMovie_size().equals(movie_type1[2])&&ticketPriceDto.getMovie_dimensional().equals(movie_type1[1])) {
 						price = new BigDecimal(movie_type1[3]);
-						price_type= movie_type1[0];
+						price_type = movie_type1[0];
 						status = false;
 						break;
 					}else if (ticketPriceDto.getMovie_size().equals(movie_type1[2])&&movie_type1[1].equals('All')) {//当网售规则的影票类型为不限时
