@@ -607,11 +607,11 @@ class SchemaService {
 				}
 				if (flag2||t!=movie_id.length) {
 					//影片不匹配
-					if(item.id==new BigInteger(22) && ticketPriceDto.movie_limit=='001100942009') {
-						logger.info('风声电影22因为影片限制被跳过。');
-						logger.info('db.item.movie_type=' + item.movie_type);
-						logger.info('movie_ids=' + movie_ids);
-					}
+//					if(item.id==new BigInteger(22) && ticketPriceDto.movie_limit=='001100942009') {
+//						logger.info('风声电影22因为影片限制被跳过。');
+//						logger.info('db.item.movie_type=' + item.movie_type);
+//						logger.info('movie_ids=' + movie_ids);
+//					}
 					continue;
 				}
 			}
@@ -637,9 +637,9 @@ class SchemaService {
 					}
 				}
 				if (flag) {
-					if(item.id==new BigInteger(22) && ticketPriceDto.movie_limit=='001100942009') {
-						logger.info('风声电影22因为时间限制被跳过')
-					}
+//					if(item.id==new BigInteger(22) && ticketPriceDto.movie_limit=='001100942009') {
+//						logger.info('风声电影22因为时间限制被跳过')
+//					}
 					continue;
 				}
 			}
@@ -689,6 +689,7 @@ class SchemaService {
 			}
 
 			def ret_price = ticketPriceDto.price;
+			logger.info(ticketPriceDto.movie_limit + '匹配的规则=' + JackSonBeanMapper.toJson(item));
 			//计算价格
 			if (price!=null&&!StringUtil.isEmpty(price_type)) {
 				if (price_type.equals('w')) {
@@ -717,7 +718,6 @@ class SchemaService {
 		}
 	}
 	public def filter_price_with_rules(def pid,TicketPriceDto ticketPriceDto,def market_info){
-		logger.info("==================ticketPriceDto==============="+JackSonBeanMapper.toJson(ticketPriceDto));
 		for(MarketInfoDto infodto : market_info) {
 			def ret_price = ticketPriceDto.price;
 			//时间策略判断
@@ -813,6 +813,7 @@ class SchemaService {
 							if (movie_id[i].equals(movie_type[j])) {
 								flag2=false;
 								t++;
+								break;
 							}
 						}
 					}
