@@ -14,6 +14,8 @@
 
 <link th:href="|${pub_bucket}/css/plugins/summernote/summernote.css|" rel="stylesheet">
 <link th:href="|${pub_bucket}/css/plugins/summernote/summernote-bs3.css|" rel="stylesheet">
+
+<link th:href="|${pub_bucket}/css/plugins/datapicker/datepicker3.css|" rel="stylesheet">
 </head>
 
 <body>
@@ -130,7 +132,7 @@
 											<div class="form-group">
 												<label class="col-lg-2 control-label">上映日期</label>
 												<div class="col-lg-10">
-													<input type="text" class="form-control" id="film_date" th:value="${movie_info.release_date}">
+													<input type="text" data-date-format="yyyy-mm-dd" class="form-control" id="film_date" readonly th:value="${movie_info.release_date}">
 												</div>
 											</div>
 											<div class="form-group">
@@ -202,11 +204,22 @@
     <script th:src="@{{sp}/jqui1114/jquery-ui.js(sp=${pub_bucket})}" type="text/javascript" charset="utf-8"></script>
     <script th:src="@{{sp}/jqui1114/jquery-ui-timepicker-addon.js(sp=${pub_bucket})}" type="text/javascript" charset="utf-8"></script>
     <script th:src="@{{sp}/jqui1114/jquery-ui-timepicker-zh-CN.js(sp=${pub_bucket})}" type="text/javascript" charset="utf-8"></script>
+    
+    <!-- Data picker -->
+	<script th:src="|${pub_bucket}/js/plugins/datapicker/bootstrap-datepicker.js|"></script>
 	
 </body>
 
 <script type="text/javascript">
 $(function() {
+	$('#film_date').datepicker({
+        todayBtn : "linked",
+        keyboardNavigation : false,
+        forceParse : false,
+        calendarWeeks : true,
+        autoclose : true,
+        format: "yyyy-mm-dd"
+    });  
 	var rich_param = {
         height: 400,
         focus:true,

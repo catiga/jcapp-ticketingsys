@@ -35,7 +35,7 @@ class MovieInfo {
 	
 	String film_region;
 	
-	Date release_date;//发布日期
+	String release_date;//发布日期
 	
 	String pic_entry;
 	

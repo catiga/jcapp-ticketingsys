@@ -1,5 +1,7 @@
 package com.jeancoder.ticketingsys.entry.movie.aj
 
+import java.text.SimpleDateFormat
+
 import com.jeancoder.app.sdk.JC
 import com.jeancoder.jdbc.JcTemplate
 import com.jeancoder.ticketingsys.ready.common.SimpleAjax
@@ -25,6 +27,14 @@ try {
 	time_diff = 90;
 }
 
+SimpleDateFormat _sdf_ = new SimpleDateFormat('yyyy-MM-dd');
+
+try {
+	film_date = _sdf_.format(_sdf_.parse(film_date));
+} catch(any) {
+	film_date = null;
+}
+
 MovieInfo movie = JcTemplate.INSTANCE().get(MovieInfo,"select * from MovieInfo Where id=? and flag!=? order by a_time desc  ", id, -1);
 if(movie==null) {
 	return SimpleAjax.notAvailable('obj_not_found,影片未找到');
@@ -40,6 +50,7 @@ movie.film_subtitle = film_subtitle;
 movie.film_type = film_type;
 movie.pic_entry = pic_entry;
 movie.time_diff = time_diff;
+movie.release_date = film_date;
 
 JcTemplate.INSTANCE().update(movie);
 
