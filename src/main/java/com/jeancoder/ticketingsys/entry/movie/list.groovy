@@ -1,8 +1,8 @@
 package com.jeancoder.ticketingsys.entry.movie
 
 import com.jeancoder.app.sdk.JC
-import com.jeancoder.app.sdk.source.LoggerSource
 import com.jeancoder.core.log.JCLogger
+import com.jeancoder.core.log.JCLoggerFactory
 import com.jeancoder.core.result.Result
 import com.jeancoder.jdbc.JcPage
 import com.jeancoder.ticketingsys.ready.Service.MovieInfoService
@@ -11,7 +11,7 @@ import com.jeancoder.ticketingsys.ready.holder.GlobalHolder
 import com.jeancoder.ticketingsys.ready.util.StringUtil
 
 Result result = new Result();
-JCLogger logger = LoggerSource.getLogger(this.class);
+JCLogger logger = JCLoggerFactory.getLogger(this.class);
 try {
 	def pn  = JC.request.param("pn");
 	def ps  = JC.request.param("ps");

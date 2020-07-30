@@ -5,6 +5,8 @@ import groovy.json.JsonSlurper
 
 import com.jeancoder.app.sdk.source.LoggerSource
 import com.jeancoder.core.log.JCLogger
+import com.jeancoder.jdbc.JcTemplate
+import com.jeancoder.ticketingsys.ready.entity.MovieInfo
 import com.jeancoder.ticketingsys.ready.film.entity.DataTcSsMovieCelebrity
 import com.jeancoder.ticketingsys.ready.film.entity.DataTcSsMovieInfo
 import com.jeancoder.ticketingsys.ready.film.entity.DataTcSsMoviePicture
@@ -37,7 +39,19 @@ class SyncThread extends Thread {
 			json = new JsonSlurper().parseText(snapshotStr);
 		}catch(JsonException e) {
 			//保存一个无名称的影片
-			DataTcSsMovieInfo film = new DataTcSsMovieInfo();
+//			DataTcSsMovieInfo film = new DataTcSsMovieInfo();
+//			film.film_name = movie.movieName;
+//			film.setFilm_no(movie.getCineMovieNum());
+//			film.setFilm_subtitle(movie.getMovieSubtitle());
+//			film.setFilm_language(movie.getMovieLanguage());
+//			film.setFilm_format(movie.getMovieFormat());
+//			film.setFilm_dimensional(movie.getMovieDimensional());
+//			film.setFilm_size(movie.getMovieSize());
+//			film.setA_time(new Date());
+//			film.setProj_id(pid)
+//			FilmService.INSTANCE.addOrUpdate(film);
+			
+			MovieInfo film = new MovieInfo();
 			film.film_name = movie.movieName;
 			film.setFilm_no(movie.getCineMovieNum());
 			film.setFilm_subtitle(movie.getMovieSubtitle());
@@ -46,8 +60,8 @@ class SyncThread extends Thread {
 			film.setFilm_dimensional(movie.getMovieDimensional());
 			film.setFilm_size(movie.getMovieSize());
 			film.setA_time(new Date());
-			film.setProj_id(pid)
-			FilmService.INSTANCE.addOrUpdate(film);
+			film.setProj_id(pid);
+			JcTemplate.INSTANCE().save(film);
 			//影讯获取失败 保存该影片影讯状态为失败状态
 			return;
 		}
@@ -55,8 +69,20 @@ class SyncThread extends Thread {
 		if(json["movies"] == null) {
 			//快照获取失败
 			//保存一个无名称的影片
-			DataTcSsMovieInfo film = new DataTcSsMovieInfo();
-			film.setFilm_name(movie.movieName);
+//			DataTcSsMovieInfo film = new DataTcSsMovieInfo();
+//			film.setFilm_name(movie.movieName);
+//			film.setFilm_no(movie.getCineMovieNum());
+//			film.setFilm_subtitle(movie.getMovieSubtitle());
+//			film.setFilm_language(movie.getMovieLanguage());
+//			film.setFilm_format(movie.getMovieFormat());
+//			film.setFilm_dimensional(movie.getMovieDimensional());
+//			film.setFilm_size(movie.getMovieSize());
+//			film.setA_time(new Date());
+//			film.setProj_id(pid)
+//			FilmService.INSTANCE.addOrUpdate(film);
+			
+			MovieInfo film = new MovieInfo();
+			film.film_name = movie.movieName;
 			film.setFilm_no(movie.getCineMovieNum());
 			film.setFilm_subtitle(movie.getMovieSubtitle());
 			film.setFilm_language(movie.getMovieLanguage());
@@ -64,8 +90,8 @@ class SyncThread extends Thread {
 			film.setFilm_dimensional(movie.getMovieDimensional());
 			film.setFilm_size(movie.getMovieSize());
 			film.setA_time(new Date());
-			film.setProj_id(pid)
-			FilmService.INSTANCE.addOrUpdate(film);
+			film.setProj_id(pid);
+			JcTemplate.INSTANCE().save(film);
 			//影讯获取失败 保存该影片影讯状态为失败状态
 			return;
 		}

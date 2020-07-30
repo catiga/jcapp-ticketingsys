@@ -28,4 +28,8 @@ class TicketSalesRules {
 	String content;
 	String time_type;
 	String hall_id;
+	
+	//排序规则
+	//数字越小，优先级越低
+	Integer seq = 0;
 }

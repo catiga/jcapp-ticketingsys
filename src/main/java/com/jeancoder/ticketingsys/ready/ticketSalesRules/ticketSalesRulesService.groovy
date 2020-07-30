@@ -40,7 +40,7 @@ class ticketSalesRulesService {
 			sql.append("and apstatus=");
 			sql.append("'"+apstatus+"'");
 		}
-		sql.append("order by id desc");
+		sql.append("order by seq desc");
 		return jcTemplate.find(TicketSalesRules.class, page, sql.toString(), pid,-1);
 	}
 
@@ -69,7 +69,7 @@ class ticketSalesRulesService {
 	}
 	//返回可用的网售规则列表
 	public static List<TicketSalesRules> getAll(def pid,def apstatus){
-		String sql="select * from TicketSalesRules where p_id =? and apstatus=? and flag!=? order by id desc"
+		String sql="select * from TicketSalesRules where p_id =? and apstatus=? and flag!=? order by seq desc"
 		return jcTemplate.find(TicketSalesRules.class, sql, pid,apstatus,-1)
 	}
 	public static Integer updateItem(TicketSalesRules rule){
