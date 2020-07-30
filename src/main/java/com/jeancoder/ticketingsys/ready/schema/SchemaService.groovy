@@ -570,8 +570,8 @@ class SchemaService {
 				}
 				if (flag1||t!=store_id.length) {
 					//门店不匹配
-					if(item.id==new BigInteger(22)) {
-						logger.info('22因为影城限制被跳过')
+					if(item.id==new BigInteger(22) && ticketPriceDto.movie_limit=='001100942009') {
+						logger.info('风声电影22因为影城限制被跳过')
 					}
 					continue;
 				}
@@ -589,8 +589,8 @@ class SchemaService {
 				}
 				if (flag3) {
 					//影厅不匹配
-					if(item.id==new BigInteger(22)) {
-						logger.info('22因为影厅限制被跳过')
+					if(item.id==new BigInteger(22) && ticketPriceDto.movie_limit=='001100942009') {
+						logger.info('风声电影22因为影厅限制被跳过')
 					}
 					continue;
 				}
@@ -612,8 +612,8 @@ class SchemaService {
 				}
 				if (flag2||t!=movie_id.length) {
 					//影片不匹配
-					if(item.id==new BigInteger(22)) {
-						logger.info('22因为影片限制被跳过')
+					if(item.id==new BigInteger(22) && ticketPriceDto.movie_limit=='001100942009') {
+						logger.info('风声电影22因为影片限制被跳过')
 					}
 					continue;
 				}
@@ -640,8 +640,8 @@ class SchemaService {
 					}
 				}
 				if (flag) {
-					if(item.id==new BigInteger(22)) {
-						logger.info('22因为时间限制被跳过')
+					if(item.id==new BigInteger(22) && ticketPriceDto.movie_limit=='001100942009') {
+						logger.info('风声电影22因为时间限制被跳过')
 					}
 					continue;
 				}
