@@ -570,9 +570,6 @@ class SchemaService {
 				}
 				if (flag1||t!=store_id.length) {
 					//门店不匹配
-					if(item.id==new BigInteger(22) && ticketPriceDto.movie_limit=='001100942009') {
-						logger.info('风声电影22因为影城限制被跳过')
-					}
 					continue;
 				}
 			}
@@ -589,24 +586,22 @@ class SchemaService {
 				}
 				if (flag3) {
 					//影厅不匹配
-					if(item.id==new BigInteger(22) && ticketPriceDto.movie_limit=='001100942009') {
-						logger.info('风声电影22因为影厅限制被跳过')
-					}
 					continue;
 				}
 			}
-			//影片限制
+			//影片限制，这里只是单一一部影片的影片编码
 			String movie_ids = ticketPriceDto.movie_limit;
 			if (!StringUtil.isEmpty(movie_ids)&&!StringUtil.isEmpty(item.movie_type)) {
 				Boolean flag2 = true;
-				String[] movie_id = movie_ids.split(',');
-				String[] movie_type = item.movie_type.split(',');
+				String[] movie_id = movie_ids.split(',');	//用户选择的影片信息
+				String[] movie_type = item.movie_type.split(',');	//系统存储的规则限制的影片信息
 				int t = 0;
 				for (int i=0;i<movie_id.length;i++) {
 					for(int j=0;j<movie_type.length;j++){
 						if (movie_id[i].equals(movie_type[j])) {
 							flag2 = false;
 							t++;
+							break;	//找到一部就直接退出循环
 						}
 					}
 				}
