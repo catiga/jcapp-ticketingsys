@@ -601,11 +601,11 @@ class SchemaService {
 				Boolean flag2 = true;
 				String[] movie_id = movie_ids.split(',');
 				String[] movie_type = item.movie_type.split(',');
-				int t=0;
+				int t = 0;
 				for (int i=0;i<movie_id.length;i++) {
 					for(int j=0;j<movie_type.length;j++){
 						if (movie_id[i].equals(movie_type[j])) {
-							flag2=false;
+							flag2 = false;
 							t++;
 						}
 					}
@@ -613,7 +613,9 @@ class SchemaService {
 				if (flag2||t!=movie_id.length) {
 					//影片不匹配
 					if(item.id==new BigInteger(22) && ticketPriceDto.movie_limit=='001100942009') {
-						logger.info('风声电影22因为影片限制被跳过')
+						logger.info('风声电影22因为影片限制被跳过。');
+						logger.info('db.item.movie_type=' + item.movie_type);
+						logger.info('movie_ids=' + movie_ids);
 					}
 					continue;
 				}
