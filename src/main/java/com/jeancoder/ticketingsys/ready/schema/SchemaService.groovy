@@ -689,7 +689,7 @@ class SchemaService {
 			}
 
 			def ret_price = ticketPriceDto.price;
-			logger.info(ticketPriceDto.movie_limit + '最低票价：' + ticketPriceDto.min_price + '匹配的规则=' + JackSonBeanMapper.toJson(item));
+			//logger.info(ticketPriceDto.movie_limit + '最低票价：' + ticketPriceDto.min_price + '匹配的规则=' + JackSonBeanMapper.toJson(item));
 			//计算价格
 			if (price!=null&&!StringUtil.isEmpty(price_type)) {
 				if (price_type.equals('w')) {
