@@ -52,6 +52,11 @@ try {
 	PlanSeatStateResult remoteResult = SssHelper.INSTANCE.getSeatsSeats(cinemaAuthInfo, plan_id, last_update_time, hall);
 	def end_2 = System.currentTimeMillis();
 	
+	if(storeInfo.id.toString()=='13') {
+		logger.info('千幕影城=' + JackSonBeanMapper.toJson(remoteResult))
+	}
+	
+	
 	if((end_2-end_1)/1000>1.5) {
 		logger.info('seats::: CINEMA_ID=' + id + ' HALL_ID=' + hall_id + ' hall_seats_status_exhausted_time=' + (end_2 - end_1)/1000);
 	}

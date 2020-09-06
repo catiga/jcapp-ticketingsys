@@ -74,7 +74,5 @@ SssHelper.INSTANCE.refresh_cinema_plans(cinemaAuthInfo, start_time, end_time);
 
 def result = SssHelper.INSTANCE.get_cinema_plans(cinemaAuthInfo, start_time, end_time);
 
-logger.info('result===' + JackSonBeanMapper.toJson(result));
-
 return SimpleAjax.available();
 
