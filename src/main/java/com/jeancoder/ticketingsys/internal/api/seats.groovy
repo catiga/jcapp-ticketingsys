@@ -94,22 +94,16 @@ try {
 	
 	int leftSeat = 0;
 	int soldSeat = 0;
-	
+	logger.info('千plan=' + JackSonBeanMapper.toJson(remoteResult));
+	logger.info('千hall=' + JackSonBeanMapper.toJson(hall.getResult()));
 	for(PlanSeatState seat : remoteResult.getResult()) {
 		//转换成我们协议的状态
-		if(storeInfo.id.toString()=='13') {
-			logger.info(seat.getSeatState() + '===' + seat.getSeatState())
-		}
 		if(seat.getSeatState().equals("0")) {
 			seat.setSeatState("4");	//可用
 		}else if(seat.getSeatState().equals("7")) {
 			seat.setSeatState("2");	//锁定
 		}else {
 			seat.setSeatState("0");	//?
-		}
-		
-		if(storeInfo.id.toString()=='13') {
-			logger.info("so===" + seat.getSeatState());
 		}
 	}
 	List<PlanSeat> seats = new ArrayList<PlanSeat>()
