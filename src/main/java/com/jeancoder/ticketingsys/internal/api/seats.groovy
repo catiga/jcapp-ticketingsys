@@ -52,9 +52,9 @@ try {
 	PlanSeatStateResult remoteResult = SssHelper.INSTANCE.getSeatsSeats(cinemaAuthInfo, plan_id, last_update_time, hall);
 	def end_2 = System.currentTimeMillis();
 	
-	if(storeInfo.id.toString()=='13') {
-		logger.info('千幕影城=' + JackSonBeanMapper.toJson(remoteResult))
-	}
+//	if(storeInfo.id.toString()=='13') {
+//		logger.info('千幕影城=' + JackSonBeanMapper.toJson(remoteResult))
+//	}
 	
 	
 	if((end_2-end_1)/1000>1.5) {
@@ -97,12 +97,19 @@ try {
 	
 	for(PlanSeatState seat : remoteResult.getResult()) {
 		//转换成我们协议的状态
+		if(storeInfo.id.toString()=='13') {
+			logger.info(seat.getSeatState().equals("0") + '===' + seat.getSeatState())
+		}
 		if(seat.getSeatState().equals("0")) {
 			seat.setSeatState("4");	//可用
 		}else if(seat.getSeatState().equals("7")) {
 			seat.setSeatState("2");	//锁定
 		}else {
 			seat.setSeatState("0");	//?
+		}
+		
+		if(storeInfo.id.toString()=='13') {
+			logger.info("so===" + seat.getSeatState());
 		}
 	}
 	List<PlanSeat> seats = new ArrayList<PlanSeat>()
