@@ -3,6 +3,8 @@ package com.jeancoder.ticketingsys.entry.store.aj
 import java.text.SimpleDateFormat
 
 import com.jeancoder.app.sdk.JC
+import com.jeancoder.core.log.JCLogger
+import com.jeancoder.core.log.JCLoggerFactory
 import com.jeancoder.jdbc.JcTemplate
 import com.jeancoder.ticketingsys.ready.common.SimpleAjax
 import com.jeancoder.ticketingsys.ready.entity.Cinema
@@ -11,7 +13,9 @@ import com.jeancoder.ticketingsys.ready.store.StoreService
 import com.jeancoder.ticketingsys.ready.store.dto.CinemaAuthInfo
 import com.jeancoder.ticketingsys.ready.support.Codes
 import com.jeancoder.ticketingsys.ready.support.Res
+import com.jeancoder.ticketingsys.ready.util.JackSonBeanMapper
 
+JCLogger logger = JCLoggerFactory.getLogger('');
 def store_id = JC.request.param('store_id');
 def end_date = JC.request.param('end_date');	//yyyy-MM-dd
 
@@ -69,6 +73,8 @@ end_time = end_now.getTime();
 SssHelper.INSTANCE.refresh_cinema_plans(cinemaAuthInfo, start_time, end_time);
 
 def result = SssHelper.INSTANCE.get_cinema_plans(cinemaAuthInfo, start_time, end_time);
+
+logger.info('result===' + JackSonBeanMapper.toJson(result));
 
 return SimpleAjax.available();
 
