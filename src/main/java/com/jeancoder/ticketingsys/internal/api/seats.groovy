@@ -98,7 +98,7 @@ try {
 	for(PlanSeatState seat : remoteResult.getResult()) {
 		//转换成我们协议的状态
 		if(storeInfo.id.toString()=='13') {
-			logger.info(seat.getSeatState().equals("0") + '===' + seat.getSeatState())
+			logger.info(seat.getSeatState() + '===' + seat.getSeatState())
 		}
 		if(seat.getSeatState().equals("0")) {
 			seat.setSeatState("4");	//可用
