@@ -22,6 +22,7 @@ JCResponse res = ResponseSource.getResponse();
 Result result = new Result();
 
 JCLogger logger = JCLoggerFactory.getLogger('');
+logger.info('enter schema/add');
 try {
 	DatabaseSource.getDatabasePower().beginTransaction();
 	
