@@ -4,6 +4,8 @@ import com.jeancoder.app.sdk.source.RequestSource
 import com.jeancoder.app.sdk.source.ResponseSource
 import com.jeancoder.core.http.JCRequest
 import com.jeancoder.core.http.JCResponse
+import com.jeancoder.core.log.JCLogger
+import com.jeancoder.core.log.JCLoggerFactory
 import com.jeancoder.core.result.Result
 import com.jeancoder.ticketingsys.ready.schema.SchemaService
 import com.jeancoder.ticketingsys.ready.schema.entity.TicketPriceSchema
@@ -19,6 +21,7 @@ JCRequest req = RequestSource.getRequest();
 JCResponse res = ResponseSource.getResponse();
 Result result = new Result();
 
+JCLogger logger = JCLoggerFactory.getLogger('');
 try {
 	DatabaseSource.getDatabasePower().beginTransaction();
 	
@@ -66,7 +69,7 @@ try {
 	result.setData(Res.Success());
 	return result;
 }catch(Exception e) {
-	e.printStackTrace()
+	logger.error('', e);
 	DatabaseSource.getDatabasePower().rollbackTransaction();
 	result.setData(Res.Failed(Codes.INTERNAL_SERVER_ERROR));
 	return result;
