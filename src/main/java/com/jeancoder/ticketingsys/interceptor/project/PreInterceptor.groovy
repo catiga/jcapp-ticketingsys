@@ -18,6 +18,8 @@ String domain = req.getServerName();
 //String domain = "e.local";
 //String domain = "127.0.0.1";
 
+
+
 req.setAttribute("domain", domain)
 SysProjectInfo project = NativeUtil.connect(SysProjectInfo.class, 'project', '/incall/project', ["domain":domain]);
 req.setAttribute("current_project", project);
