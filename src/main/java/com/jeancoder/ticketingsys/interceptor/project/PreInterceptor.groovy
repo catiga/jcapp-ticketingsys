@@ -1,6 +1,6 @@
 package com.jeancoder.ticketingsys.interceptor.project
 
-import com.jeancoder.annotation.urlmapped
+//import com.jeancoder.annotation.urlmapped
 import com.jeancoder.app.sdk.source.RequestSource
 import com.jeancoder.core.http.JCRequest
 import com.jeancoder.ticketingsys.ready.dto.RemoteUtil
