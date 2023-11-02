@@ -1,7 +1,7 @@
 package com.jeancoder.ticketingsys.interceptor.project
 
 //import com.jeancoder.annotation.urlmapped
-import com.jeancoder.app.sdk.source.RequestSource
+import com.jeancoder.app.sdk.JC
 import com.jeancoder.core.http.JCRequest
 import com.jeancoder.ticketingsys.ready.dto.RemoteUtil
 import com.jeancoder.ticketingsys.ready.dto.sys.SysProjectInfo;
@@ -12,7 +12,7 @@ import com.jeancoder.ticketingsys.ready.util.NativeUtil
 //@urlmapped("/")
 
 GlobalHolder.remove();
-JCRequest request = RequestSource.getRequest();
+JCRequest req = JC.request.get();
 String domain = request.getServerName();
 //String domain = "jcloudapp.pdr365.com";
 //String domain = "e.local";
