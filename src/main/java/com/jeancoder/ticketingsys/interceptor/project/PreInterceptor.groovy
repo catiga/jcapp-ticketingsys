@@ -9,7 +9,7 @@ import com.jeancoder.ticketingsys.ready.holder.GlobalHolder
 import com.jeancoder.ticketingsys.ready.util.NativeUtil
 
 
-@urlmapped("/")
+//@urlmapped("/")
 
 GlobalHolder.remove();
 JCRequest request = RequestSource.getRequest();
