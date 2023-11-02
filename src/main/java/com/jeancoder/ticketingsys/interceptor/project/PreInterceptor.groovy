@@ -13,17 +13,15 @@ import com.jeancoder.ticketingsys.ready.util.NativeUtil
 
 GlobalHolder.remove();
 JCRequest req = JC.request.get();
-String domain = request.getServerName();
+String domain = req.getServerName();
 //String domain = "jcloudapp.pdr365.com";
 //String domain = "e.local";
 //String domain = "127.0.0.1";
-println "PreInterceptor"+request.getPathInfo();
-request.setAttribute("domain", domain)
-SysProjectInfo project = NativeUtil.connect(SysProjectInfo.class, 'project', '/incall/project', ["domain":domain]);
-request.setAttribute("current_project", project);
 
-//request.setAttribute('pub_bucket', 'https://cdn.iplaysky.com/static/');
-// request.setAttribute('pub_bucket', 'https://static.pdr365.com/static/');
+req.setAttribute("domain", domain)
+SysProjectInfo project = NativeUtil.connect(SysProjectInfo.class, 'project', '/incall/project', ["domain":domain]);
+req.setAttribute("current_project", project);
+
 req.setAttribute('pub_bucket', 'https://ticket.wisetrip.com/res/')
 
 GlobalHolder.setProj(project);
