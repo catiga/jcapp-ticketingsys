@@ -26,7 +26,7 @@ request.setAttribute("current_project", project);
 
 //request.setAttribute('pub_bucket', 'https://cdn.iplaysky.com/static/');
 // request.setAttribute('pub_bucket', 'https://static.pdr365.com/static/');
-req.setAttribute('pub_bucket', 'http://static.jcloudapp.fancynote.vip/static/')
+req.setAttribute('pub_bucket', 'https://ticket.wisetrip.com/res/')
 
 GlobalHolder.setProj(project);
 return true;
