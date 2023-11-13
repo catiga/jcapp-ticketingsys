@@ -5,6 +5,8 @@ import com.jeancoder.app.sdk.source.RequestSource
 import com.jeancoder.app.sdk.source.ResponseSource
 import com.jeancoder.core.http.JCRequest
 import com.jeancoder.core.http.JCResponse
+import com.jeancoder.core.log.JCLogger
+import com.jeancoder.core.log.JCLoggerFactory
 import com.jeancoder.core.result.Result
 import com.jeancoder.core.util.JackSonBeanMapper
 import com.jeancoder.jdbc.JcTemplate
@@ -16,10 +18,11 @@ import com.jeancoder.ticketingsys.ready.store.StoreService
 import com.jeancoder.ticketingsys.ready.support.Codes
 import com.jeancoder.ticketingsys.ready.support.Res
 
-JCRequest req = RequestSource.getRequest();
+JCRequest req = JC.request.get();
 JCResponse res = ResponseSource.getResponse();
 Result result = new Result();
 
+JCLogger logger = JCLoggerFactory.getLogger('ticket add store')
 try {
 	String idStr = req.getParameter("id");
 	String store_basic_str = req.getParameter('store_basic');
@@ -83,7 +86,7 @@ try {
 	result.setData(Res.Success());
 	return result;
 }catch(Exception e) {
-	e.printStackTrace()
+	logger.info("error:::", e)
 	result.setData(Res.Failed(Codes.INTERNAL_SERVER_ERROR));
 	return result;
 }
