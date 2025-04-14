@@ -307,7 +307,7 @@ def data = '''
 		"sc": 5,
 		"supportComment": true,
 		"supportLike": true,
-		"text": "文/安旭先生smile\n——————————————————————————————————————————​\n《毒液》一部漫威震撼影片，无论从人物剧情还是打斗的场面都让你爱上这部电影。主人公埃迪（汤",
+		"text": "文/安旭先生smile\n——————————————————————————————————————————\n《毒液》一部漫威震撼影片，无论从人物剧情还是打斗的场面都让你爱上这部电影。主人公埃迪（汤",
 		"title": "《毒液》一部让你热血沸腾的影片",
 		"upCount": 1,
 		"url": "meituanmovie://www.meituan.com/forum/postDetail?postID=1018367",
@@ -2076,7 +2076,7 @@ def data = '''
 			}
 		}
 	},
-	"$schema": "meituanmovie://www.meituan.com/movie?id=42964&nm=æ¯æ¶²ï¼è´å½å®æ¤è",
+	"$schema": "meituanmovie://www.meituan.com/movie?id=42964&nm=",
 	"cid": "c_tbHYp",
 	"valObj": {
 		"movie_id": "42964",
