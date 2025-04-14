@@ -44,7 +44,7 @@ CREATE TABLE `data_spec_sp_rule`  (
   `hall_id` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
   `seq` int(11) DEFAULT '0',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for data_store_info
@@ -84,7 +84,7 @@ CREATE TABLE `data_store_info`  (
   INDEX `store_no_2`(`store_no`) USING BTREE,
   INDEX `store_basic`(`store_basic`) USING BTREE,
   INDEX `city`(`city`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of data_store_info
@@ -119,7 +119,7 @@ CREATE TABLE `data_tc_ss_cinema_config`  (
   `config_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `store_id`(`store_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of data_tc_ss_cinema_config
@@ -142,7 +142,7 @@ CREATE TABLE `data_tc_ss_handle_fee_setting`  (
   `flag` tinyint(4) NOT NULL DEFAULT 0,
   `pid` bigint(20) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for data_tc_ss_lock_order_info
@@ -188,7 +188,7 @@ CREATE TABLE `data_tc_ss_lock_order_info`  (
   INDEX `user_id`(`user_id`) USING BTREE,
   INDEX `proj_id`(`proj_id`) USING BTREE,
   INDEX `order_no`(`order_no`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for data_tc_ss_lock_order_remote
@@ -205,7 +205,7 @@ CREATE TABLE `data_tc_ss_lock_order_remote`  (
   `flag` tinyint(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `order_id`(`order_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for data_tc_ss_lock_order_seat
@@ -228,7 +228,7 @@ CREATE TABLE `data_tc_ss_lock_order_seat`  (
   `pub_fee` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `order_id`(`order_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for data_tc_ss_movie_attach
@@ -246,7 +246,7 @@ CREATE TABLE `data_tc_ss_movie_attach`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `film_no`(`film_no`) USING BTREE,
   INDEX `offline_date`(`offline_date`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 14140 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 14140 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for data_tc_ss_movie_celebrity
@@ -268,7 +268,7 @@ CREATE TABLE `data_tc_ss_movie_celebrity`  (
   INDEX `movie_id`(`movie_id`) USING BTREE,
   INDEX `cele_id`(`cele_id`) USING BTREE,
   INDEX `flag`(`flag`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for data_tc_ss_movie_info
@@ -303,7 +303,7 @@ CREATE TABLE `data_tc_ss_movie_info`  (
   INDEX `proj_id`(`proj_id`) USING BTREE,
   INDEX `release_date`(`release_date`) USING BTREE,
   INDEX `film_no`(`film_no`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for data_tc_ss_movie_picture
@@ -320,7 +320,7 @@ CREATE TABLE `data_tc_ss_movie_picture`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `flag`(`flag`) USING BTREE,
   INDEX `m_id`(`m_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for data_tc_ss_reserve_order_info
@@ -366,7 +366,7 @@ CREATE TABLE `data_tc_ss_reserve_order_info`  (
   INDEX `user_id`(`user_id`) USING BTREE,
   INDEX `proj_id`(`proj_id`) USING BTREE,
   INDEX `order_no`(`order_no`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for data_tc_ss_reserve_order_remote
@@ -383,7 +383,7 @@ CREATE TABLE `data_tc_ss_reserve_order_remote`  (
   `flag` tinyint(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `order_id`(`order_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for data_tc_ss_reserve_order_seat
@@ -406,7 +406,7 @@ CREATE TABLE `data_tc_ss_reserve_order_seat`  (
   `pub_fee` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `order_id`(`order_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for data_tc_ss_sale_order_info
@@ -458,7 +458,7 @@ CREATE TABLE `data_tc_ss_sale_order_info`  (
   INDEX `order_no`(`order_no`) USING BTREE,
   INDEX `plan_date`(`plan_date`) USING BTREE,
   INDEX `plan_time`(`plan_time`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 162 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 162 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for data_tc_ss_sale_order_remote
@@ -475,7 +475,7 @@ CREATE TABLE `data_tc_ss_sale_order_remote`  (
   `flag` tinyint(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `order_id`(`order_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 146 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 146 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for data_tc_ss_sale_order_seat
@@ -500,7 +500,7 @@ CREATE TABLE `data_tc_ss_sale_order_seat`  (
   `tclass_id` bigint(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `order_id`(`order_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 177 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 177 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for dic_city
@@ -516,7 +516,7 @@ CREATE TABLE `dic_city`  (
   `flag` tinyint(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `city_no`(`city_no`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3382 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 3382 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of dic_city
@@ -3912,7 +3912,7 @@ CREATE TABLE `hall_schema`  (
   `c_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
   `flag` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 45 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 45 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 
 -- ----------------------------
@@ -3934,7 +3934,7 @@ CREATE TABLE `ticket_price_schema`  (
   `flag` int(11) NOT NULL DEFAULT 0,
   `pid` bigint(20) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '票类(比如成人票儿童票等)' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '票类(比如成人票儿童票等)' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for ticket_price_schema_group
@@ -3949,7 +3949,7 @@ CREATE TABLE `ticket_price_schema_group`  (
   `group_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `pid` bigint(20) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '票类分组方便查看' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '票类分组方便查看' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for ticket_price_schema_item
@@ -3969,7 +3969,7 @@ CREATE TABLE `ticket_price_schema_item`  (
   `flag` int(11) NOT NULL DEFAULT 0,
   `pid` bigint(20) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 
 -- ----------------------------
@@ -3995,6 +3995,6 @@ CREATE TABLE `unregu_record`  (
   `flag` tinyint(4) NOT NULL DEFAULT 0,
   `notify_mobiles` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 SET FOREIGN_KEY_CHECKS = 1;
