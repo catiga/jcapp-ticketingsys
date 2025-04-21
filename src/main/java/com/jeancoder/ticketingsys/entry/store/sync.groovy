@@ -56,10 +56,11 @@ try {
 	Cinema foundCinema = null;
 	for(Cinema cinema : cinemas.getResult()) {
 		def uni_cinema_code = cinema.getCinemaId();
+		def ccc_cinema_number = cinema.getCinemaNumber();
 		if(tc_ss_type=='yueke_yun'||tc_ss_type=='huolieniao') {
 			uni_cinema_code = cinema.getCinemaNumber();
 		}
-		if(uni_cinema_code.equals(cinema_code)) {
+		if(ccc_cinema_number.equals(cinema_code)) {
 			foundCinema = cinema;
 			break;
 		}

@@ -69,8 +69,10 @@ try {
 		CinemaPlanResult planResult = SssHelper.INSTANCE.get_cinema_plans(cinemaAuthInfo, start_time, end_time);
 		
 		if(!"0".equals(planResult.getCode())) {
-			result.setData(Res.Failed(Codes.CINEMA_CONN_FAILED));
-			return result;
+//			result.setData(Res.Failed(Codes.CINEMA_CONN_FAILED));
+//			return result;
+			logger.error("got error response while call plan list: {}", JackSonBeanMapper.toJson(planResult));
+			continue;
 		}
 		lists.add(planResult);
 	}

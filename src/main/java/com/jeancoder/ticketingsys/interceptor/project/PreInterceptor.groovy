@@ -25,6 +25,7 @@ SysProjectInfo project = NativeUtil.connect(SysProjectInfo.class, 'project', '/i
 req.setAttribute("current_project", project);
 
 req.setAttribute('pub_bucket', 'http://static.jcloudapp.chinaren.xyz/static/')
+req.setAttribute('pub_bucket', 'https://static.hash.bid/static/')
 
 GlobalHolder.setProj(project);
 return true;

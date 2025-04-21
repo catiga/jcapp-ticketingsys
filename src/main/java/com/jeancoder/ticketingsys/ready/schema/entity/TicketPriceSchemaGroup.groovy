@@ -1,6 +1,12 @@
 package com.jeancoder.ticketingsys.ready.schema.entity
 
+import com.jeancoder.jdbc.bean.JCBean
+import com.jeancoder.jdbc.bean.JCID
+
+@JCBean(tbname = "ticket_price_schema_group")
 class TicketPriceSchemaGroup {
+
+	@JCID
 	private Long id;
 	private String group_name;
 	private String group_type;

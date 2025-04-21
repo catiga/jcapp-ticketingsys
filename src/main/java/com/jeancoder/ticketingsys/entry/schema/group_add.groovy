@@ -4,6 +4,7 @@ import com.jeancoder.app.sdk.source.ResponseSource
 import com.jeancoder.core.http.JCRequest
 import com.jeancoder.core.http.JCResponse
 import com.jeancoder.core.result.Result
+import com.jeancoder.jdbc.JcTemplate
 import com.jeancoder.ticketingsys.ready.holder.GlobalHolder
 import com.jeancoder.ticketingsys.ready.schema.SchemaService
 import com.jeancoder.ticketingsys.ready.schema.dto.GroupInfo
@@ -43,7 +44,8 @@ try {
 		}
 	}*/
 	
-	SchemaService.INSTANCE.addOrUpdateGroup(group);
+//	SchemaService.INSTANCE.addOrUpdateGroup(group);
+	JcTemplate.INSTANCE().save(group);
 	
 	result.setData(Res.Success());
 	return result;
