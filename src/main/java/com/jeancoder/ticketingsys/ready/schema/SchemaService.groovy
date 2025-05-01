@@ -89,13 +89,13 @@ class SchemaService {
 	 * 删除一个票类下原有明细
 	 * @param schema_id
 	 */
-	public void deleteSchemaOldItem(Long schema_id) {
+	public void deleteSchemaOldItem(def schema_id) {
 		DatabasePower dbpower = DatabaseSource.getDatabasePower();
 		String sql = "UPDATE ticket_price_schema_item SET flag = ?,delete_time = ? where flag != ? and schema_id = ?";
 		dbpower.doUpdate(sql, -1,new Date(),-1,schema_id);
 	}
 
-	public SchemaWithItem getSchemaWithItemById(Long id) {
+	public SchemaWithItem getSchemaWithItemById(def id) {
 		DatabasePower dbpower = DatabaseSource.getDatabasePower();
 		String sql = "select * from ticket_price_schema WHERE id = ?";
 		SchemaWithItem schema = dbpower.doQueryUnique(SchemaWithItem.class, sql, id);
@@ -105,7 +105,7 @@ class SchemaService {
 		return schema;
 	}
 
-	public List<SchemaChildItem> getSchemaChildItems(Long schemaId) {
+	public List<SchemaChildItem> getSchemaChildItems(def schemaId) {
 		DatabasePower dbpower = DatabaseSource.getDatabasePower();
 		String sql = "SELECT * FROM ticket_price_schema_item WHERE flag != ? and schema_id = ?";
 		return dbpower.doQueryList(SchemaChildItem.class, sql, -1,schemaId);
@@ -116,7 +116,7 @@ class SchemaService {
 		dbpower.doUpdateSerialize(item, "id");
 	}
 
-	public void deleteItem(Long id) {
+	public void deleteItem(def id) {
 		DatabasePower dbpower = DatabaseSource.getDatabasePower();
 		String sql = "UPDATE ticket_price_schema_item set flag = ? where id = ?";
 		dbpower.doUpdate(sql, -1,id);
@@ -182,7 +182,7 @@ class SchemaService {
 		return groups;
 	}
 
-	public List<SchemaWithItem> getGroupSchema(Long groupId){
+	public List<SchemaWithItem> getGroupSchema(def groupId){
 		DatabasePower dbpower = DatabaseSource.getDatabasePower();
 		String sql = "SELECT * FROM ticket_price_schema WHERE flag != ? and group_id = ?";
 		List<SchemaWithItem> schemas = dbpower.doQueryList(SchemaWithItem.class, sql, -1,groupId);
@@ -194,18 +194,18 @@ class SchemaService {
 		return schemas;
 	}
 
-	public void changeSchemaGroup(Long schemaId,Long groupId) {
+	public void changeSchemaGroup(def schemaId,def groupId) {
 		DatabasePower dbpower = DatabaseSource.getDatabasePower();
 		String sql = "UPDATE ticket_price_schema SET group_id = ? WHERE id = ?";
 		dbpower.doUpdate(sql, groupId,schemaId);
 	}
 
-	public void deleteSchema(Long id) {
+	public void deleteSchema(def id) {
 		String sql  = "UPDATE ticket_price_schema SET flag = - 1 WHERE id = ?";
 		DatabaseSource.getDatabasePower().doUpdate(sql, id);
 	}
 
-	public void schemaToTop(Long id) {
+	public void schemaToTop(def id) {
 		DatabasePower dbpower = DatabaseSource.getDatabasePower();
 		String sql = '''
 			UPDATE 
@@ -219,7 +219,7 @@ class SchemaService {
 		dbpower.doUpdate(sql, id);
 	}
 
-	public void schemaToBottom(Long id) {
+	public void schemaToBottom(def id) {
 		DatabasePower dbpower = DatabaseSource.getDatabasePower();
 		String sql = '''
 			UPDATE 
