@@ -1,8 +1,8 @@
 package com.jeancoder.ticketingsys.ready.schema.entity
 
 class TicketPriceSchema {
-	private Long id;
-	private Long group_id;
+	private BigInteger id;
+	private BigInteger group_id;
 	private String schema_name;
 	private Integer sort_num;
 	private String schema_status;
@@ -10,16 +10,16 @@ class TicketPriceSchema {
 	private String week_rule;
 	private String time_rule;
 	private String month_rule;
-	public Long getId() {
+	public BigInteger getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(BigInteger id) {
 		this.id = id;
 	}
-	public Long getGroup_id() {
+	public BigInteger getGroup_id() {
 		return group_id;
 	}
-	public void setGroup_id(Long group_id) {
+	public void setGroup_id(BigInteger group_id) {
 		this.group_id = group_id;
 	}
 	public String getSchema_name() {
