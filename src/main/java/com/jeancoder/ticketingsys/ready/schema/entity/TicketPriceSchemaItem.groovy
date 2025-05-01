@@ -2,7 +2,7 @@ package com.jeancoder.ticketingsys.ready.schema.entity
 
 class TicketPriceSchemaItem {
 	private BigInteger id;
-	private Long schema_id;
+	private BigInteger schema_id;
 	private String movie_dimensional;
 	private String movie_size;
 	private Long price;
@@ -14,10 +14,10 @@ class TicketPriceSchemaItem {
 	public void setId(BigInteger id) {
 		this.id = id;
 	}
-	public Long getSchema_id() {
+	public BigInteger getSchema_id() {
 		return schema_id;
 	}
-	public void setSchema_id(Long schema_id) {
+	public void setSchema_id(BigInteger schema_id) {
 		this.schema_id = schema_id;
 	}
 	public String getMovie_dimensional() {
