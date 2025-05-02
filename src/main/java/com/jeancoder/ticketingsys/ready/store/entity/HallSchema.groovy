@@ -1,6 +1,11 @@
 package com.jeancoder.ticketingsys.ready.store.entity
 
+import com.jeancoder.jdbc.bean.JCBean
+import com.jeancoder.jdbc.bean.JCID
+
+@JCBean(tbname = "hall_schema")
 class HallSchema {
+	@JCID
 	private Long id;
 	private Long store_id;
 	private String hall_id;

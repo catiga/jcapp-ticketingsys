@@ -2,6 +2,7 @@ package com.jeancoder.ticketingsys.ready.store
 
 import com.jeancoder.app.sdk.source.DatabaseSource
 import com.jeancoder.core.power.DatabasePower
+import com.jeancoder.jdbc.JcTemplate
 import com.jeancoder.ticketingsys.ready.store.dto.CinemaAuthInfo
 import com.jeancoder.ticketingsys.ready.store.dto.City
 import com.jeancoder.ticketingsys.ready.store.dto.StoreInfo
@@ -233,7 +234,8 @@ class StoreService {
 		sqlpower.doUpdate(delSql, cinemaId,hallId);
 
 		for(HallSchema schema : schemas) {
-			sqlpower.doUpdateSerialize(schema, "id");
+			// sqlpower.doUpdateSerialize(schema, "id");
+			JcTemplate.INSTANCE().save(schema)
 		}
 	}
 
