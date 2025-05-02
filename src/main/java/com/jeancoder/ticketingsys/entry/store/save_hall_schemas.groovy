@@ -4,6 +4,8 @@ import com.jeancoder.app.sdk.source.RequestSource
 import com.jeancoder.app.sdk.source.ResponseSource
 import com.jeancoder.core.http.JCRequest
 import com.jeancoder.core.http.JCResponse
+import com.jeancoder.core.log.JCLogger
+import com.jeancoder.core.log.JCLoggerFactory
 import com.jeancoder.core.result.Result
 import com.jeancoder.ticketingsys.ready.store.StoreService
 import com.jeancoder.ticketingsys.ready.store.entity.HallSchema
@@ -13,6 +15,7 @@ import com.jeancoder.ticketingsys.ready.support.Res
 JCRequest req = RequestSource.getRequest();
 JCResponse res = ResponseSource.getResponse();
 Result result = new Result();
+JCLogger logger = JCLoggerFactory.getLogger("save_hall_schemas");
 
 try {
 	DatabaseSource.getDatabasePower().beginTransaction();
@@ -39,7 +42,7 @@ try {
 	result.setData(Res.Success());
 	return result;
 }catch(Exception e) {
-	e.printStackTrace()
+	logger.error("save_hall_schemas error", e)
 	DatabaseSource.getDatabasePower().rollbackTransaction();
 	result.setData(Res.Failed(Codes.INTERNAL_SERVER_ERROR));
 	return result;
