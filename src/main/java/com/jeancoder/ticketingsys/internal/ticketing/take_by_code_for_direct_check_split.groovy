@@ -50,9 +50,13 @@ if(seat_info.went_status!='00') {
 }
 if(modify_status && modify_status.equals('modify')) {
 	//修改为已入场状态
-	seat_info.went_status = '10';
-	seat_info.c_time = new Timestamp(Calendar.getInstance().getTimeInMillis());
-	JcTemplate.INSTANCE().update(seat_info);
+	for (SaleSeat ss in sale_seats) {
+		if (ss.went_status.equals('00')) {
+			ss.went_status = '10';
+			ss.c_time = new Timestamp(Calendar.getInstance().getTimeInMillis());
+			JcTemplate.INSTANCE().update(ss);
+		}
+	}
 
 	def need_update = false;
 	if (order.order_status.equals("2000")) {
@@ -70,4 +74,4 @@ if(modify_status && modify_status.equals('modify')) {
 	}
 }
 
-return SimpleAjax.available('', [order, seat_info]);
+return SimpleAjax.available('', [order, sale_seats]);
