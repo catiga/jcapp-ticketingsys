@@ -77,7 +77,8 @@ try {
 	SimpleAjax market_info = null;
 	try {
 		// 只取在线选座
-		market_info = JC.internal.call(SimpleAjax.class, 'market', 'market/get_all_market_rule', ["pid":pid, "mc_type":"2000"])
+		// market_info = JC.internal.call(SimpleAjax.class, 'market', 'market/get_all_market_rule', ["pid":pid, "mc_type":"2000"])
+		market_info = JC.internal.call(SimpleAjax.class, 'market', 'market/get_tcss_market_rule', ["pid":pid, "mc_type":"2000"])
 	} catch (Exception e) {
 		logger.error("无获取可用的票务营销活动失败，或获取活动失败");
 	}
