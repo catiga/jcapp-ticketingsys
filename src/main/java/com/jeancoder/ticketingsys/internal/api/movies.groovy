@@ -76,7 +76,8 @@ try {
 
 	SimpleAjax market_info = null;
 	try {
-		market_info = JC.internal.call(SimpleAjax.class, 'market', 'market/get_all_market_rule', ["pid":pid]) 
+		// 只取在线选座
+		market_info = JC.internal.call(SimpleAjax.class, 'market', 'market/get_all_market_rule', ["pid":pid, "mc_type":"2000"])
 	} catch (Exception e) {
 		logger.error("无获取可用的票务营销活动失败，或获取活动失败");
 	}
@@ -154,7 +155,7 @@ try {
 
 		logger.info("Get market info object: {}", JackSonBeanMapper.toJson(market_info));
 		try {
-			if(market_info != null && market_info.available && market_info.data != null){
+			if(market_info != null && market_info.available && market_info.data != null && market_info.data.length > 0){
 				item.currt_running_time = plan.getStartTime();
 				item.hall_limit = plan.getHallId();
 				filter_price = SchemaService.INSTANCE.filter_price_with_rules(pid,item,market_info.data.obj);
