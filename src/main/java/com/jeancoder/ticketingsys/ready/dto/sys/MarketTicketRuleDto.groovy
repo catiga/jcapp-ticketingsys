@@ -15,5 +15,6 @@ class MarketTicketRuleDto {
 	String member_card_rule;//限制会员
 	String time_type;
 	String hall_id;
-	String store_id
+	String store_id;
+	String film_no;
 }
