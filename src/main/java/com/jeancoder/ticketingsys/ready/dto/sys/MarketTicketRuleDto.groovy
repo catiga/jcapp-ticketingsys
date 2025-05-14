@@ -17,4 +17,5 @@ class MarketTicketRuleDto {
 	String hall_id;
 	String store_id;
 	String film_no;
+
 }
