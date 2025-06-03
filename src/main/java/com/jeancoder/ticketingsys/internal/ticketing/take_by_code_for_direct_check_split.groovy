@@ -35,7 +35,7 @@ SaleOrder order = JcTemplate.INSTANCE().get(SaleOrder, 'select * from SaleOrder 
 if(order==null) {
 	return SimpleAjax.notAvailable('obj_not_found,未找到订单信息');
 }
-if(!order.order_status.startsWith('2')) {
+if(!order.order_status.startsWith('2') && !order.order_status.startsWith("3")) {
 	return SimpleAjax.notAvailable('status_invalid,订单状态不支持进场操作');
 }
 
