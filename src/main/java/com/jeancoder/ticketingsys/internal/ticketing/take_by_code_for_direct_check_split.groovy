@@ -45,9 +45,9 @@ if (sale_seats == null || sale_seats.isEmpty()) {
 }
 SaleSeat seat_info = sale_seats.get(0);
 
-if(seat_info.went_status!='00') {
-	return SimpleAjax.notAvailable('status_invalid,该座位已经入场');
-}
+//if(seat_info.went_status!='00') {
+//	return SimpleAjax.notAvailable('status_invalid,该座位已经入场');
+//}
 if(modify_status && modify_status.equals('modify')) {
 	//修改为已入场状态
 	for (SaleSeat ss in sale_seats) {
