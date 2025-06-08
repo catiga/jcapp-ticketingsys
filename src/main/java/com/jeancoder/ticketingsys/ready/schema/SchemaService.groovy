@@ -884,17 +884,34 @@ class SchemaService {
 				String movie_price_streg = item.mc_p_streg;
 				if (!StringUtil.isEmpty(movie_price_streg)) {
 					Boolean status=true;
-					String [] movie_type = movie_price_streg.split('/');//w,2D,700/d,All,8000
-					logger.info("调试影片类型判断 {}, {}", JackSonBeanMapper.toJson(movie_type), JackSonBeanMapper.toJson(item))
-					for (int i=0;i<movie_type.length;i++) {
-						String [] movie_type1=movie_type[i].split(',');
-						if (movie_type1[1].equals('不限')||ticketPriceDto.getMovie_dimensional().equals(movie_type1[1])) {
-							price = new BigDecimal(movie_type1[2]);
-							price_type= movie_type1[0];
+					String [] movie_type = movie_price_streg.split(';'); // 00/2d:3;00/3d:5
+					logger.info("调试影片类型判断 {}, {}, {}",
+							JackSonBeanMapper.toJson(movie_type),
+							JackSonBeanMapper.toJson(item),
+							JackSonBeanMapper.toJson(ticketPriceDto))
+					for (int i=0; i < movie_type.length; i++) {
+						String[] movie_type1 = movie_type[i].split('/');
+						String[] movie_type_1_rule = movie_type1[1].split(":");
+
+						String tmp_price_type = movie_type1[0];
+						String tmp_price = "";
+						String tmp_movie_limit = "不限"
+						if (movie_type_1_rule.length > 1) {
+							tmp_movie_limit = movie_type_1_rule[0];
+							tmp_price = movie_type_1_rule[1];
+						} else {
+							tmp_price = movie_type1[1]
+						}
+
+						if (tmp_movie_limit.equals('不限')
+								|| ticketPriceDto.getMovie_dimensional().equals(tmp_movie_limit)) {
+							price = new BigDecimal(tmp_price.toString());
+							price_type= tmp_price_type;
 							status = false;
 							break;
 						}
 					}
+					logger.info("调试影片结束 {} {} {}", price, price_type, status)
 					if (status) {
 						//类型不匹配
 						continue;
