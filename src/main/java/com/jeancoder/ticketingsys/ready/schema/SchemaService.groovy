@@ -877,10 +877,11 @@ class SchemaService {
 						continue;//时间策略不匹配
 					}
 				}
+				logger.info("开始判断影片:{}", JackSonBeanMapper.toJson(item))
 				//影片类型判断
 				BigDecimal price=null;//价格变动值
 				String price_type='';//价格类型
-				String movie_price_streg=item.mc_p_streg;
+				String movie_price_streg = item.mc_p_streg;
 				if (!StringUtil.isEmpty(movie_price_streg)) {
 					Boolean status=true;
 					String [] movie_type = movie_price_streg.split('/');//w,2D,700/d,All,8000
