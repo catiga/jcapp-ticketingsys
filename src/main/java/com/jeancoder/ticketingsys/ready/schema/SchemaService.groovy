@@ -727,11 +727,9 @@ class SchemaService {
 			int min = s_time.compareTo(ticketPriceDto.currt_running_time+":00");
 			int max = e_time.compareTo(ticketPriceDto.currt_running_time+":00");
 			if(min>0||max<0){
-				logger.info("时间都不匹配？ {}-{}, {}", s_time, e_time, ticketPriceDto.currt_running_time+":00")
 				continue;//时间策略不匹配
 			}
-			logger.info("prepare for market judgement: {}, {}",
-					JackSonBeanMapper.toJson(ticketPriceDto), JackSonBeanMapper.toJson(infodto.market))
+
 			for(MarketTicketRuleDto item : infodto.market){
 				if(ticketPriceDto.status.equals('10')){
 					if (item.is_mc_rule.equals('0')||StringUtil.isEmpty(item.is_mc_rule)) {//结算时，显示仅会员参与的活动规则
@@ -778,6 +776,8 @@ class SchemaService {
 					}
 					if (flag1||t!=store_id.length) {
 						//门店不匹配
+						logger.info("门店不匹配，规则: {}, 目标票：{}",
+								JackSonBeanMapper.toJson(item), JackSonBeanMapper.toJson(ticketPriceDto))
 						continue;
 					}
 				}
@@ -802,6 +802,8 @@ class SchemaService {
 					}
 					if (flag_1||t!=hall_id.length) {
 						//影厅不匹配
+						logger.info("影厅不匹配，规则: {}, 目标票：{}",
+								JackSonBeanMapper.toJson(item), JackSonBeanMapper.toJson(ticketPriceDto))
 						continue;
 					}
 				}
@@ -823,6 +825,8 @@ class SchemaService {
 					}
 					if (flag2||t!=movie_id.length) {
 						//影片不匹配
+						logger.info("影片不匹配，规则: {}, 目标票：{}",
+								JackSonBeanMapper.toJson(item), JackSonBeanMapper.toJson(ticketPriceDto))
 						continue;
 					}
 				}
@@ -868,6 +872,8 @@ class SchemaService {
 						}
 					}
 					if(flag7){
+						logger.info("时间不匹配，规则: {}, 目标票：{}",
+								JackSonBeanMapper.toJson(item), JackSonBeanMapper.toJson(ticketPriceDto))
 						continue;//时间策略不匹配
 					}
 				}
