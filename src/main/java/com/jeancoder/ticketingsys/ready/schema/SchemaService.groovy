@@ -883,7 +883,8 @@ class SchemaService {
 				String movie_price_streg=item.mc_p_streg;
 				if (!StringUtil.isEmpty(movie_price_streg)) {
 					Boolean status=true;
-					String [] movie_type=movie_price_streg.split('/');//w,2D,700/d,All,8000
+					String [] movie_type = movie_price_streg.split('/');//w,2D,700/d,All,8000
+					logger.info("调试影片类型判断", JackSonBeanMapper.toJson(movie_type))
 					for (int i=0;i<movie_type.length;i++) {
 						String [] movie_type1=movie_type[i].split(',');
 						if (movie_type1[1].equals('不限')||ticketPriceDto.getMovie_dimensional().equals(movie_type1[1])) {
