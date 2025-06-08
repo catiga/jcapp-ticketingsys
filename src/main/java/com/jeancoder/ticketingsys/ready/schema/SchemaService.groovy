@@ -721,6 +721,7 @@ class SchemaService {
 		for(MarketInfoDto infodto : market_info) {
 
 			def ret_price = ticketPriceDto.price;
+			def original_price = ret_price;
 			//时间策略判断
 			String s_time = infodto.start_time;//格式为yyyy-MM-dd HH:mm:ss
 			String e_time = infodto.end_time;
@@ -877,7 +878,6 @@ class SchemaService {
 						continue;//时间策略不匹配
 					}
 				}
-				logger.info("开始判断影片:{}", JackSonBeanMapper.toJson(item))
 				//影片类型判断
 				BigDecimal price = new BigDecimal("0");//价格变动值
 				String price_type = '';//价格类型
@@ -885,10 +885,6 @@ class SchemaService {
 				if (!StringUtil.isEmpty(movie_price_streg)) {
 					Boolean status=true;
 					String [] movie_type = movie_price_streg.split(';'); // 00/2d:3;00/3d:5
-					logger.info("调试影片类型判断 {}, {}, {}",
-							JackSonBeanMapper.toJson(movie_type),
-							JackSonBeanMapper.toJson(item),
-							JackSonBeanMapper.toJson(ticketPriceDto))
 					for (int i=0; i < movie_type.length; i++) {
 						String[] movie_type1 = movie_type[i].split('/');
 						String[] movie_type_1_rule = movie_type1[1].split(":");
@@ -918,27 +914,31 @@ class SchemaService {
 					}
 				}
 
+				logger.info("开始修改价格 {}-{}, {}, {}",
+						price, price_type,
+						JackSonBeanMapper.toJson(item),
+						JackSonBeanMapper.toJson(ticketPriceDto))
 				//计算价格
 				if (price!=null&&!StringUtil.isEmpty(price_type)) {
-					if (price_type.equals('w')) {
+					if (price_type.equals('00')) {	//销售价格立减
 						//BigDecimal new_price=price.divide(100,2,RoundingMode.HALF_UP);
 						BigDecimal old_price = (ticketPriceDto.price);
-						ret_price = old_price.add(price);
-					} else if (price_type.equals('d')) {
-						BigDecimal new_price = price.divide(100,2,RoundingMode.HALF_UP);
+						ret_price = old_price.subtract(price);
+					} else if (price_type.equals('10')) {	//固定折扣销售
+						BigDecimal new_price = price.divide(100, 2, RoundingMode.HALF_UP);
 						BigDecimal old_price = ticketPriceDto.price;
 						ret_price = old_price.multiply(new_price).setScale(2,BigDecimal.ROUND_HALF_DOWN);
 						ret_price = ret_price.divide(100,2,RoundingMode.HALF_UP);
-					} else if (price_type.equals('s')) {
+					} else if (price_type.equals('20')) {	//指定销售价格
 						//BigDecimal new_price=price.divide(100,2,RoundingMode.HALF_UP);
 						BigDecimal new_price = price;
 						ret_price = new_price;
-					} else if (price_type.equals('y')) {//最低价格变动
-						ret_price = ticketPriceDto.min_price.add(price);
+					} else if (price_type.equals('50')) { //最低票价立减
+						ret_price = ticketPriceDto.min_price.subtract(price);
 					}
 				}
 			}
-			logger.info("==================价格变动值为==============="+ret_price);
+			logger.info("==================原始价格: {}, 最新价格: {}===============", original_price ,ret_price);
 			return ret_price;
 		}
 	}
