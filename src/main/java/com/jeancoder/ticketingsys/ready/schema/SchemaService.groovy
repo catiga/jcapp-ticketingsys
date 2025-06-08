@@ -717,8 +717,10 @@ class SchemaService {
 			return ret_price;
 		}
 	}
-	public def filter_price_with_rules(def pid,TicketPriceDto ticketPriceDto,def market_info){
+	public def filter_price_with_rules(def pid, TicketPriceDto ticketPriceDto, def market_info){
 		for(MarketInfoDto infodto : market_info) {
+			logger.info("prepare for market judgement: {}, {}",
+					JackSonBeanMapper.toJson(ticketPriceDto), JackSonBeanMapper.toJson(infodto))
 			def ret_price = ticketPriceDto.price;
 			//时间策略判断
 			String s_time = infodto.start_time;//格式为yyyy-MM-dd HH:mm:ss

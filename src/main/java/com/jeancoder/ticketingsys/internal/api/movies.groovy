@@ -154,12 +154,11 @@ try {
 		item.min_price = new BigDecimal(plan.lowestPrice).multiply(100);
 		String filter_price = SchemaService.INSTANCE.filterPriceRlues(item,pid);
 
-		logger.info("Get market info object: {}", JackSonBeanMapper.toJson(market_info));
 		try {
 			if(market_info != null && market_info.available && market_info.data != null){
 				item.currt_running_time = plan.getStartTime();
 				item.hall_limit = plan.getHallId();
-				filter_price = SchemaService.INSTANCE.filter_price_with_rules(pid,item,market_info.data);
+				filter_price = SchemaService.INSTANCE.filter_price_with_rules(pid, item, market_info.data);
 			}
 		} catch (Exception e) {
 			logger.error("获取可用的票务营销活动失败", e);
