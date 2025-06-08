@@ -94,8 +94,8 @@ try {
 	
 	int leftSeat = 0;
 	int soldSeat = 0;
-	logger.info('千plan=' + JackSonBeanMapper.toJson(remoteResult));
-	logger.info('千hall=' + JackSonBeanMapper.toJson(hall.getResult()));
+//	logger.info('千plan=' + JackSonBeanMapper.toJson(remoteResult));
+//	logger.info('千hall=' + JackSonBeanMapper.toJson(hall.getResult()));
 	for(PlanSeatState seat : remoteResult.getResult()) {
 		//转换成我们协议的状态
 		if(seat.getSeatState().equals("0")) {

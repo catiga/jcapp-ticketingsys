@@ -245,14 +245,32 @@ try {
 		item.price = new BigDecimal(unitPrice);
 		item.hall_limit = matchPlan.getHallId();
 		item.min_price = new BigDecimal(pub_fee);
+
+		SimpleAjax market_info = null;
+		try {
+			// 只取在线选座
+			market_info = JC.internal.call(SimpleAjax.class, 'market', 'market/get_tcss_market_rule', ["pid":pid, "mc_type":"2000"])
+		} catch (Exception e) {
+			Logger.error("无获取可用的票务营销活动失败，或获取活动失败");
+		}
+
 		//根据网售规则筛选价格
 		String filter_price = SchemaService.INSTANCE.filterPriceRlues(item,pid);
-
+		try {
+			if(market_info != null && market_info.available && market_info.data != null){
+				item.currt_running_time = plan.getStartTime();
+				item.hall_limit = plan.getHallId();
+				filter_price = SchemaService.INSTANCE.filter_price_with_rules(pid, item, market_info.data);
+			}
+		} catch (Exception e) {
+			Logger.error("获取可用的票务营销活动失败", e);
+		}
 		if(filter_price != null&&filter_price != ''){
 			if (new BigDecimal(filter_price).compareTo(new BigDecimal(0))<0) {
 				filter_price = '0';
 			}
 		}
+
 		total_amount = MoneyUtil.add(total_amount, filter_price?filter_price:unitPrice);
 		
 		SaleSeat seat = new SaleSeat();
