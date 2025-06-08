@@ -719,8 +719,7 @@ class SchemaService {
 	}
 	public def filter_price_with_rules(def pid, TicketPriceDto ticketPriceDto, def market_info){
 		for(MarketInfoDto infodto : market_info) {
-			logger.info("prepare for market judgement: {}, {}",
-					JackSonBeanMapper.toJson(ticketPriceDto), JackSonBeanMapper.toJson(infodto))
+
 			def ret_price = ticketPriceDto.price;
 			//时间策略判断
 			String s_time = infodto.start_time;//格式为yyyy-MM-dd HH:mm:ss
@@ -728,9 +727,12 @@ class SchemaService {
 			int min = s_time.compareTo(ticketPriceDto.currt_running_time+":00");
 			int max = e_time.compareTo(ticketPriceDto.currt_running_time+":00");
 			if(min>0||max<0){
+				logger.info("时间都不匹配？ {}-{}, {}", s_time, e_time, ticketPriceDto.currt_running_time+":00")
 				continue;//时间策略不匹配
 			}
-			for(MarketTicketRuleDto item:infodto.market){
+			logger.info("prepare for market judgement: {}, {}",
+					JackSonBeanMapper.toJson(ticketPriceDto), JackSonBeanMapper.toJson(infodto.market))
+			for(MarketTicketRuleDto item : infodto.market){
 				if(ticketPriceDto.status.equals('10')){
 					if (item.is_mc_rule.equals('0')||StringUtil.isEmpty(item.is_mc_rule)) {//结算时，显示仅会员参与的活动规则
 						continue;
@@ -758,10 +760,10 @@ class SchemaService {
 						continue;
 					}
 				}
-
+				logger.info("开始真实判断逻辑")
 				//影城限制
-				String store_ids=ticketPriceDto.store_limit;
-				if(!StringUtil.isEmpty(store_ids)&&!StringUtil.isEmpty(item.store_id)){
+				String store_ids = ticketPriceDto.store_limit;
+				if(!StringUtil.isEmpty(store_ids) && !StringUtil.isEmpty(item.store_id)){
 					Boolean flag1=true;
 					String [] store_id=store_ids.split(',');
 					String [] store_type=item.store_id.split(',');
