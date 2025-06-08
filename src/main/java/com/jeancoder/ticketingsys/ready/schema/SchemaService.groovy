@@ -879,8 +879,8 @@ class SchemaService {
 				}
 				logger.info("开始判断影片:{}", JackSonBeanMapper.toJson(item))
 				//影片类型判断
-				BigDecimal price=null;//价格变动值
-				String price_type='';//价格类型
+				BigDecimal price = new BigDecimal("0");//价格变动值
+				String price_type = '';//价格类型
 				String movie_price_streg = item.mc_p_streg;
 				if (!StringUtil.isEmpty(movie_price_streg)) {
 					Boolean status=true;
@@ -897,14 +897,14 @@ class SchemaService {
 						String tmp_price = "";
 						String tmp_movie_limit = "不限"
 						if (movie_type_1_rule.length > 1) {
-							tmp_movie_limit = movie_type_1_rule[0];
+							tmp_movie_limit = movie_type_1_rule[0].toUpperCase();
 							tmp_price = movie_type_1_rule[1];
 						} else {
 							tmp_price = movie_type1[1]
 						}
 
 						if (tmp_movie_limit.equals('不限')
-								|| ticketPriceDto.getMovie_dimensional().equals(tmp_movie_limit)) {
+								|| ticketPriceDto.getMovie_dimensional().equalsIgnoreCase(tmp_movie_limit)) {
 							price = new BigDecimal(tmp_price.toString());
 							price_type= tmp_price_type;
 							status = false;
