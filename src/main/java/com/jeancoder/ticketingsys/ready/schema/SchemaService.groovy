@@ -923,7 +923,7 @@ class SchemaService {
 					if (price_type.equals('00')) {	//销售价格立减
 						//BigDecimal new_price=price.divide(100,2,RoundingMode.HALF_UP);
 						BigDecimal old_price = (ticketPriceDto.price);
-						ret_price = old_price.subtract(price);
+						ret_price = old_price.subtract(price.multiply(new BigDecimal(100)));
 					} else if (price_type.equals('10')) {	//固定折扣销售
 						BigDecimal new_price = price.divide(100, 2, RoundingMode.HALF_UP);
 						BigDecimal old_price = ticketPriceDto.price;
