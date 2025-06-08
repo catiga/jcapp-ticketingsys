@@ -258,8 +258,8 @@ try {
 		String filter_price = SchemaService.INSTANCE.filterPriceRlues(item,pid);
 		try {
 			if(market_info != null && market_info.available && market_info.data != null){
-				item.currt_running_time = plan.getStartTime();
-				item.hall_limit = plan.getHallId();
+				item.currt_running_time = matchPlan.getStartTime();
+				item.hall_limit = matchPlan.getHallId();
 				filter_price = SchemaService.INSTANCE.filter_price_with_rules(pid, item, market_info.data);
 			}
 		} catch (Exception e) {
