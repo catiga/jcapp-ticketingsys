@@ -21,6 +21,7 @@ import com.jeancoder.ticketingsys.ready.prefer.PreferFactory
 import com.jeancoder.ticketingsys.ready.prep.PrepData
 import com.jeancoder.ticketingsys.ready.store.StoreService
 import com.jeancoder.ticketingsys.ready.store.dto.StoreInfo
+import com.jeancoder.ticketingsys.ready.util.JackSonBeanMapper
 import com.jeancoder.ticketingsys.ready.util.MoneyUtil
 
 JCLogger LOGGER = JCLoggerFactory.getLogger('GOODS_ORDER_NOTIFY');
@@ -90,7 +91,7 @@ order_param['ap_id'] = ap_id;
 
 
 SimpleAjax ret_obj = computer.compute(order_param, card_code, op, param);
-
+LOGGER.info("compute preferential {}, {}", card_code, JackSonBeanMapper.toJson(ret_obj))
 if(store_id==5) {
 	//针对包头需要重置优惠金额
 	if(ret_obj.available) {

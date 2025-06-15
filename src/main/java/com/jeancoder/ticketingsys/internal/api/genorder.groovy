@@ -179,8 +179,8 @@ try {
 			}
 		}
 	}
-	Logger.info('handle_fees===' + store.id + ", " + handle_fees.toString());
-	Logger.info('store_handle_fee type is : ' + store_handle_fee.class + ' and value is: ' + store_handle_fee);
+	// Logger.info('handle_fees===' + store.id + ", " + handle_fees.toString());
+	// Logger.info('store_handle_fee type is : ' + store_handle_fee.class + ' and value is: ' + store_handle_fee);
 	/**获取影城手续费配置相关**/
 	
 	
@@ -188,7 +188,7 @@ try {
 	List<SeatBuy> seats = new ArrayList<SeatBuy>();
 	// 查询网售票类
 	List<PlanSchema> planSchemalist = SchemaService.INSTANCE.matchPlanSchemas(matchPlan,matchPlan.getMovieInfo().get(0), cinemaSchemas);
-	Logger.info("matched schemas: {}\n, {}", JackSonBeanMapper.listToJson(cinemaSchemas), JackSonBeanMapper.listToJson(planSchemalist));
+	// Logger.info("matched schemas: {}\n, {}", JackSonBeanMapper.listToJson(cinemaSchemas), JackSonBeanMapper.listToJson(planSchemalist));
 	PlanSchema match_schema = null;
 	if (planSchemalist != null && !planSchemalist.isEmpty()) {
 		//unitPrice = planSchemalist.get(0).getPrice();
