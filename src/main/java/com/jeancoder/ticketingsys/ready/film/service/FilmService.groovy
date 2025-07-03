@@ -81,6 +81,38 @@ class FilmService {
 		}
 		return movie;
 	}
+
+	public DataTcSsMovieFullInfo getMovieInfoByNoWithoutPid(String filmNo) {
+		DatabasePower power = DatabaseSource.getDatabasePower();
+		String sql = '''
+		SELECT
+		*
+		FROM
+		data_tc_ss_movie_info
+		WHERE 
+		film_no = ?  AND flag != -1
+		ORDER BY id asc
+		''';
+
+		List<DataTcSsMovieFullInfo> result = power.doQueryList(DataTcSsMovieFullInfo.class, sql,filmNo);
+
+		DataTcSsMovieFullInfo movie = null;
+		if(result&&!result.isEmpty()) {
+			def i = 0;
+			for(x in result) {
+				//这里处理多余的影片
+				if(i == 0) {
+					movie = x;
+				} else {
+					Movie  m =  JcTemplate.INSTANCE().get(Movie, " select * from Movie WHERE id=?", x.id);
+					m.flag = -1;
+					JcTemplate.INSTANCE().update(m);
+				}
+				i++;
+			}
+		}
+		return movie;
+	}
 	
 	public void addOrUpdateCele(DataTcSsMovieCelebrity cele) {
 		DatabasePower power = DatabaseSource.getDatabasePower();

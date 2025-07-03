@@ -91,7 +91,7 @@ try {
 		///暂不支持多影片排期 默认取第一部
 		CinemaPlanMovie pmovie = plan.getMovieInfo().get(0);
 		
-		DataTcSsMovieFullInfo movieInfo = FilmService.INSTANCE.getMovieInfoByNo(pmovie.getCineMovieNum(), pid);
+		DataTcSsMovieFullInfo movieInfo = FilmService.INSTANCE.getMovieInfoByNoWithoutPid(pmovie.getCineMovieNum(), pid);
 		//Movie movieInfo = JcTemplate.INSTANCE().get(Movie, 'select * from Movie where flag!=? and film_no=? order by id asc', -1, pmovie.getCineMovieNum());
 		
 		String mname = movieInfo != null && movieInfo.getFilm_name() != null && !"".equals(movieInfo.getFilm_name()) ? movieInfo.getFilm_name() : pmovie.getMovieName()
