@@ -184,7 +184,7 @@ try {
 	/**获取影城手续费配置相关**/
 	
 	
-	DataTcSsMovieFullInfo movieInfo = FilmService.INSTANCE.getMovieInfoByNo(matchPlan.getMovieInfo().get(0).getCineMovieNum(), pid);
+	DataTcSsMovieFullInfo movieInfo = FilmService.INSTANCE.getMovieInfoByNoWithoutPid(matchPlan.getMovieInfo().get(0).getCineMovieNum());
 	List<SeatBuy> seats = new ArrayList<SeatBuy>();
 	// 查询网售票类
 	List<PlanSchema> planSchemalist = SchemaService.INSTANCE.matchPlanSchemas(matchPlan,matchPlan.getMovieInfo().get(0), cinemaSchemas);
