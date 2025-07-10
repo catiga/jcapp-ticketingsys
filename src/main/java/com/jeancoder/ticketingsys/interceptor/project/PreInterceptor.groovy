@@ -24,8 +24,9 @@ req.setAttribute("domain", domain)
 SysProjectInfo project = NativeUtil.connect(SysProjectInfo.class, 'project', '/incall/project', ["domain":domain]);
 req.setAttribute("current_project", project);
 
-req.setAttribute('pub_bucket', 'http://static.jcloudapp.chinaren.xyz/static/')
-req.setAttribute('pub_bucket', 'https://static.hash.bid/static/')
+//req.setAttribute('pub_bucket', 'http://static.jcloudapp.chinaren.xyz/static/')
+//req.setAttribute('pub_bucket', 'https://static.hash.bid/static/')
+req.setAttribute('pub_bucket', 'https://static.qrcinema.cn/')
 
 GlobalHolder.setProj(project);
 return true;
