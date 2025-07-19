@@ -5,6 +5,8 @@ import com.jeancoder.app.sdk.source.RequestSource
 import com.jeancoder.app.sdk.source.ResponseSource
 import com.jeancoder.core.http.JCRequest
 import com.jeancoder.core.http.JCResponse
+import com.jeancoder.core.log.JCLogger
+import com.jeancoder.core.log.JCLoggerFactory
 import com.jeancoder.core.result.Result
 import com.jeancoder.jdbc.JcTemplate
 import com.jeancoder.ticketingsys.ready.dto.RemoteUtil
@@ -20,6 +22,7 @@ import com.jeancoder.ticketingsys.ready.system.TicketingSystemService
 import com.jeancoder.ticketingsys.ready.system.dto.SystemMinInfo
 import com.jeancoder.ticketingsys.ready.util.JackSonBeanMapper
 
+JCLogger logger = JCLoggerFactory.getLogger('')
 List<Extensive> provs = LocationService.INSTANCE.getAllProvinces();
 
 List<SystemMinInfo> systems = TicketingSystemService.INSTANCE.getAllMinInfo();
@@ -78,7 +81,7 @@ for(x in real_stores) {
 	}
 	all_result.add(add);
 }
-
+logger.info("cinema list result {}", JackSonBeanMapper.toJson(all_result))
 Result result = new Result();
 result.addObject("systems", systems);
 result.addObject("provs", provs);

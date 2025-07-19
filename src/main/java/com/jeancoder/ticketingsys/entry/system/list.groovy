@@ -1,18 +1,17 @@
 package com.jeancoder.ticketingsys.entry.system
-import com.jeancoder.app.sdk.source.LoggerSource
+
 import com.jeancoder.core.log.JCLogger
+import com.jeancoder.core.log.JCLoggerFactory
 import com.jeancoder.core.result.Result
 import com.jeancoder.jdbc.JcTemplate
 import com.jeancoder.ticketingsys.ready.entity.CinemaConfig
 import com.jeancoder.ticketingsys.ready.holder.GlobalHolder
 import com.jeancoder.ticketingsys.ready.support.TicketingSysType
 import com.jeancoder.ticketingsys.ready.support.TicketingSysTypeHelper
-import com.jeancoder.ticketingsys.ready.system.TicketingSystemService
 import com.jeancoder.ticketingsys.ready.system.dto.SystemCodeInfo
-import com.jeancoder.ticketingsys.ready.util.RemoteUtil
 
 Result result = new Result();
-JCLogger Logger = LoggerSource.getLogger(this.getClass().getName());
+JCLogger Logger = JCLoggerFactory.getLogger(this.getClass().getName());
 List<TicketingSysType> supportSystems =  TicketingSysTypeHelper.getSupportSystem();
 BigInteger pid = GlobalHolder.proj.id;
 
