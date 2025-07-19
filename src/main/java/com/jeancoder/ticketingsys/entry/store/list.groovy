@@ -27,8 +27,9 @@ List<Extensive> provs = LocationService.INSTANCE.getAllProvinces();
 
 List<SystemMinInfo> systems = TicketingSystemService.INSTANCE.getAllMinInfo();
 
+def pid = GlobalHolder.proj.id
 //List<StoreInfo> stores = StoreService.INSTANCE.getAll();
-List<Cinema> stores = JcTemplate.INSTANCE().find(Cinema, 'select * from Cinema where flag!=?', -1);
+List<Cinema> stores = JcTemplate.INSTANCE().find(Cinema, 'select * from Cinema where flag!=? and proj_id = ?', -1, pid);
 if(stores) {
 	for(x in stores) {
 		if(x.config_id) {
@@ -42,8 +43,6 @@ if(stores) {
 		}
 	}
 }
-
-def pid = GlobalHolder.proj.id;
 
 def json_real_stores = JC.internal.call('project', '/incall/mystore', [pid:pid]);
 
