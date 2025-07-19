@@ -1,14 +1,12 @@
 package com.jeancoder.ticketingsys.entry.store
 
 import com.jeancoder.app.sdk.JC
-import com.jeancoder.app.sdk.source.RequestSource
 import com.jeancoder.app.sdk.source.ResponseSource
 import com.jeancoder.core.http.JCRequest
 import com.jeancoder.core.http.JCResponse
 import com.jeancoder.core.log.JCLogger
 import com.jeancoder.core.log.JCLoggerFactory
 import com.jeancoder.core.result.Result
-import com.jeancoder.core.util.JackSonBeanMapper
 import com.jeancoder.jdbc.JcTemplate
 import com.jeancoder.ticketingsys.ready.dto.store.StoreGeneral
 import com.jeancoder.ticketingsys.ready.entity.Cinema
@@ -17,6 +15,7 @@ import com.jeancoder.ticketingsys.ready.holder.GlobalHolder
 import com.jeancoder.ticketingsys.ready.store.StoreService
 import com.jeancoder.ticketingsys.ready.support.Codes
 import com.jeancoder.ticketingsys.ready.support.Res
+import com.jeancoder.ticketingsys.ready.util.JackSonBeanMapper
 
 JCRequest req = JC.request.get();
 JCResponse res = ResponseSource.getResponse();
@@ -52,11 +51,13 @@ try {
 	}
 	def pid = GlobalHolder.proj.id;
 	def json_real_stores = JC.internal.call('project', '/incall/mystore', [pid:pid]);
+
+	logger.info("fetch store for config cinema ticket system: {}", json_real_stores);
 	
 	StoreGeneral real_store = null;
 	List<StoreGeneral> real_stores = JackSonBeanMapper.jsonToList(json_real_stores, StoreGeneral);
 	for(x in real_stores) {
-		if(x.id.longValue()==store_basic) {
+		if(x.id.longValue() == store_basic) {
 			real_store = x; break;
 		}
 	}
@@ -67,7 +68,7 @@ try {
 	
 	Long projId = real_store.proj_id;
 	
-	Cinema store = JcTemplate.INSTANCE().get(Cinema, 'select * from Cinema where flag!=? and store_basic=?', -1, new BigInteger(store_basic));
+	Cinema store = JcTemplate.INSTANCE().get(Cinema, 'select * from Cinema where flag!=? and store_basic=?', -1, BigInteger.valueOf(store_basic));
 	if(!store) {
 		id = null;
 	} else {
