@@ -29,7 +29,7 @@ List<SystemMinInfo> systems = TicketingSystemService.INSTANCE.getAllMinInfo();
 
 def pid = GlobalHolder.proj.id
 //List<StoreInfo> stores = StoreService.INSTANCE.getAll();
-List<Cinema> stores = JcTemplate.INSTANCE().find(Cinema, 'select * from Cinema where flag!=? and proj_id = ?', -1, pid);
+List<Cinema> stores = JcTemplate.INSTANCE().find(Cinema, 'select * from Cinema where flag!=?', -1);
 if(stores) {
 	for(x in stores) {
 		if(x.config_id) {
