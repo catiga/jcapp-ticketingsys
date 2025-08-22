@@ -3,6 +3,8 @@ import com.jeancoder.app.sdk.source.RequestSource
 import com.jeancoder.app.sdk.source.ResponseSource
 import com.jeancoder.core.http.JCRequest
 import com.jeancoder.core.http.JCResponse
+import com.jeancoder.core.log.JCLogger
+import com.jeancoder.core.log.JCLoggerFactory
 import com.jeancoder.core.result.Result
 import com.jeancoder.ticketingsys.ready.holder.GlobalHolder
 import com.jeancoder.ticketingsys.ready.schema.SchemaService
@@ -13,6 +15,7 @@ import com.jeancoder.ticketingsys.ready.support.TicketingSysTypeHelper
 import com.piaodaren.ssc.factory.SscOp
 import com.piaodaren.ssc.model.SscAuthModel
 
+JCLogger logger = JCLoggerFactory.getLogger('')
 JCRequest req = RequestSource.getRequest();
 JCResponse res = ResponseSource.getResponse();
 Result result = new Result();
@@ -30,6 +33,7 @@ SscAuthModel auth_model = TicketingsysFactory.direct_generateAuthModel(Ticketing
 SscOp ssc_op = TicketingsysFactory.generateSscOp(auth_model);
 
 def halls = ssc_op.get_cinema_hall_list(cinemaAuthInfo.getCinemaCode());
+logger.info("store_id:{} - {}", store_id, halls)
 def schemas = SchemaService.INSTANCE.getAllSchemaGroup(GlobalHolder.proj.id);
 
 result.addObject("halls", halls.getResult());
