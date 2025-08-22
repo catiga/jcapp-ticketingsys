@@ -12,6 +12,7 @@ import com.jeancoder.ticketingsys.ready.ssc.TicketingsysFactory
 import com.jeancoder.ticketingsys.ready.store.StoreService
 import com.jeancoder.ticketingsys.ready.store.dto.CinemaAuthInfo
 import com.jeancoder.ticketingsys.ready.support.TicketingSysTypeHelper
+import com.jeancoder.ticketingsys.ready.util.JackSonBeanMapper
 import com.piaodaren.ssc.factory.SscOp
 import com.piaodaren.ssc.model.SscAuthModel
 
@@ -33,7 +34,7 @@ SscAuthModel auth_model = TicketingsysFactory.direct_generateAuthModel(Ticketing
 SscOp ssc_op = TicketingsysFactory.generateSscOp(auth_model);
 
 def halls = ssc_op.get_cinema_hall_list(cinemaAuthInfo.getCinemaCode());
-logger.info("store_id:{} - {}", store_id, halls)
+logger.info("store_id:{} - {}", store_id, JackSonBeanMapper.toJson(halls))
 def schemas = SchemaService.INSTANCE.getAllSchemaGroup(GlobalHolder.proj.id);
 
 result.addObject("halls", halls.getResult());
