@@ -1,7 +1,10 @@
 package com.jeancoder.ticketingsys.internal.ticketing
 
+import com.jeancoder.core.log.JCLoggerFactory
+import com.jeancoder.ticketingsys.ready.entity.CinemaHall
 import com.jeancoder.ticketingsys.ready.entity.SaleRemote
 import com.jeancoder.ticketingsys.ready.order.constants.OrderConstants
+import com.jeancoder.ticketingsys.ready.util.JackSonBeanMapper
 
 import java.sql.Timestamp
 
@@ -14,7 +17,7 @@ import com.jeancoder.ticketingsys.ready.entity.SaleOrder
 import com.jeancoder.ticketingsys.ready.entity.SaleSeat
 
 // order_id, order_seat_id 这样入参
-JCLogger Logger = LoggerSource.getLogger();
+JCLogger Logger = JCLoggerFactory.getLogger('');
 def get_code = JC.internal.param('get_code')?.toString();
 if(!get_code) {
 	return SimpleAjax.notAvailable('param_error,验票信息为空');
@@ -55,6 +58,7 @@ if(modify_status && modify_status.equals('modify')) {
 			ss.went_status = '10';
 			ss.c_time = new Timestamp(Calendar.getInstance().getTimeInMillis());
 			JcTemplate.INSTANCE().update(ss);
+			break;	//一次检票一张
 		}
 	}
 
@@ -74,4 +78,7 @@ if(modify_status && modify_status.equals('modify')) {
 	}
 }
 
-return SimpleAjax.available('', [order, sale_seats]);
+//查询screen code
+CinemaHall cinemaHall = JcTemplate.INSTANCE().get(CinemaHall.class, 'select * from CinemaHall where store_id = ? and hall_id = ?', order.store_id, order.hall_id);
+Logger.info("check ticket for cinema hall: {}", JackSonBeanMapper.toJson(cinemaHall))
+return SimpleAjax.available('', [order, sale_seats, cinemaHall]);
